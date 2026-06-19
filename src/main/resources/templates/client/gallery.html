@@ -338,9 +338,9 @@
                  th:each="photo : ${selectedPhotos[album.id]}"
                  th:id="'card-' + ${photo.id}">
                 <div class="selected-tick"><i class="ti ti-check"></i></div>
-                <img th:src="${'/' + photo.filePath}"
+                <img th:src="@{/gallery/photo/__${photo.id}__}"
                      th:alt="${photo.filename}"
-                     th:data-full="${'/' + photo.filePath}"
+                     th:data-full="@{/gallery/photo/__${photo.id}__}"
                      onclick="openLightbox(this)"
                      onerror="this.src='/images/placeholder.jpg'">
                 <div class="card-footer">
@@ -366,9 +366,9 @@
                  th:each="photo : ${unselectedPhotos[album.id]}"
                  th:id="'card-' + ${photo.id}">
                 <div class="selected-tick"><i class="ti ti-check"></i></div>
-                <img th:src="${'/' + photo.filePath}"
+                <img th:src="@{/gallery/photo/__${photo.id}__}"
                      th:alt="${photo.filename}"
-                     th:data-full="${'/' + photo.filePath}"
+                     th:data-full="@{/gallery/photo/__${photo.id}__}"
                      onclick="openLightbox(this)"
                      onerror="this.src='/images/placeholder.jpg'">
                 <div class="card-footer">
@@ -538,6 +538,16 @@ function closeLightbox() {
 function closeLightboxOutside(e) {
     if (e.target.id === 'lightbox') closeLightbox();
 }
+
+// ── BACK BUTTON FIX ──────────────────────────────
+// Replace history so login page never appears on Back press.
+// Browser Back from gallery goes to the page before login (e.g. /select).
+(function() {
+    if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', '/gallery/view');
+    }
+})();
 </script>
+<script src="/js/constants.js"></script>
 </body>
 </html>

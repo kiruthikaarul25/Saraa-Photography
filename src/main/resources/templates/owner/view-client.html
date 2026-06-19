@@ -143,6 +143,10 @@
             opacity: 0; transition: opacity 0.2s; cursor: pointer;
         }
         .photo-item:hover .photo-delete-btn { opacity: 1; }
+        @media (hover: none) {
+            .photo-delete-btn { opacity: 1; background: rgba(0,0,0,0.35); }
+            .photo-item:hover .selected-tick { opacity: 1; }
+        }
         .photo-delete-btn button {
             background: rgba(192,57,43,0.85); border: 1.5px solid #e74c3c; color: #fff;
             border-radius: 8px; padding: 7px 14px; font-family: 'Raleway', sans-serif;
@@ -441,9 +445,19 @@
 
 <script>
     function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('open');
-        document.getElementById('overlay').classList.toggle('open');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const btn = document.querySelector('.hamburger');
+        const isOpen = sidebar.classList.toggle('open');
+        overlay.classList.toggle('open');
+        if (btn) btn.innerHTML = isOpen ? '<i class="ti ti-x"></i>' : '<i class="ti ti-menu-2"></i>';
     }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('open')) toggleSidebar();
+        }
+    });
     function openUploadModal() {
         document.getElementById('uploadOverlay').classList.add('show');
         document.body.style.overflow = 'hidden';
@@ -542,5 +556,6 @@
         progressWrap.style.display = 'block';
     });
 </script>
+<script src="/js/constants.js"></script>
 </body>
 </html>

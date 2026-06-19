@@ -230,5 +230,6 @@
     const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.08 });
     document.querySelectorAll('.animate-in').forEach(el => obs.observe(el));
 </script>
+<script src="/js/constants.js"></script>
 </body>
 </html>

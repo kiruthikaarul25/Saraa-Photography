@@ -6,7 +6,9 @@ plugins {
 
 group = 'com.shop'
 version = '0.0.1-SNAPSHOT'
-
+springBoot {
+    mainClass = 'com.shop.DreamGalleryShopApplication'
+}
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)

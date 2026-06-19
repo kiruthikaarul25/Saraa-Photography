@@ -172,5 +172,14 @@
 
 </div>
 
+<script>
+    // Replace this page in history so the POST /gallery/submit is never
+    // in the browser stack. Back button goes cleanly to /gallery/view.
+    if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', '/gallery/submitted');
+    }
+</script>
+
+<script src="/js/constants.js"></script>
 </body>
 </html>
