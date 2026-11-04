@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">s
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saara Photography | Destination Photographer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <style>
+/* ===== Floating WhatsApp & Instagram Icons ===== */
+.floating-social {
+    position: fixed;
+    right: 18px;
+    bottom: 90px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 999;
+}
+.floating-social a {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 24px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.floating-social a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+.floating-social .whatsapp-btn { background-color: #000000; }
+.floating-social .instagram-btn { background: #d4146a; }
+@media (min-width: 768px) {
+    .floating-social { bottom: 100px; right: 30px; }
+}
+
+/* ===== page styles ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Calibri', 'Carlito', 'Segoe UI', sans-serif;
+    background: #ffffff;
+    color: #000000;
+    font-weight: 700;
+    overflow-x: hidden;
+    padding-bottom: 70px;
+}
+
+.fixed-social {
+    position: fixed;
+    bottom: 90px;
+    right: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 300;
+}
+.fixed-social a {
+    width: 46px; height: 46px;
+    border: 1px solid rgba(212,20,106,0.35);
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: center;
+    color: #d4146a;
+    font-size: 20px;
+    text-decoration: none;
+    transition: border-color 0.3s, background 0.3s, transform 0.3s;
+}
+.fixed-social a:hover {
+    border-color: #d4146a;
+    background: rgba(212,20,106,0.12);
+    transform: scale(1.1);
+}
+
+.hero {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background: #ffffff;
+}
+.hero-content {
+    position: absolute;
+    top: 46%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+    width: 90%;
+}
+.hero-logo {
+    width: 120px; height: 120px;
+    display: block;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    border: 3px solid #d4146a;
+    box-shadow: 0 6px 24px rgba(212,20,106,.55);
+}
+.hero-tag {
+    font-size: 10px;
+    letter-spacing: 6px;
+    color: #d4146a;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.4s forwards;
+}
+.hero-content h1 {
+    font-size: clamp(2.8rem, 8vw, 6rem);
+    color: #000000;
+    letter-spacing: 4px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 14px;
+    min-height: 1.2em;
+}
+.hero-content h1 span.gold { color: #d4146a; }
+
+.cursor {
+    display: inline-block;
+    width: 2px;
+    background: #d4146a;
+    margin-left: 3px;
+    animation: blink 0.75s step-end infinite;
+    vertical-align: baseline;
+    height: 0.85em;
+    position: relative;
+    top: 0.05em;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+.hero-gold-line {
+    width: 50px; height: 1px;
+    background: #d4146a;
+    margin: 16px auto;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.9s forwards;
+}
+.hero-sub {
+    font-size: clamp(0.72rem, 2vw, 0.88rem);
+    color: #000000;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    min-height: 1.4em;
+}
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.insta-section {
+    padding: 70px 20px 40px;
+    background: #ffffff;
+    text-align: center;
+}
+.insta-tag {
+    font-size: 9px;
+    letter-spacing: 5px;
+    color: #d4146a;
+    text-transform: uppercase;
+    opacity: 0.7;
+    display: block;
+    margin-bottom: 10px;
+}
+.insta-section h2 {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    color: #d4146a;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+}
+.insta-section p {
+    color: #000000;
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    margin-bottom: 36px;
+    text-transform: uppercase;
+}
+.insta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+@media (max-width: 500px) { .insta-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 768px) {
+    .insta-grid { gap: 6px; max-width: 760px; }
+    .insta-section { padding: 90px 32px 50px; }
+}
+@media (min-width: 1024px) {
+    .insta-grid { max-width: 940px; gap: 8px; }
+    .insta-section { padding: 110px 40px 60px; }
+}
+@media (max-width: 360px) {
+    .fixed-social { right: 12px; bottom: 80px; }
+    .fixed-social a { width: 40px; height: 40px; font-size: 17px; }
+    .insta-section { padding: 56px 14px 32px; }
+}
+
+.insta-item {
+    aspect-ratio: 1;
+    background: #ffffff;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+.insta-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    transition: transform 0.6s ease;
+    pointer-events: none;
+    user-select: none;
+    display: block;
+}
+.insta-item::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(212,20,106,0);
+    transition: background 0.4s;
+}
+.insta-item:hover img { transform: scale(1.08); }
+.insta-item:hover::after { background: rgba(212,20,106,0.1); }
+.insta-item::before {
+    content: '';
+    position: absolute; inset: 0;
+    border: 2px solid transparent;
+    transition: border-color 0.4s;
+    z-index: 2;
+}
+.insta-item:hover::before { border-color: rgba(212,20,106,0.45); }
+
+.insta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 32px;
+    padding: 13px 32px;
+    border: 1px solid rgba(212,20,106,0.4);
+    color: #d4146a;
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+.insta-link::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: #d4146a;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+    z-index: 0;
+}
+.insta-link:hover::before { transform: scaleX(1); }
+.insta-link:hover { color: #fff; }
+.insta-link span, .insta-link i { position: relative; z-index: 1; }
+.insta-link i { font-size: 18px; }
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 200;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(212,20,106,0.15);
+    padding: 10px 0 max(10px, env(safe-area-inset-bottom));
+}
+.bottom-nav ul {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    max-width: 500px;
+    margin: 0 auto;
+}
+.bottom-nav ul li a {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 4px;
+    text-decoration: none;
+    color: #000000;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    padding: 4px 8px;
+}
+.bottom-nav ul li a i { font-size: 20px; transition: transform 0.3s; }
+.bottom-nav ul li a:hover i { transform: translateY(-3px); }
+.bottom-nav ul li a:hover,
+.bottom-nav ul li a.active { color: #d4146a; }
+
+.spacer { height: 80px; }
+
+.animate-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.animate-in.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+<section class="hero">
+    <div class="hero-content">
+        <img class="hero-logo" src="/images/logo.png" alt="Saara Photography logo">
+        <span class="hero-tag">Destination Photographer</span>
+        <h1 id="heroTitle"><span class="cursor" id="cur1"></span></h1>
+        <div class="hero-gold-line"></div>
+        <p class="hero-sub" id="heroSub"></p>
+    </div>
+</section>
+
+<section class="insta-section animate-in">
+    <span class="insta-tag">Follow our journey</span>
+    <h2>Our Work</h2>
+    <p><span class="insta-handle">@saaraphotography05</span></p>
+
+    <div class="insta-grid">
+        <div class="insta-item"><img src="https://images.pexels.com/photos/29153198/pexels-photo-29153198.jpeg?auto=compress&cs=tinysrgb&w=500" alt=""></div>
+        <div class="insta-item"><img src="https://images.pexels.com/photos/7669965/pexels-photo-7669965.jpeg?auto=compress&cs=tinysrgb&w=500" alt=""></div>
+        <div class="insta-item"><img src="https://images.pexels.com/photos/36814772/pexels-photo-36814772.jpeg?auto=compress&cs=tinysrgb&w=500" alt=""></div>
+        <div class="insta-item"><img src="https://images.pexels.com/photos/15459821/pexels-photo-15459821.jpeg?auto=compress&cs=tinysrgb&w=500" alt=""></div>
+        <div class="insta-item"><img src="https://images.pexels.com/photos/5043313/pexels-photo-5043313.jpeg?auto=compress&cs=tinysrgb&w=500" alt=""></div>
+        <div class="insta-item"><img src="https://images.pexels.com/photos/32315685/pexels-photo-32315685.jpeg?auto=compress&cs=tinysrgb&w=500" alt=""></div>
+    </div>
+
+    <a href="https://www.instagram.com/saaraphotography05" target="_blank" class="insta-link">
+        <i class="ti ti-brand-instagram"></i>
+        <span>View on Instagram</span>
+    </a>
+</section>
+
+<div class="spacer"></div>
+
+<nav class="bottom-nav">
+    <ul>
+        <li><a href="/" class="active"><i class="ti ti-home"></i><span>Home</span></a></li>
+        <li><a href="/work"><i class="ti ti-video"></i><span>Work</span></a></li>
+        <li><a href="/select"><i class="ti ti-photo"></i><span>Select</span></a></li>
+        <li><a href="/packages-page"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
+        <li><a href="/contact"><i class="ti ti-phone"></i><span>Contact</span></a></li>
+    </ul>
+</nav>
+
+<script>
+    /* ── Typewriter ── */
+    function typewriter(element, segments, delay, onDone) {
+        let segIdx = 0, charIdx = 0;
+        const cursor = element.querySelector('.cursor') || document.createElement('span');
+
+        function tick() {
+            if (segIdx >= segments.length) {
+                cursor.remove();
+                if (onDone) onDone();
+                return;
+            }
+            const seg = segments[segIdx];
+            let span = element.querySelector('[data-seg="' + segIdx + '"]');
+            if (!span) {
+                span = document.createElement('span');
+                if (seg.gold) span.classList.add('gold');
+                span.dataset.seg = segIdx;
+                element.insertBefore(span, cursor);
+            }
+            span.textContent += seg.text[charIdx];
+            charIdx++;
+            if (charIdx >= seg.text.length) {
+                segIdx++;
+                charIdx = 0;
+                setTimeout(tick, seg.pause || 80);
+            } else {
+                setTimeout(tick, delay);
+            }
+        }
+        tick();
+    }
+
+    function typewriterSimple(element, text, delay, showCursor, onDone) {
+        element.textContent = '';
+        const cursor = document.createElement('span');
+        cursor.className = 'cursor';
+        element.appendChild(cursor);
+
+        let i = 0;
+        function tick() {
+            if (i >= text.length) {
+                if (!showCursor) cursor.remove();
+                if (onDone) onDone();
+                return;
+            }
+            cursor.insertAdjacentText('beforebegin', text[i]);
+            i++;
+            setTimeout(tick, delay);
+        }
+        tick();
+    }
+
+    setTimeout(() => {
+        const h1 = document.getElementById('heroTitle');
+        const sub = document.getElementById('heroSub');
+        const segments = [
+            { text: 'Saara ', gold: false, pause: 120 },
+            { text: 'Photography', gold: true, pause: 0 }
+        ];
+        typewriter(h1, segments, 90, () => {
+            setTimeout(() => {
+                typewriterSimple(sub, 'All kind of events · Service wide', 55, true, null);
+            }, 300);
+        });
+    }, 800);
+
+    /* ── Image fallback ── */
+    document.querySelectorAll('.insta-item img').forEach(img => {
+        img.onerror = function() {
+            this.parentElement.style.background = '#ffffff';
+            this.style.display = 'none';
+        };
+    });
+
+    /* ── Scroll animation ── */
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
+
+    /* ── Screenshot protection ── */
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+        if (e.key === 'PrintScreen' ||
+            (e.ctrlKey && ['s','u','p'].includes(e.key.toLowerCase())) ||
+            e.key === 'F12') e.preventDefault();
+    });
+</script>
+<script>
+/* ===== constants (merged) ===== */
+const DG = {
+  STUDIO_NAME    : "Saara Photography",
+  INSTA_HANDLE   : "@saaraphotography05",
+  LOCATION       : "Destination Photographer · Service wide",
+  INSTA_URL      : "https://www.instagram.com/saaraphotography05",
+  WHATSAPP_NUMBER: "919786711698",
+  WHATSAPP_MSG   : "Hi! I'm interested in your photography services.",
+  PHONE_1        : "+91 97867 11698",
+  PHONE_2        : "+91 97867 11698",
+  EMAIL          : "",   // TODO: add Saara Photography email
+  ADDRESS        : "Saara Photography — All kind of events, service wide",
+  HOURS          : "Bookings open all days",
+  HOURS_NOTE     : "Call 9786711698 to book your date",
+  NAV: [
+    { label: "Work",     href: "/work",          icon: "ti-video"   },
+    { label: "Select",   href: "/select",         icon: "ti-photo"   },
+    { label: "Packages", href: "/packages-page",  icon: "ti-diamond" },
+    { label: "Contact",  href: "/contact",        icon: "ti-phone"   }
+  ]
+};
+
+(function () {
+  const waURL = `https://wa.me/${DG.WHATSAPP_NUMBER}?text=${encodeURIComponent(DG.WHATSAPP_MSG)}`;
+
+  document.querySelectorAll('.fixed-social').forEach(el => {
+    el.innerHTML = `
+      <a href="${DG.INSTA_URL}" target="_blank" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+      <a href="${waURL}" target="_blank" aria-label="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>`;
+  });
+
+  document.querySelectorAll('a.insta-link').forEach(a => { a.href = DG.INSTA_URL; });
+  document.querySelectorAll('.insta-handle').forEach(el => { el.textContent = DG.INSTA_HANDLE; });
+
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('nav.bottom-nav').forEach(nav => {
+    const ul = nav.querySelector('ul') || document.createElement('ul');
+    ul.innerHTML = DG.NAV.map(item => {
+      const isActive = currentPath === item.href || currentPath.startsWith(item.href + '/');
+      return `<li>
+        <a href="${item.href}"${isActive ? ' class="active"' : ''}>
+          <i class="ti ${item.icon}"></i>
+          <span>${item.label}</span>
+        </a>
+      </li>`;
+    }).join('');
+    if (!nav.querySelector('ul')) nav.appendChild(ul);
+  });
+})();
+</script>
+</body>
+</html>

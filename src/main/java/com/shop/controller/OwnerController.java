@@ -21,21 +21,11 @@ public class OwnerController {
     private PhotoService photoService;
 
     // ─── Dashboard ──────────────────────────────────
+ // ─── Dashboard (now goes to clients page) ───────
     @GetMapping("/dashboard")
-    public String dashboard(Authentication auth, Model model) {
-        Owner owner = ownerService.getLoggedInOwner(auth.getName());
-        model.addAttribute("owner", owner);
-        model.addAttribute("clientCount",
-            clientService.countByOwner(owner.getId()));
-        model.addAttribute("photoCount",
-            photoService.countByOwner(owner.getId()));
-        model.addAttribute("totalRevenue", 0);
-        model.addAttribute("paidOrders", 0);
-        model.addAttribute("recentClients",
-            clientService.findByOwner(owner.getId()));
-        return "dashboard";  // ← templates/dashboard.html
+    public String dashboard() {
+        return "redirect:/clients";
     }
-
     // ─── Profile Page ───────────────────────────────
     @GetMapping("/owner/profile")
     public String profilePage(Authentication auth, Model model) {

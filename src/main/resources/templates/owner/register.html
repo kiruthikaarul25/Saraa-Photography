@@ -1,155 +1,443 @@
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register — Dream Gallery Photography</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Admin Sign Up — Saara Photography</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Raleway',sans-serif;background:#080808;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}
-        body::before{content:'';position:fixed;inset:0;background:url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&auto=format&fit=crop') center/cover no-repeat;opacity:0.04;pointer-events:none}
+:root{color-scheme:dark}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        .wrap{width:100%;max-width:420px;position:relative;z-index:1}
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
+            font-weight: 400;
+            background:#111111;
+            color:#ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-        /* BRAND */
-        .brand{text-align:center;margin-bottom:32px}
-        .brand-dots{display:flex;justify-content:center;gap:6px;margin-bottom:16px}
-        .brand-dots span{width:5px;height:5px;border-radius:50%;background:rgba(212,175,55,0.3)}
-        .brand-dots span:nth-child(2){background:#D4AF37}
-        .brand h1{font-family:'Cinzel',serif;font-size:clamp(1.4rem,4vw,1.8rem);font-weight:300;color:#fff;letter-spacing:6px}
-        .brand h1 span{color:#D4AF37}
-        .brand p{font-size:0.68rem;letter-spacing:5px;text-transform:uppercase;color:#333;margin-top:6px}
+        input, button {
+            font-family: inherit;
+            font-weight: 700;
+        }
 
-        /* CARD */
-        .card{background:#0e0e0e;border:1px solid rgba(212,175,55,0.18);border-radius:22px;padding:36px 32px;position:relative;overflow:hidden}
-        .card::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(to right,transparent,#D4AF37,transparent)}
-        @media(max-width:480px){.card{padding:28px 20px}}
+        .box {
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid rgba(233,30,99,.4);
+            border-top: 8px solid #e91e63;
+            border-radius: 20px;
+            padding: 32px 26px;
+        }
 
-        .card-eyebrow{font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;color:#D4AF37;margin-bottom:8px}
-        .card h2{font-family:'Cinzel',serif;font-size:1.3rem;font-weight:300;color:#fff;letter-spacing:3px;margin-bottom:6px}
-        .gold-line{width:40px;height:1px;background:linear-gradient(to right,transparent,#D4AF37,transparent);margin-bottom:26px}
+        .logo {
+            display: block;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid #e91e63;
+            margin: 0 auto 14px;
+        }
 
-        /* ERROR */
-        .alert-error{display:flex;align-items:center;gap:10px;background:rgba(231,76,60,0.07);border:1px solid rgba(231,76,60,0.25);border-radius:12px;padding:12px 16px;color:#e74c3c;font-size:0.8rem;margin-bottom:22px}
-        .alert-error i{font-size:1.05rem;flex-shrink:0}
+        .tag {
+            display: block;
+            text-align: center;
+            font-size: 11px;
+            letter-spacing: 5px;
+            color: #e91e63;
+            text-transform: uppercase;
+        }
 
-        /* SECTION SEP */
-        .section-sep{display:flex;align-items:center;gap:10px;margin:20px 0 16px}
-        .section-sep .sep-line{flex:1;height:1px;background:rgba(212,175,55,0.08)}
-        .section-sep .sep-label{font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:#2a2a2a;white-space:nowrap}
+        h1 {
+            text-align: center;
+            font-size: 1.9rem;
+            margin: 6px 0 20px;
+        }
 
-        /* FIELDS */
-        .field{margin-bottom:16px}
-        .field label{display:block;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:7px}
-        .input-wrap{position:relative}
-        .input-wrap i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#333;font-size:1rem;pointer-events:none;transition:color 0.3s}
-        .input-wrap:focus-within i{color:#D4AF37}
-        .field input{width:100%;background:#080808;border:1px solid rgba(212,175,55,0.12);border-radius:12px;padding:12px 16px 12px 42px;color:#fff;font-family:'Raleway',sans-serif;font-size:0.86rem;font-weight:300;outline:none;transition:border-color 0.3s}
-        .field input::placeholder{color:#252525}
-        .field input:focus{border-color:rgba(212,175,55,0.45)}
+        label {
+            display: block;
+            font-size: .78rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin: 14px 0 6px;
+        }
 
-        /* SUBMIT */
-        .btn-register{width:100%;margin-top:10px;padding:14px;background:transparent;border:1px solid rgba(212,175,55,0.45);color:#D4AF37;border-radius:40px;cursor:pointer;font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:3px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.35s}
-        .btn-register:hover{background:#D4AF37;color:#000;border-color:#D4AF37}
-        .btn-register i{font-size:1rem}
+        .field {
+            position: relative;
+        }
 
-        /* LOGIN LINK */
-        .login-link{text-align:center;margin-top:22px;font-size:0.78rem;color:#2a2a2a;letter-spacing:0.5px}
-        .login-link a{color:#D4AF37;text-decoration:none;border-bottom:1px solid rgba(212,175,55,0.3);transition:border-color 0.3s;padding-bottom:1px}
-        .login-link a:hover{border-color:#D4AF37}
+        .field input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid rgba(233,30,99,.4);
+            border-radius: 12px;
+            font-size: 1rem;
+        }
+
+        .field input:focus {
+            outline: none;
+            border-color: #e91e63;
+        }
+
+        .otp-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .otp-row input {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .otp-btn {
+            border: 0;
+            border-radius: 12px;
+            padding: 0 12px;
+            background: #d81b60;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .otp-btn:hover {
+            background: #e91e63;
+        }
+
+        .submit {
+            width: 100%;
+            margin-top: 22px;
+            padding: 14px;
+            border: 0;
+            border-radius: 999px;
+            background: #e91e63;
+            color: #fff;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .submit:hover {
+            background: #d81b60;
+        }
+
+        .msg {
+            margin-top: 14px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: .9rem;
+            display: none;
+        }
+
+        .msg.err {
+            display: block;
+            background: #d81b60;
+            color: #fff;
+        }
+
+        .msg.ok {
+            display: block;
+            background: #e91e63;
+            color: #fff;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 20px;
+            font-size: .92rem;
+            line-height: 2;
+        }
+
+        .links a {
+            color: #e91e63;
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            color:#ffffff;
+        }
     </style>
+
+<style id="pink-theme">
+/* ===== Medium dark pink + white + black theme ===== */
+:root{--pink-main:#e91e63;--pink-dark:#ad1457;--pink-deep:#c2185b;--black:#111111}
+html,body{font-family:"Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif !important}
+button,input,select,textarea{font-family:inherit !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card,.mob-client-card,.insta-item,.photo-item,.preview-item,.album-header,.drop-zone,.item{box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.sidebar{box-shadow:4px 0 18px rgba(0,0,0,.35)}
+.bottom-nav{box-shadow:0 -4px 16px rgba(0,0,0,.3)}
+button,.btn-save,.btn-add,.btn-copy,.btn-back,.back-btn,.submit,.logout-btn,.sidebar-logout{box-shadow:0 4px 12px rgba(0,0,0,.3)}
+input,select,textarea{box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.btn-back,.back-btn{background:var(--black) !important;color:#fff !important;border:1px solid var(--black) !important}
+.btn-back:hover,.back-btn:hover{background:var(--pink-main) !important;border-color:var(--pink-main) !important}
+.section-sep{border-color:var(--black) !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card{border-top:4px solid var(--black)}
+
+/* dark pages: pink background, black cards, white headings */
+.main h1,.main h1 span,.page-title,.page-title span,.main>.section-label,.main>.page-top *,.page-header *,.main>h2,.main>p{color:#fff !important}
+.main .section-label,.main .section-title{color:#fff !important}
+.sidebar{background:#111111 !important;border-right:3px solid var(--pink-main)}
+.album-header{background:#111111 !important}
+.album-header *{color:#fff !important}
+.album-header .badge,.album-header [class*=count]{color:#fff !important}
+</style>
+
+<style id="pink-white-theme-overrides">
+:root { color-scheme: light !important; --theme-pink:#d95791; --theme-pink-dark:#c94480; --theme-pink-light:#f7dce8; --theme-white:#ffffff; --theme-black:#171317; --theme-muted:#6f6269; --theme-border:#efd0dd; }
+html { color-scheme: light !important; }
+body { background:#fff !important; color:var(--theme-black) !important; }
+body::before { opacity:.025 !important; }
+header, nav, aside, .sidebar, .topbar, .navbar, .header, .side-nav, .mobile-nav {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+}
+main, .main, .content, .main-content, .page-content, .workspace, .container, .wrap {
+  color:var(--theme-black);
+}
+.card, .box, .panel, .modal, .form-card, .stat-card, .table-wrap, .content-card,
+.package-card, .client-card, .upload-card, .success-card, .login-card {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+  box-shadow:0 5px 18px rgba(190,75,125,.10) !important;
+  transition:box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+}
+.card:hover, .box:hover, .panel:hover, .stat-card:hover, .package-card:hover, .client-card:hover {
+  box-shadow:0 8px 22px rgba(190,75,125,.15) !important;
+  border-color:#e7a9c4 !important;
+}
+h1,h2,h3,h4,h5,h6,p,label,small,span,td,th,li,div { }
+h1,h2,h3,h4,h5,h6,p,label,td,th { color:inherit; }
+.brand, .tag, .sidebar-brand h2, .section-title, .page-title, .logo-text,
+a:not(.btn):not([class*="button"]) { color:var(--theme-pink-dark) !important; }
+button, .btn, input[type="submit"], input[type="button"], .button, a.btn {
+  background:var(--theme-pink) !important; color:#fff !important;
+  border-color:var(--theme-pink) !important;
+  box-shadow:0 3px 10px rgba(217,87,145,.16) !important;
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+button:hover, .btn:hover, input[type="submit"]:hover, input[type="button"]:hover, .button:hover {
+  background:var(--theme-pink-dark) !important; transform:translateY(-1px);
+  box-shadow:0 5px 13px rgba(217,87,145,.22) !important;
+}
+input, select, textarea {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:#e8c5d5 !important;
+}
+input::placeholder, textarea::placeholder { color:#a99aa1 !important; }
+table th { background:var(--theme-pink-light) !important; color:#39232e !important; }
+table td { color:var(--theme-black) !important; border-color:#f0dce5 !important; }
+hr, .divider { border-color:var(--theme-border) !important; }
+.badge, .pill, .status { border-color:#edc4d6 !important; }
+@keyframes softFadeUp { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+.card, .box, .panel, .stat-card, .package-card, .client-card { animation:softFadeUp .45s ease both; }
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } }
+</style>
+<style id="dark-pink-white-theme">
+:root{--bg:#ffffff!important;--surface:#ffffff!important;--soft:#fff3f7!important;--text:#171317!important;--muted:#765b68!important;--pink:#c2185b!important;--pink-main:#c2185b!important;--pink-dark:#880e4f!important;--pink-deep:#ad1457!important;--theme-pink:#c2185b!important;--theme-pink-dark:#880e4f!important;--theme-pink-light:#fff0f5!important;--theme-white:#fff!important;--theme-black:#171317!important;--theme-muted:#765b68!important;--theme-border:#f0bfd2!important}
+html,body{background:#fff!important;color:#171317!important;color-scheme:light!important}
+body{font-weight:400!important}
+/* White surfaces; dark pink is the only strong theme colour. */
+.sidebar,.main,.card,.table-card,.table-wrapper,.ph,.ph-body,.panel,.form-card,.content-card,.modal-content,.stat-card,.dashboard-card,.section-card,.album-header,.row,.client-card,.package-card,.profile-card,.upload-card,.gallery-card,.auth-card,.login-card,.form-container,.page-card{background:#fff!important;color:#171317!important;border-color:#f0bfd2!important;box-shadow:0 5px 18px rgba(136,14,79,.08)!important}
+.sidebar{border-right:1px solid #f0bfd2!important}
+.sidebar-brand,.sidebar-footer{border-color:#f0bfd2!important}
+.sidebar-brand h2,.page-top h4 span,.card-label,.nav-section,.section-title,.section-label,.ph-body label,.cat-label{color:#c2185b!important}
+.nav-item,.logout-btn,.sidebar-nav a{color:#171317!important}
+.nav-item:hover,.nav-item.active,.logout-btn:hover,.sidebar-nav a:hover{background:#fff0f5!important;color:#171317!important;border-color:#c2185b!important}
+input,select,textarea,.sel,.ph-body input[type=text],.ph-body select{background:#fff!important;color:#171317!important;border:1px solid #e8b2c8!important}
+input::placeholder,textarea::placeholder{color:#987b88!important}
+button,.btn,.btn-primary,.btn-add,.save-btn,.action-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important;transition:all .22s ease!important}
+button:hover,.btn:hover,.btn-primary:hover,.btn-add:hover,.save-btn:hover,.action-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important;transform:translateY(-1px)}
+.btn.del,.btn-delete,.delete-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important}
+.btn.del:hover,.btn-delete:hover,.delete-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.file-pick{background:#fff5f8!important;color:#c2185b!important;border-color:#c2185b!important}
+.file-pick:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.tag,.badge,.status-badge{background:#c2185b!important;color:#fff!important}
+hr{border-color:#f0bfd2!important}
+.card,.ph,.table-card{border-radius:16px!important}
+.ph{overflow:hidden!important}
+.ph-body{color:#171317!important}
+/* Keep status colours legible while preventing dark panels. */
+.msg{background:#f0fff4!important;color:#236b3b!important}
+</style>
 </head>
+
 <body>
+<div class="box">
 
-<div class="wrap">
+    <img class="logo" src="/images/logo.png" alt="Saara Photography logo">
 
-    <div class="brand">
-        <div class="brand-dots"><span></span><span></span><span></span></div>
-        <h1>Dream <span>Gallery</span></h1>
-        <p>Photography Admin Portal</p>
-    </div>
+    <span class="tag">Saara Photography</span>
+    <h1>Admin Sign Up</h1>
 
-    <div class="card">
-        <p class="card-eyebrow">New Account</p>
-        <h2>Create Account</h2>
-        <div class="gold-line"></div>
+    <form id="form" autocomplete="on">
 
-        <div class="alert-error" th:if="${error}">
-            <i class="ti ti-alert-circle"></i>
-            <span th:text="${error}">Error message</span>
+        <label for="name">Full Name</label>
+        <div class="field">
+            <input type="text" id="name"
+                   placeholder="Enter your name" required>
         </div>
 
-        <form th:action="@{/register}" th:object="${owner}" method="post">
+        <label for="mobile">Mobile Number</label>
+        <div class="field">
+            <input type="tel" id="mobile"
+                   placeholder="Enter 10 digit mobile number"
+                   maxlength="10"
+                   pattern="[6-9][0-9]{9}"
+                   required>
+        </div>
 
-            <!-- PERSONAL -->
-            <div class="section-sep">
-                <div class="sep-line"></div>
-                <div class="sep-label">Personal</div>
-                <div class="sep-line"></div>
-            </div>
+        <label for="otp">SMS OTP</label>
+        <div class="field otp-row">
+            <input type="text" id="otp"
+                   placeholder="Enter 6 digit OTP"
+                   maxlength="6"
+                   inputmode="numeric"
+                   required>
 
-            <div class="field">
-                <label>Full Name</label>
-                <div class="input-wrap">
-                    <input type="text" th:field="*{name}" placeholder="Arjun Sharma" required>
-                    <i class="ti ti-user"></i>
-                </div>
-            </div>
-
-            <div class="field">
-                <label>Studio Name</label>
-                <div class="input-wrap">
-                    <input type="text" th:field="*{studioName}" placeholder="Arjun Captures">
-                    <i class="ti ti-camera"></i>
-                </div>
-            </div>
-
-            <!-- CREDENTIALS -->
-            <div class="section-sep">
-                <div class="sep-line"></div>
-                <div class="sep-label">Credentials</div>
-                <div class="sep-line"></div>
-            </div>
-
-            <div class="field">
-                <label>Email</label>
-                <div class="input-wrap">
-                    <input type="email" th:field="*{email}" placeholder="your@email.com" required>
-                    <i class="ti ti-mail"></i>
-                </div>
-            </div>
-
-            <div class="field">
-                <label>Phone</label>
-                <div class="input-wrap">
-                    <input type="text" th:field="*{phone}" placeholder="+91 98765 43210">
-                    <i class="ti ti-phone"></i>
-                </div>
-            </div>
-
-            <div class="field">
-                <label>Password</label>
-                <div class="input-wrap">
-                    <input type="password" th:field="*{passwordHash}" placeholder="••••••••" required>
-                    <i class="ti ti-lock"></i>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-register">
-                <i class="ti ti-user-plus"></i>Create Account
+            <button type="button" class="otp-btn" id="sendOtpBtn"
+                    onclick="sendOtp()">
+                Send OTP
             </button>
+        </div>
 
-        </form>
+        <label for="password">Password</label>
+        <div class="field">
+            <input type="password" id="password"
+                   placeholder="Create password" required>
+        </div>
+
+        <label for="confirmPassword">Confirm Password</label>
+        <div class="field">
+            <input type="password" id="confirmPassword"
+                   placeholder="Confirm password" required>
+        </div>
+
+        <button class="submit" type="submit">Create Account</button>
+
+        <div class="msg" id="msg"></div>
+    </form>
+
+    <div class="links">
+        Already have an account?
+        <a href="/login">Login</a><br>
+
+        <a href="/"> <i class="ti ti-arrow-left"></i> Back to website</a>
     </div>
-
-    <p class="login-link">
-        Already have an account? <a th:href="@{/login}">Login</a>
-    </p>
 
 </div>
 
-<script src="/js/constants.js"></script>
+<script>
+    function say(message, success) {
+        const msg = document.getElementById('msg');
+        msg.textContent = message;
+        msg.className = 'msg ' + (success ? 'ok' : 'err');
+    }
+
+    function validMobile(mobile) {
+        return /^[6-9][0-9]{9}$/.test(mobile);
+    }
+
+    async function sendOtp() {
+        const mobile = document.getElementById('mobile').value.trim();
+
+        if (!validMobile(mobile)) {
+            say('Valid 10 digit mobile number enter pannunga.', false);
+            return;
+        }
+
+        const btn = document.getElementById('sendOtpBtn');
+        btn.disabled = true;
+
+        try {
+            const response = await fetch('/register/send-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    mobile: mobile
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                say('SMS OTP sent successfully!', true);
+            } else {
+                say(result.message || 'OTP send failed.', false);
+            }
+        } catch (error) {
+            say('Server not reachable.', false);
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    document.getElementById('form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value.trim();
+        const mobile = document.getElementById('mobile').value.trim();
+        const otp = document.getElementById('otp').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (!validMobile(mobile)) {
+            say('Valid mobile number enter pannunga.', false);
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            say('Passwords do not match.', false);
+            return;
+        }
+
+        if (!/^[0-9]{6}$/.test(otp)) {
+            say('Correct 6 digit OTP enter pannunga.', false);
+            return;
+        }
+
+        try {
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    name: name,
+                    mobile: mobile,
+                    password: password,
+                    confirmPassword: confirmPassword,
+                    otp: otp
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                say('Registration successful!', true);
+                setTimeout(() => {
+                    location.href = '/login';
+                }, 1000);
+            } else {
+                say(result.message || 'Registration failed.', false);
+            }
+        } catch (error) {
+            say('Server not reachable.', false);
+        }
+    });
+</script>
+
 </body>
 </html>

@@ -1,387 +1,461 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dream Gallery Photography</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>Saara Photography | Destination Photographer</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+/* ===== Floating WhatsApp & Instagram Icons ===== */
+.floating-social {
+    position: fixed;
+    right: 18px;
+    bottom: 90px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 999;
+}
+.floating-social a {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 24px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.floating-social a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+.floating-social .whatsapp-btn { background-color: #000000; }
+.floating-social .instagram-btn { background: #e91e63; }
+@media (min-width: 768px) {
+    .floating-social { bottom: 100px; right: 30px; }
+}
 
-        body {
-            font-family: 'Raleway', sans-serif;
-            background: #080808;
-            color: #fff;
-            overflow-x: hidden;
-        }
+/* ===== page styles ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .fixed-social {
-            position: fixed;
-            bottom: 90px;
-            right: 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 300;
-        }
-        .fixed-social a {
-            width: 46px; height: 46px;
-            border: 1px solid rgba(212,175,55,0.35);
-            background: rgba(8,8,8,0.85);
-            backdrop-filter: blur(12px);
-            display: flex; align-items: center; justify-content: center;
-            color: #D4AF37;
-            font-size: 20px;
-            text-decoration: none;
-            transition: border-color 0.3s, background 0.3s, transform 0.3s;
-        }
-        .fixed-social a:hover {
-            border-color: #D4AF37;
-            background: rgba(212,175,55,0.12);
-            transform: scale(1.1);
-        }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
+    background: #ffffff;
+    color: #000000;
+    font-weight: 400;
+    overflow-x: hidden;
+    padding-bottom: 70px;
+}
 
-        .hero {
-            position: relative;
-            height: 100vh;
-            overflow: hidden;
-        }
+.fixed-social {
+    position: fixed;
+    bottom: 90px;
+    right: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 300;
+}
+.fixed-social a {
+    width: 46px; height: 46px;
+    border: 1px solid rgba(212,20,106,0.35);
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: center;
+    color: #e91e63;
+    font-size: 20px;
+    text-decoration: none;
+    transition: border-color 0.3s, background 0.3s, transform 0.3s;
+}
+.fixed-social a:hover {
+    border-color: #e91e63;
+    background: rgba(212,20,106,0.12);
+    transform: scale(1.1);
+}
 
-        .slide {
-            position: absolute;
-            width: 100%; height: 100%;
-            background-size: cover;
-            background-position: center top;
-            opacity: 0;
-            transition: opacity 2s ease-in-out;
-            transform: scale(1.08);
-        }
+.hero {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(180deg, #ffe3ef 0%, #ffffff 100%);
+    border-bottom: 4px solid #e91e63;
+}
+.hero-content {
+    position: absolute;
+    top: 46%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+    width: 90%;
+}
+.hero-logo {
+    width: 120px; height: 120px;
+    display: block;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    border: 3px solid #e91e63;
+    box-shadow: 0 6px 24px rgba(212,20,106,.55);
+}
+.hero-tag {
+    font-size: 10px;
+    letter-spacing: 6px;
+    color: #e91e63;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.4s forwards;
+}
+.hero-content h1 {
+    font-size: clamp(2.8rem, 8vw, 6rem);
+    color: #000000;
+    letter-spacing: 4px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 14px;
+    min-height: 1.2em;
+}
+.hero-content h1 span.gold { color: #e91e63; }
 
-        .slide.active {
-            opacity: 1;
-            animation: zoomSlide 7s ease-in-out forwards;
-        }
+.cursor {
+    display: inline-block;
+    width: 2px;
+    background: #e91e63;
+    margin-left: 3px;
+    animation: blink 0.75s step-end infinite;
+    vertical-align: baseline;
+    height: 0.85em;
+    position: relative;
+    top: 0.05em;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        @keyframes zoomSlide {
-            from { transform: scale(1.08); }
-            to   { transform: scale(1.0); }
-        }
+.hero-gold-line {
+    width: 50px; height: 1px;
+    background: #e91e63;
+    margin: 16px auto;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.9s forwards;
+}
+.hero-sub {
+    font-size: clamp(0.72rem, 2vw, 0.88rem);
+    color: #000000;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    min-height: 1.4em;
+}
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
 
-        .slide:nth-child(1) { background-image: url('https://images.unsplash.com/photo-1612428852832-5a31da9e6e9e?w=1600&auto=format&fit=crop'); }
-        .slide:nth-child(2) { background-image: url('https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=1600&auto=format&fit=crop'); }
-        .slide:nth-child(3) { background-image: url('https://images.unsplash.com/photo-1617575521317-d6234c9ed726?w=1600&auto=format&fit=crop'); }
-        .slide:nth-child(4) { background-image: url('https://images.unsplash.com/photo-1583939411023-14783179e581?w=1600&auto=format&fit=crop'); }
-        .slide:nth-child(5) { background-image: url('https://images.unsplash.com/photo-1601933470096-0e34634ffcde?w=1600&auto=format&fit=crop'); }
+.insta-section {
+    padding: 70px 20px 40px;
+    background: #fff5f9;
+    text-align: center;
+}
+.insta-tag {
+    font-size: 9px;
+    letter-spacing: 5px;
+    color: #e91e63;
+    text-transform: uppercase;
+    opacity: 0.7;
+    display: block;
+    margin-bottom: 10px;
+}
+.insta-section h2 {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    color: #e91e63;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+}
+.insta-section p {
+    color: #000000;
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    margin-bottom: 36px;
+    text-transform: uppercase;
+}
+.insta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+@media (max-width: 500px) { .insta-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 768px) {
+    .insta-grid { gap: 6px; max-width: 760px; }
+    .insta-section { padding: 90px 32px 50px; }
+}
+@media (min-width: 1024px) {
+    .insta-grid { max-width: 940px; gap: 8px; }
+    .insta-section { padding: 110px 40px 60px; }
+}
+@media (max-width: 360px) {
+    .fixed-social { right: 12px; bottom: 80px; }
+    .fixed-social a { width: 40px; height: 40px; font-size: 17px; }
+    .insta-section { padding: 56px 14px 32px; }
+}
 
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                to bottom,
-                rgba(0,0,0,0.3) 0%,
-                rgba(0,0,0,0.05) 40%,
-                rgba(0,0,0,0.78) 100%
-            );
-            z-index: 1;
-        }
+.insta-item {
+    aspect-ratio: 1;
+    background: #ffffff;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+.insta-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    transition: transform 0.6s ease;
+    pointer-events: none;
+    user-select: none;
+    display: block;
+}
+.insta-item::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(212,20,106,0);
+    transition: background 0.4s;
+}
+.insta-title {
+    position: absolute; left: 0; right: 0; bottom: 0; z-index: 3;
+    padding: 22px 10px 9px;
+    background: linear-gradient(to top, rgba(0,0,0,.72), transparent);
+    color: #fff; font-size: 0.72rem; letter-spacing: 2px;
+    text-transform: uppercase; text-align: center;
+}
+.insta-cat { position: absolute; top: 8px; left: 8px; z-index: 4; background: #e91e63; color: #fff; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
+.insta-work { background: #e91e63; color: #fff; border-color: #e91e63; margin-right: 8px; }
+.insta-work::before { background: #ad1457; }
+.insta-item:hover img { transform: scale(1.08); }
+.insta-item:hover::after { background: rgba(212,20,106,0.1); }
+.insta-item::before {
+    content: '';
+    position: absolute; inset: 0;
+    border: 2px solid transparent;
+    transition: border-color 0.4s;
+    z-index: 2;
+}
+.insta-item:hover::before { border-color: rgba(212,20,106,0.45); }
 
-        .hero-content {
-            position: absolute;
-            bottom: 110px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            z-index: 2;
-            width: 90%;
-        }
+.insta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 32px;
+    padding: 13px 32px;
+    border: 1px solid rgba(212,20,106,0.4);
+    color: #e91e63;
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+.insta-link::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: #e91e63;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+    z-index: 0;
+}
+.insta-link:hover::before { transform: scaleX(1); }
+.insta-link:hover { color: #fff; }
+.insta-link span, .insta-link i { position: relative; z-index: 1; }
+.insta-link i { font-size: 18px; }
 
-        .hero-tag {
-            font-family: 'Cinzel', serif;
-            font-size: 10px;
-            letter-spacing: 6px;
-            color: #D4AF37;
-            text-transform: uppercase;
-            display: block;
-            margin-bottom: 16px;
-            opacity: 0;
-            animation: fadeUp 1s ease 0.4s forwards;
-        }
+.bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 200;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(212,20,106,0.15);
+    padding: 10px 0 max(10px, env(safe-area-inset-bottom));
+}
+.bottom-nav ul {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    max-width: 500px;
+    margin: 0 auto;
+}
+.bottom-nav ul li a {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 4px;
+    text-decoration: none;
+    color: #000000;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    padding: 4px 8px;
+}
+.bottom-nav ul li a i { font-size: 20px; transition: transform 0.3s; }
+.bottom-nav ul li a:hover i { transform: translateY(-3px); }
+.bottom-nav ul li a:hover,
+.bottom-nav ul li a.active { color: #e91e63; }
 
-        .hero-content h1 {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(2.8rem, 8vw, 6rem);
-            color: #fff;
-            letter-spacing: 4px;
-            font-weight: 300;
-            line-height: 1.1;
-            margin-bottom: 14px;
-            min-height: 1.2em;
-        }
+.spacer { height: 80px; }
 
-        .hero-content h1 span.gold { color: #D4AF37; }
-
-        /* typewriter cursor */
-        .cursor {
-            display: inline-block;
-            width: 2px;
-            background: #D4AF37;
-            margin-left: 3px;
-            animation: blink 0.75s step-end infinite;
-            vertical-align: baseline;
-            height: 0.85em;
-            position: relative;
-            top: 0.05em;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50%       { opacity: 0; }
-        }
-
-        .hero-gold-line {
-            width: 50px; height: 1px;
-            background: #D4AF37;
-            margin: 16px auto;
-            opacity: 0;
-            animation: fadeUp 1s ease 0.9s forwards;
-        }
-
-        .hero-sub {
-            font-family: 'Raleway', sans-serif;
-            font-size: clamp(0.72rem, 2vw, 0.88rem);
-            color: rgba(255,255,255,0.45);
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            font-weight: 300;
-            min-height: 1.4em;
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(18px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .slide-dots {
-            position: absolute;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 3;
-        }
-        .dot {
-            width: 24px; height: 2px;
-            background: rgba(255,255,255,0.2);
-            transition: background 0.4s, width 0.4s;
-            cursor: pointer;
-        }
-        .dot.active { background: #D4AF37; width: 40px; }
-
-        .insta-section {
-            padding: 70px 20px 40px;
-            background: #080808;
-            text-align: center;
-        }
-
-        .insta-tag {
-            font-family: 'Cinzel', serif;
-            font-size: 9px;
-            letter-spacing: 5px;
-            color: #D4AF37;
-            text-transform: uppercase;
-            opacity: 0.7;
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .insta-section h2 {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(1.5rem, 4vw, 2.2rem);
-            color: #e8e0d5;
-            font-weight: 300;
-            letter-spacing: 3px;
-            margin-bottom: 6px;
-        }
-
-        .insta-section p {
-            color: #444;
-            font-size: 0.78rem;
-            letter-spacing: 2px;
-            margin-bottom: 36px;
-            text-transform: uppercase;
-        }
-
-        .insta-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 3px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        @media(max-width: 500px) {
-            .insta-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        .insta-item {
-            aspect-ratio: 1;
-            background: #111;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .insta-item img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            object-position: center top;
-            transition: transform 0.6s ease;
-            pointer-events: none;
-            user-select: none;
-            display: block;
-        }
-
-        .insta-item::after {
-            content: '';
-            position: absolute; inset: 0;
-            background: rgba(212,175,55,0);
-            transition: background 0.4s;
-        }
-        .insta-item:hover img { transform: scale(1.08); }
-        .insta-item:hover::after { background: rgba(212,175,55,0.1); }
-
-        .insta-item::before {
-            content: '';
-            position: absolute; inset: 0;
-            border: 2px solid transparent;
-            transition: border-color 0.4s;
-            z-index: 2;
-        }
-        .insta-item:hover::before { border-color: rgba(212,175,55,0.45); }
-
-        .insta-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 32px;
-            padding: 13px 32px;
-            border: 1px solid rgba(212,175,55,0.4);
-            color: #D4AF37;
-            text-decoration: none;
-            font-family: 'Cinzel', serif;
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        .insta-link::before {
-            content: '';
-            position: absolute; inset: 0;
-            background: #D4AF37;
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.3s;
-            z-index: 0;
-        }
-        .insta-link:hover::before { transform: scaleX(1); }
-        .insta-link:hover { color: #000; }
-        .insta-link span, .insta-link i { position: relative; z-index: 1; }
-        .insta-link i { font-size: 18px; }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            z-index: 200;
-            background: rgba(8,8,8,0.92);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(212,175,55,0.15);
-            padding: 10px 0 max(10px, env(safe-area-inset-bottom));
-        }
-
-        .bottom-nav ul {
-            display: flex;
-            justify-content: space-around;
-            list-style: none;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .bottom-nav ul li a {
-            display: flex; flex-direction: column;
-            align-items: center; gap: 4px;
-            text-decoration: none;
-            color: #444;
-            font-family: 'Cinzel', serif;
-            font-size: 8px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: color 0.3s;
-            padding: 4px 8px;
-        }
-
-        .bottom-nav ul li a i { font-size: 20px; transition: transform 0.3s; }
-        .bottom-nav ul li a:hover i { transform: translateY(-3px); }
-        .bottom-nav ul li a:hover,
-        .bottom-nav ul li a.active { color: #D4AF37; }
-
-        .spacer { height: 80px; }
-
-        .animate-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-        }
-        .animate-in.visible { opacity: 1; transform: translateY(0); }
+.animate-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.animate-in.visible { opacity: 1; transform: translateY(0); }
     </style>
+
+<style id="pink-theme">
+/* ===== Medium dark pink + white + black theme ===== */
+:root{--pink-main:#e91e63;--pink-dark:#ad1457;--pink-deep:#c2185b;--black:#111111}
+html,body{font-family:"Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif !important}
+button,input,select,textarea{font-family:inherit !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card,.mob-client-card,.insta-item,.photo-item,.preview-item,.album-header,.drop-zone,.item{box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.sidebar{box-shadow:4px 0 18px rgba(0,0,0,.35)}
+.bottom-nav{box-shadow:0 -4px 16px rgba(0,0,0,.3)}
+button,.btn-save,.btn-add,.btn-copy,.btn-back,.back-btn,.submit,.logout-btn,.sidebar-logout{box-shadow:0 4px 12px rgba(0,0,0,.3)}
+input,select,textarea{box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.btn-back,.back-btn{background:var(--black) !important;color:#fff !important;border:1px solid var(--black) !important}
+.btn-back:hover,.back-btn:hover{background:var(--pink-main) !important;border-color:var(--pink-main) !important}
+.section-sep{border-color:var(--black) !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card{border-top:4px solid var(--black)}
+</style>
+
+<style id="pink-white-theme-overrides">
+:root { color-scheme: light !important; --theme-pink:#d95791; --theme-pink-dark:#c94480; --theme-pink-light:#f7dce8; --theme-white:#ffffff; --theme-black:#171317; --theme-muted:#6f6269; --theme-border:#efd0dd; }
+html { color-scheme: light !important; }
+body { background:#fff !important; color:var(--theme-black) !important; }
+body::before { opacity:.025 !important; }
+header, nav, aside, .sidebar, .topbar, .navbar, .header, .side-nav, .mobile-nav {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+}
+main, .main, .content, .main-content, .page-content, .workspace, .container, .wrap {
+  color:var(--theme-black);
+}
+.card, .box, .panel, .modal, .form-card, .stat-card, .table-wrap, .content-card,
+.package-card, .client-card, .upload-card, .success-card, .login-card {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+  box-shadow:0 5px 18px rgba(190,75,125,.10) !important;
+  transition:box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+}
+.card:hover, .box:hover, .panel:hover, .stat-card:hover, .package-card:hover, .client-card:hover {
+  box-shadow:0 8px 22px rgba(190,75,125,.15) !important;
+  border-color:#e7a9c4 !important;
+}
+h1,h2,h3,h4,h5,h6,p,label,small,span,td,th,li,div { }
+h1,h2,h3,h4,h5,h6,p,label,td,th { color:inherit; }
+.brand, .tag, .sidebar-brand h2, .section-title, .page-title, .logo-text,
+a:not(.btn):not([class*="button"]) { color:var(--theme-pink-dark) !important; }
+button, .btn, input[type="submit"], input[type="button"], .button, a.btn {
+  background:var(--theme-pink) !important; color:#fff !important;
+  border-color:var(--theme-pink) !important;
+  box-shadow:0 3px 10px rgba(217,87,145,.16) !important;
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+button:hover, .btn:hover, input[type="submit"]:hover, input[type="button"]:hover, .button:hover {
+  background:var(--theme-pink-dark) !important; transform:translateY(-1px);
+  box-shadow:0 5px 13px rgba(217,87,145,.22) !important;
+}
+input, select, textarea {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:#e8c5d5 !important;
+}
+input::placeholder, textarea::placeholder { color:#a99aa1 !important; }
+table th { background:var(--theme-pink-light) !important; color:#39232e !important; }
+table td { color:var(--theme-black) !important; border-color:#f0dce5 !important; }
+hr, .divider { border-color:var(--theme-border) !important; }
+.badge, .pill, .status { border-color:#edc4d6 !important; }
+@keyframes softFadeUp { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+.card, .box, .panel, .stat-card, .package-card, .client-card { animation:softFadeUp .45s ease both; }
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } }
+</style>
+<style id="dark-pink-white-theme">
+:root{--bg:#ffffff!important;--surface:#ffffff!important;--soft:#fff3f7!important;--text:#171317!important;--muted:#765b68!important;--pink:#c2185b!important;--pink-main:#c2185b!important;--pink-dark:#880e4f!important;--pink-deep:#ad1457!important;--theme-pink:#c2185b!important;--theme-pink-dark:#880e4f!important;--theme-pink-light:#fff0f5!important;--theme-white:#fff!important;--theme-black:#171317!important;--theme-muted:#765b68!important;--theme-border:#f0bfd2!important}
+html,body{background:#fff!important;color:#171317!important;color-scheme:light!important}
+body{font-weight:400!important}
+/* White surfaces; dark pink is the only strong theme colour. */
+.sidebar,.main,.card,.table-card,.table-wrapper,.ph,.ph-body,.panel,.form-card,.content-card,.modal-content,.stat-card,.dashboard-card,.section-card,.album-header,.row,.client-card,.package-card,.profile-card,.upload-card,.gallery-card,.auth-card,.login-card,.form-container,.page-card{background:#fff!important;color:#171317!important;border-color:#f0bfd2!important;box-shadow:0 5px 18px rgba(136,14,79,.08)!important}
+.sidebar{border-right:1px solid #f0bfd2!important}
+.sidebar-brand,.sidebar-footer{border-color:#f0bfd2!important}
+.sidebar-brand h2,.page-top h4 span,.card-label,.nav-section,.section-title,.section-label,.ph-body label,.cat-label{color:#c2185b!important}
+.nav-item,.logout-btn,.sidebar-nav a{color:#171317!important}
+.nav-item:hover,.nav-item.active,.logout-btn:hover,.sidebar-nav a:hover{background:#fff0f5!important;color:#171317!important;border-color:#c2185b!important}
+input,select,textarea,.sel,.ph-body input[type=text],.ph-body select{background:#fff!important;color:#171317!important;border:1px solid #e8b2c8!important}
+input::placeholder,textarea::placeholder{color:#987b88!important}
+button,.btn,.btn-primary,.btn-add,.save-btn,.action-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important;transition:all .22s ease!important}
+button:hover,.btn:hover,.btn-primary:hover,.btn-add:hover,.save-btn:hover,.action-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important;transform:translateY(-1px)}
+.btn.del,.btn-delete,.delete-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important}
+.btn.del:hover,.btn-delete:hover,.delete-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.file-pick{background:#fff5f8!important;color:#c2185b!important;border-color:#c2185b!important}
+.file-pick:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.tag,.badge,.status-badge{background:#c2185b!important;color:#fff!important}
+hr{border-color:#f0bfd2!important}
+.card,.ph,.table-card{border-radius:16px!important}
+.ph{overflow:hidden!important}
+.ph-body{color:#171317!important}
+/* Keep status colours legible while preventing dark panels. */
+.msg{background:#f0fff4!important;color:#236b3b!important}
+</style>
 </head>
 <body>
 
-<div class="fixed-social">
-    <a href="https://instagram.com/dreamgalleryphoto" target="_blank" aria-label="Instagram">
-        <i class="ti ti-brand-instagram"></i>
-    </a>
-    <a href="https://wa.me/919876543210?text=Hi! I'm interested in your photography services." target="_blank" aria-label="WhatsApp">
-        <i class="ti ti-brand-whatsapp"></i>
-    </a>
-</div>
-
 <section class="hero">
-    <div class="slide active"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="slide"></div>
-    <div class="hero-overlay"></div>
-
     <div class="hero-content">
-        <span class="hero-tag">Tamil Nadu Wedding Photography</span>
+        <img class="hero-logo" src="/images/logo.png" alt="Saara Photography logo">
+        <span class="hero-tag">Destination Photographer</span>
         <h1 id="heroTitle"><span class="cursor" id="cur1"></span></h1>
         <div class="hero-gold-line"></div>
         <p class="hero-sub" id="heroSub"></p>
     </div>
-
-    <div class="slide-dots" id="dots"></div>
 </section>
 
 <section class="insta-section animate-in">
     <span class="insta-tag">Follow our journey</span>
     <h2>Our Work</h2>
-    <p><span class="insta-handle">@dreamgalleryphoto</span></p>
+    <p><span class="insta-handle">@saaraphotography05</span></p>
 
-    <div class="insta-grid">
-        <div class="insta-item"><img src="https://images.unsplash.com/photo-1612428852832-5a31da9e6e9e?w=500&auto=format&fit=crop" alt="South Indian bridal"></div>
-        <div class="insta-item"><img src="https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=500&auto=format&fit=crop" alt="Tamil bride"></div>
-        <div class="insta-item"><img src="https://images.unsplash.com/photo-1617575521317-d6234c9ed726?w=500&auto=format&fit=crop" alt="South Indian wedding"></div>
-        <div class="insta-item"><img src="https://images.unsplash.com/photo-1583939411023-14783179e581?w=500&auto=format&fit=crop" alt="Indian wedding ceremony"></div>
-        <div class="insta-item"><img src="https://images.unsplash.com/photo-1601933470096-0e34634ffcde?w=500&auto=format&fit=crop" alt="Indian bridal portrait"></div>
-        <div class="insta-item"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&auto=format&fit=crop" alt="Wedding portrait"></div>
+    <!-- Photos added by admin (Admin → Home Photos). Falls back to sample photos until the first one is added. -->
+    <div class="insta-grid" th:if="${homePhotos != null and !homePhotos.isEmpty()}">
+        <div class="insta-item" th:each="hp : ${homePhotos}">
+            <span class="insta-cat" th:text="${hp.categoryLabel}">Wedding</span>
+            <img th:src="${hp.url}" th:alt="${hp.title}">
+            <div class="insta-title" th:text="${hp.title}"></div>
+        </div>
     </div>
 
-    <a href="https://instagram.com/dreamgalleryphoto" target="_blank" class="insta-link">
+    <div class="insta-grid" th:if="${homePhotos == null or homePhotos.isEmpty()}">
+        <div class="insta-item"><img src="https://images.pexels.com/photos/29153198/pexels-photo-29153198.jpeg?auto=compress&cs=tinysrgb&w=500" alt=""></div>
+        <div class="insta-item"><img src="https://images.pexels.com/photos/7669965/pexels-photo-7669965.jpeg?auto=compress&cs=tinysrgb&w=500" alt=""></div>
+        <div class="insta-item"><img src="https://images.pexels.com/photos/36814772/pexels-photo-36814772.jpeg?auto=compress&cs=tinysrgb&w=500" alt=""></div>
+        <div class="insta-item"><img src="https://images.pexels.com/photos/15459821/pexels-photo-15459821.jpeg?auto=compress&cs=tinysrgb&w=500" alt=""></div>
+        <div class="insta-item"><img src="https://images.pexels.com/photos/5043313/pexels-photo-5043313.jpeg?auto=compress&cs=tinysrgb&w=500" alt=""></div>
+        <div class="insta-item"><img src="https://images.pexels.com/photos/32315685/pexels-photo-32315685.jpeg?auto=compress&cs=tinysrgb&w=500" alt=""></div>
+    </div>
+
+    <a href="/work" class="insta-link insta-work"><i class="ti ti-camera"></i><span>View All Work</span></a>
+    <br>
+    <a href="https://www.instagram.com/saaraphotography05" target="_blank" class="insta-link">
         <i class="ti ti-brand-instagram"></i>
         <span>View on Instagram</span>
     </a>
@@ -391,6 +465,7 @@
 
 <nav class="bottom-nav">
     <ul>
+        <li><a href="/" class="active"><i class="ti ti-home"></i><span>Home</span></a></li>
         <li><a href="/work"><i class="ti ti-video"></i><span>Work</span></a></li>
         <li><a href="/select"><i class="ti ti-photo"></i><span>Select</span></a></li>
         <li><a href="/packages-page"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
@@ -399,45 +474,18 @@
 </nav>
 
 <script>
-    /* ── Slideshow ── */
-    const slides = document.querySelectorAll('.slide');
-    const dotsContainer = document.getElementById('dots');
-    let current = 0;
-
-    slides.forEach((_, i) => {
-        const d = document.createElement('div');
-        d.className = 'dot' + (i === 0 ? ' active' : '');
-        d.onclick = () => goTo(i);
-        dotsContainer.appendChild(d);
-    });
-
-    function goTo(n) {
-        slides[current].classList.remove('active');
-        document.querySelectorAll('.dot')[current].classList.remove('active');
-        current = n;
-        slides[current].classList.add('active');
-        document.querySelectorAll('.dot')[current].classList.add('active');
-    }
-
-    setInterval(() => goTo((current + 1) % slides.length), 5500);
-
     /* ── Typewriter ── */
     function typewriter(element, segments, delay, onDone) {
-        // segments = [{text, gold}]  — renders plain or gold spans
         let segIdx = 0, charIdx = 0;
-
-        // cursor stays at end — insert before it
         const cursor = element.querySelector('.cursor') || document.createElement('span');
 
         function tick() {
             if (segIdx >= segments.length) {
-                // done — remove cursor from h1, add blinking cursor to sub line
                 cursor.remove();
                 if (onDone) onDone();
                 return;
             }
             const seg = segments[segIdx];
-            // find or create span for this segment
             let span = element.querySelector('[data-seg="' + segIdx + '"]');
             if (!span) {
                 span = document.createElement('span');
@@ -478,21 +526,16 @@
         tick();
     }
 
-    // Start after slight delay (hero tag fade-in)
     setTimeout(() => {
         const h1 = document.getElementById('heroTitle');
         const sub = document.getElementById('heroSub');
-
-        // Type "Dream " then "Gallery" in gold
         const segments = [
-            { text: 'Dream ', gold: false, pause: 120 },
-            { text: 'Gallery', gold: true, pause: 0 }
+            { text: 'Saara ', gold: false, pause: 120 },
+            { text: 'Photography', gold: true, pause: 0 }
         ];
-
         typewriter(h1, segments, 90, () => {
-            // After h1 done, type subtitle
             setTimeout(() => {
-                typewriterSimple(sub, 'Photography & Cinematography', 55, true, null);
+                typewriterSimple(sub, 'All kind of events · Service wide', 55, true, null);
             }, 300);
         });
     }, 800);
@@ -500,7 +543,7 @@
     /* ── Image fallback ── */
     document.querySelectorAll('.insta-item img').forEach(img => {
         img.onerror = function() {
-            this.parentElement.style.background = '#1a1a1a';
+            this.parentElement.style.background = '#ffffff';
             this.style.display = 'none';
         };
     });
@@ -519,6 +562,63 @@
             e.key === 'F12') e.preventDefault();
     });
 </script>
-<script src="/js/constants.js"></script>
+<script>
+/* ===== constants (merged) ===== */
+const DG = {
+  STUDIO_NAME    : "Saara Photography",
+  INSTA_HANDLE   : "@saaraphotography05",
+  LOCATION       : "Destination Photographer · Service wide",
+  INSTA_URL      : "https://www.instagram.com/saaraphotography05",
+  WHATSAPP_NUMBER: "919786711698",
+  WHATSAPP_MSG   : "Hi! I'm interested in your photography services.",
+  PHONE_1        : "+91 97867 11698",
+  PHONE_2        : "+91 97867 11698",
+  EMAIL          : "",   // TODO: add Saara Photography email
+  ADDRESS        : "Saara Photography — All kind of events, service wide",
+  HOURS          : "Bookings open all days",
+  HOURS_NOTE     : "Call 9786711698 to book your date",
+  NAV: [
+    { label: "Home",     href: "/",               icon: "ti-home"    },
+    { label: "Work",     href: "/work",          icon: "ti-video"   },
+    { label: "Select",   href: "/select",         icon: "ti-photo"   },
+    { label: "Packages", href: "/packages-page",  icon: "ti-diamond" },
+    { label: "Contact",  href: "/contact",        icon: "ti-phone"   }
+  ]
+};
+
+(function () {
+  const waURL = `https://wa.me/${DG.WHATSAPP_NUMBER}?text=${encodeURIComponent(DG.WHATSAPP_MSG)}`;
+
+  document.querySelectorAll('.fixed-social').forEach(el => {
+    el.innerHTML = `
+      <a href="${DG.INSTA_URL}" target="_blank" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+      <a href="${waURL}" target="_blank" aria-label="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>`;
+  });
+
+  document.querySelectorAll('a.insta-link').forEach(a => { a.href = DG.INSTA_URL; });
+  document.querySelectorAll('.insta-handle').forEach(el => { el.textContent = DG.INSTA_HANDLE; });
+
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('nav.bottom-nav').forEach(nav => {
+    const ul = nav.querySelector('ul') || document.createElement('ul');
+    ul.innerHTML = DG.NAV.map(item => {
+      const isActive = currentPath === item.href || currentPath.startsWith(item.href + '/');
+      return `<li>
+        <a href="${item.href}"${isActive ? ' class="active"' : ''}>
+          <i class="ti ${item.icon}"></i>
+          <span>${item.label}</span>
+        </a>
+      </li>`;
+    }).join('');
+    if (!nav.querySelector('ul')) nav.appendChild(ul);
+  });
+})();
+</script>
+
+<!-- Floating Instagram -->
+<div class="floating-social">
+    <a href="https://www.instagram.com/saaraphotography05" target="_blank" rel="noopener" class="instagram-btn" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+</div>
+
 </body>
 </html>

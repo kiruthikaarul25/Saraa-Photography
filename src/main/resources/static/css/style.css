@@ -3,12 +3,12 @@
 
 body {
     font-family: 'Segoe UI', sans-serif;
-    background: #f8f4f0;
+    background: #fff5f8;
     color: #333;
 }
 
 /* ─── Navbar ─────────────────────────────────── */
-.navbar { background: #8B5E3C !important; }
+.navbar { background: #e0357a !important; }
 .navbar-brand, .nav-link { color: white !important; }
 .nav-link:hover { opacity: 0.8; }
 
@@ -16,17 +16,17 @@ body {
 .card {
     border: none;
     border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 16px rgba(224,53,122,0.03);
 }
 
 /* ─── Buttons ────────────────────────────────── */
 .btn-primary {
-    background: #8B5E3C;
-    border-color: #8B5E3C;
+    background: #e0357a;
+    border-color: #e0357a;
 }
 .btn-primary:hover {
-    background: #6d4a2f;
-    border-color: #6d4a2f;
+    background: #c2185b;
+    border-color: #c2185b;
 }
 
 /* ─── Photo Grid ─────────────────────────────── */
@@ -57,14 +57,14 @@ body {
 }
 
 .photo-card.selected {
-    border: 3px solid #8B5E3C;
+    border: 3px solid #e0357a;
 }
 
 .photo-card .check-badge {
     position: absolute;
     top: 8px;
     right: 8px;
-    background: #8B5E3C;
+    background: #e0357a;
     color: white;
     border-radius: 50%;
     width: 28px;

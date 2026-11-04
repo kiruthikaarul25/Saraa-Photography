@@ -1,122 +1,246 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login — Dream Gallery Photography</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Admin Login — Saara Photography</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="shortcut icon" href="/favicon.ico">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Raleway',sans-serif;background:#080808;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
-        body::before{content:'';position:fixed;inset:0;background:url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&auto=format&fit=crop') center/cover no-repeat;opacity:0.04;pointer-events:none}
+        :root {
+            --pink: #c2185b;
+            --pink-dark: #880e4f;
+            --pink-soft: #fff0f5;
+            --black: #111111;
+            --border: #f0bfd2;
+            color-scheme: light;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .wrap{width:100%;max-width:400px;position:relative;z-index:1}
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
+            font-weight: 400;
+            background: #fff;
+            color: var(--black);
+            min-height: 100vh;
+            display: flex;
+        }
 
-        /* BRAND */
-        .brand{text-align:center;margin-bottom:36px}
-        .brand-dots{display:flex;justify-content:center;gap:6px;margin-bottom:16px}
-        .brand-dots span{width:5px;height:5px;border-radius:50%;background:rgba(212,175,55,0.3)}
-        .brand-dots span:nth-child(2){background:#D4AF37}
-        .brand h1{font-family:'Cinzel',serif;font-size:clamp(1.5rem,5vw,1.9rem);font-weight:300;color:#fff;letter-spacing:6px}
-        .brand h1 span{color:#D4AF37}
-        .brand p{font-size:0.68rem;letter-spacing:5px;text-transform:uppercase;color:#333;margin-top:6px}
+        /* ===== LEFT: black admin panel ===== */
+        .side {
+            flex: 1;
+            background: var(--black);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 48px 40px;
+            border-right: 6px solid var(--pink);
+            box-shadow: 6px 0 24px rgba(0,0,0,.3);
+            position: relative;
+        }
+        .side .logo {
+            width: 110px; height: 110px; border-radius: 50%;
+            border: 3px solid var(--pink);
+            object-fit: cover;
+            box-shadow: 0 6px 18px rgba(194,24,91,.45);
+            margin-bottom: 22px;
+            background: #fff;
+        }
+        .side h1 {
+            font-size: 1.9rem; font-weight: 700; letter-spacing: 4px;
+        }
+        .side h1 span { color: #ff5c9a; }
+        .side .tagline {
+            margin-top: 8px; font-size: .72rem; letter-spacing: 5px;
+            text-transform: uppercase; color: #f2b8d2;
+        }
+        .side .features {
+            margin-top: 38px; list-style: none; text-align: left;
+            display: flex; flex-direction: column; gap: 14px;
+        }
+        .side .features li {
+            display: flex; align-items: center; gap: 12px;
+            font-size: .88rem; color: #fff;
+        }
+        .side .features i {
+            width: 34px; height: 34px; border-radius: 10px;
+            background: var(--pink); display: flex;
+            align-items: center; justify-content: center; font-size: 1.05rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,.35);
+        }
 
-        /* CARD */
-        .card{background:#0e0e0e;border:1px solid rgba(212,175,55,0.18);border-radius:22px;padding:40px 36px;position:relative;overflow:hidden}
-        .card::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(to right,transparent,#D4AF37,transparent)}
-        @media(max-width:480px){.card{padding:30px 22px}}
+        /* ===== RIGHT: white login form ===== */
+        .main {
+            flex: 1;
+            display: flex; align-items: center; justify-content: center;
+            padding: 32px 24px;
+            background: var(--pink-soft);
+        }
+        .box {
+            width: 100%; max-width: 400px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-top: 6px solid var(--pink);
+            border-radius: 16px;
+            padding: 36px 30px;
+            box-shadow: 0 8px 26px rgba(136,14,79,.15);
+        }
+        .badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--black); color: #fff;
+            font-size: .68rem; letter-spacing: 3px; text-transform: uppercase;
+            padding: 6px 14px; border-radius: 30px; margin-bottom: 16px;
+        }
+        .badge i { color: #ff5c9a; font-size: .9rem; }
+        .box h2 { font-size: 1.6rem; font-weight: 700; color: var(--black); }
+        .box .sub { font-size: .85rem; color: #765b68; margin: 6px 0 26px; }
 
-        .card-eyebrow{font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;color:#D4AF37;margin-bottom:8px}
-        .card h2{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:300;color:#fff;letter-spacing:3px;margin-bottom:24px}
-        .gold-line{width:40px;height:1px;background:linear-gradient(to right,transparent,#D4AF37,transparent);margin-bottom:28px}
+        .error-msg {
+            display: flex; align-items: center; gap: 10px;
+            background: #fdecea; border: 1px solid #f5b5ae; color: #b3261e;
+            border-radius: 10px; padding: 11px 14px;
+            font-size: .82rem; margin-bottom: 18px;
+        }
 
-        /* ALERTS */
-        .alert{display:flex;align-items:center;gap:10px;border-radius:12px;padding:12px 16px;font-size:0.8rem;margin-bottom:22px;line-height:1.5}
-        .alert i{font-size:1.05rem;flex-shrink:0}
-        .alert-error{background:rgba(231,76,60,0.07);border:1px solid rgba(231,76,60,0.25);color:#e74c3c}
-        .alert-success{background:rgba(76,175,80,0.07);border:1px solid rgba(76,175,80,0.25);color:#4caf50}
+        .field { margin-bottom: 18px; }
+        .field label {
+            display: block; font-size: .72rem; font-weight: 700;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            color: var(--pink); margin-bottom: 8px;
+        }
+        .input-wrap { position: relative; }
+        .input-wrap > i {
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+            color: var(--pink); font-size: 1.05rem; pointer-events: none;
+        }
+        .input-wrap input {
+            width: 100%; padding: 13px 44px 13px 42px;
+            border: 1px solid #e8b2c8; border-radius: 10px;
+            background: #fff; color: var(--black);
+            font-family: inherit; font-size: .92rem; outline: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,.08);
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .input-wrap input:focus {
+            border-color: var(--pink);
+            box-shadow: 0 0 0 3px rgba(194,24,91,.15);
+        }
+        .input-wrap input::placeholder { color: #987b88; }
+        .toggle-pw {
+            position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; cursor: pointer;
+            color: #765b68; font-size: 1.1rem; padding: 6px;
+        }
+        .toggle-pw:hover { color: var(--pink); }
 
-        /* FIELDS */
-        .field{margin-bottom:18px}
-        .field label{display:block;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:8px}
-        .input-wrap{position:relative}
-        .input-wrap i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#333;font-size:1rem;pointer-events:none;transition:color 0.3s}
-        .input-wrap:focus-within i{color:#D4AF37}
-        .field input{width:100%;background:#080808;border:1px solid rgba(212,175,55,0.12);border-radius:12px;padding:13px 16px 13px 42px;color:#fff;font-family:'Raleway',sans-serif;font-size:0.88rem;font-weight:300;outline:none;transition:border-color 0.3s}
-        .field input::placeholder{color:#252525}
-        .field input:focus{border-color:rgba(212,175,55,0.45)}
+        .btn-login {
+            width: 100%; margin-top: 6px; padding: 14px;
+            background: var(--pink); color: #fff;
+            border: none; border-radius: 10px;
+            font-family: inherit; font-size: .9rem; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 5px 14px rgba(194,24,91,.35);
+            transition: background .2s, transform .2s;
+        }
+        .btn-login:hover { background: var(--black); transform: translateY(-1px); }
 
-        /* SUBMIT */
-        .btn-login{width:100%;margin-top:10px;padding:14px;background:transparent;border:1px solid rgba(212,175,55,0.45);color:#D4AF37;border-radius:40px;cursor:pointer;font-family:'Cinzel',serif;font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.35s}
-        .btn-login:hover{background:#D4AF37;color:#000;border-color:#D4AF37}
-        .btn-login i{font-size:1rem}
+        .back-link { text-align: center; margin-top: 22px; }
+        .back-link a {
+            color: var(--pink-dark); text-decoration: none; font-size: .8rem;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .back-link a:hover { color: var(--black); }
 
-        /* BACK */
-        .back-link{text-align:center;margin-top:24px}
-        .back-link a{color:#2a2a2a;text-decoration:none;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px;transition:color 0.3s}
-        .back-link a:hover{color:#D4AF37}
-        .back-link a i{font-size:0.9rem}
+        /* ===== Mobile: stack panels ===== */
+        @media (max-width: 800px) {
+            body { flex-direction: column; }
+            .side {
+                flex: none; padding: 28px 20px;
+                border-right: none; border-bottom: 6px solid var(--pink);
+                box-shadow: 0 6px 20px rgba(0,0,0,.3);
+            }
+            .side .logo { width: 72px; height: 72px; margin-bottom: 12px; }
+            .side h1 { font-size: 1.35rem; letter-spacing: 3px; }
+            .side .features { display: none; }
+            .main { flex: 1; align-items: flex-start; padding: 24px 16px 32px; }
+            .box { padding: 28px 22px; }
+        }
     </style>
 </head>
 <body>
 
-<div class="wrap">
+    <!-- LEFT: admin branding -->
+    <aside class="side">
+        <img class="logo" src="/images/logo.png" alt="Saara Photography">
+        <h1>Saara <span>Photography</span></h1>
+        <p class="tagline">Admin Panel</p>
 
-    <div class="brand">
-        <div class="brand-dots"><span></span><span></span><span></span></div>
-        <h1>Dream <span>Gallery</span></h1>
-        <p>Wedding Photography Portal</p>
-    </div>
+        <ul class="features">
+            <li><i class="ti ti-users"></i> Manage clients &amp; albums</li>
+            <li><i class="ti ti-upload"></i> Upload &amp; organise photos</li>
+            <li><i class="ti ti-link"></i> Send gallery links to clients</li>
+            <li><i class="ti ti-diamond"></i> Edit packages &amp; enquiries</li>
+        </ul>
+    </aside>
 
-    <div class="card">
-        <p class="card-eyebrow">Admin Portal</p>
-        <h2>Welcome Back</h2>
-        <div class="gold-line"></div>
+    <!-- RIGHT: login form -->
+    <main class="main">
+        <div class="box">
+            <span class="badge"><i class="ti ti-shield-lock"></i> Admin Only</span>
+            <h2>Admin Login</h2>
+            <p class="sub">Sign in to manage your studio dashboard.</p>
 
-        <!-- Error -->
-        <div class="alert alert-error" th:if="${error}">
-            <i class="ti ti-alert-circle"></i>
-            <span th:text="${error}">Invalid credentials.</span>
-        </div>
-
-        <!-- Success -->
-        <div class="alert alert-success" th:if="${msg}">
-            <i class="ti ti-circle-check"></i>
-            <span th:text="${msg}">Success.</span>
-        </div>
-
-        <form th:action="@{/login}" method="post">
-
-            <div class="field">
-                <label>Email</label>
-                <div class="input-wrap">
-                    <input type="email" name="email" placeholder="your@email.com" required>
-                    <i class="ti ti-mail"></i>
-                </div>
+            <div class="error-msg" th:if="${error}">
+                <i class="ti ti-alert-circle"></i>
+                <span th:text="${error}">Invalid email or password!</span>
             </div>
 
-            <div class="field">
-                <label>Password</label>
-                <div class="input-wrap">
-                    <input type="password" name="password" placeholder="••••••••" required>
-                    <i class="ti ti-lock"></i>
+            <form th:action="@{/login}" method="post" autocomplete="on">
+                <div class="field">
+                    <label for="username">Email / Username</label>
+                    <div class="input-wrap">
+                        <i class="ti ti-mail"></i>
+                        <input type="text" id="username" name="username"
+                               placeholder="Enter admin email" autocomplete="username" required>
+                    </div>
                 </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <div class="input-wrap">
+                        <i class="ti ti-lock"></i>
+                        <input type="password" id="password" name="password"
+                               placeholder="Enter password" autocomplete="current-password" required>
+                        <button type="button" class="toggle-pw" id="togglePw" aria-label="Show password">
+                            <i class="ti ti-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login">
+                    <i class="ti ti-login-2"></i> Sign In
+                </button>
+            </form>
+
+            <div class="back-link">
+                <a href="/"><i class="ti ti-arrow-left"></i> Back to Website</a>
             </div>
+        </div>
+    </main>
 
-            <button type="submit" class="btn-login">
-                <i class="ti ti-login"></i>Login
-            </button>
-
-        </form>
-    </div>
-
-    <div class="back-link">
-        <a href="/select"><i class="ti ti-arrow-left"></i>Client Login</a>
-    </div>
-
-</div>
-
-<script src="/js/constants.js"></script>
+    <script>
+        var pw = document.getElementById('password');
+        var btn = document.getElementById('togglePw');
+        btn.addEventListener('click', function () {
+            var show = pw.type === 'password';
+            pw.type = show ? 'text' : 'password';
+            btn.innerHTML = '<i class="ti ' + (show ? 'ti-eye-off' : 'ti-eye') + '"></i>';
+        });
+    </script>
 </body>
 </html>

@@ -19,8 +19,13 @@ public class CustomUserDetailsService
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
+        // "admin" / "niki" are accepted as shortcuts for the owner's email
+        String login = email == null ? "" : email.trim();
+        if (login.equalsIgnoreCase("admin") || login.equalsIgnoreCase("niki"))
+            login = "niki@gmail.com";
+
         Owner owner = ownerRepository
-            .findByEmail(email)
+            .findByEmail(login)
             .orElseThrow(() ->
                 new UsernameNotFoundException(
                     "Owner not found: " + email));

@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard — Dream Gallery Photography</title>
+    <title>Dashboard — Welcome Studio</title>
     <!-- FAVICON -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📷</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -17,7 +17,7 @@
             --text: #e8e0d0; --text-muted: #6a6050; --text-sub: #9a9080;
             --green: #27ae60; --green-dim: rgba(39,174,96,0.12); --red: #c0392b;
         }
-        body { background: var(--bg); color: var(--text); font-family: 'Raleway', sans-serif; min-height: 100vh; display: flex; }
+        body { background: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; min-height: 100vh; display: flex; }
 
         /* ── SIDEBAR ── */
         .sidebar {
@@ -37,9 +37,9 @@
         }
 
         .sidebar-brand {
-            font-family: 'Cinzel', serif;
+            font-family: 'Playfair Display', serif;
             font-size: 15px;
-            font-weight: 700;
+            font-weight: 500;
             color: var(--gold);
             letter-spacing: 0.12em;
             padding: 0 8px 28px;
@@ -73,7 +73,7 @@
             text-transform: uppercase;
             display: block;
             margin-top: 3px;
-            font-family: 'Raleway', sans-serif;
+            font-family: 'Poppins', sans-serif;
             white-space: nowrap;
         }
 
@@ -116,8 +116,8 @@
 
         .page-header { margin-bottom: 38px; }
         .page-header h1 {
-            font-family: 'Cinzel', serif; font-size: 1.9rem;
-            color: var(--text); font-weight: 300; letter-spacing: 2px;
+            font-family: 'Playfair Display', serif; font-size: 1.9rem;
+            color: var(--text); font-weight: 500; letter-spacing: 2px;
         }
         .page-header h1 span { color: var(--gold); }
         .page-header p {
@@ -127,9 +127,9 @@
         .gold-line { width: 48px; height: 1px; background: var(--gold); opacity: 0.4; margin: 14px 0 0; }
 
         .section-title {
-            font-family: 'Cinzel', serif; font-size: 0.9rem; color: var(--gold);
+            font-family: 'Playfair Display', serif; font-size: 0.9rem; color: var(--gold);
             letter-spacing: 3px; text-transform: uppercase;
-            font-weight: 400; margin-bottom: 18px; opacity: 0.8;
+            font-weight: 500; margin-bottom: 18px; opacity: 0.8;
         }
 
         /* ── ACTIONS ── */
@@ -148,7 +148,7 @@
             color: var(--gold); opacity: 0.7; transition: opacity 0.25s;
         }
         .action-card:hover i { opacity: 1; }
-        .action-label { font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; }
+        .action-label { font-family: 'Playfair Display', serif; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; }
 
         /* ── TABLE ── */
         .table-section {
@@ -160,15 +160,15 @@
             display: flex; justify-content: space-between; align-items: center;
         }
         .table-header h3 {
-            font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--text);
-            font-weight: 400; letter-spacing: 2px; text-transform: uppercase;
+            font-family: 'Playfair Display', serif; font-size: 0.85rem; color: var(--text);
+            font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
         }
         .table-header a { font-size: 0.75rem; color: var(--gold); text-decoration: none; letter-spacing: 1px; }
         table { width: 100%; border-collapse: collapse; }
         thead th {
-            padding: 11px 25px; text-align: left; font-family: 'Cinzel', serif;
+            padding: 11px 25px; text-align: left; font-family: 'Playfair Display', serif;
             font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase;
-            letter-spacing: 2px; background: var(--surface2); font-weight: 400;
+            letter-spacing: 2px; background: var(--surface2); font-weight: 500;
         }
         tbody tr { border-top: 1px solid var(--border); transition: background 0.15s; }
         tbody tr:hover { background: var(--surface2); }
@@ -176,7 +176,7 @@
 
         .status-badge {
             display: inline-block; padding: 3px 10px; border-radius: 20px;
-            font-size: 0.7rem; font-family: 'Cinzel', serif;
+            font-size: 0.7rem; font-family: 'Playfair Display', serif;
             letter-spacing: 1px; text-transform: uppercase;
         }
         .status-active  { background: var(--green-dim); color: var(--green); border: 1px solid rgba(39,174,96,0.3); }
@@ -190,7 +190,7 @@
         .mobile-clients { display: none; }
         .client-mobile-card { padding: 16px 20px; border-bottom: 1px solid var(--border); }
         .client-mobile-card:last-child { border-bottom: none; }
-        .client-mobile-name { font-family: 'Cinzel', serif; font-size: 0.9rem; color: var(--text); margin-bottom: 6px; }
+        .client-mobile-name { font-family: 'Playfair Display', serif; font-size: 0.9rem; color: var(--text); margin-bottom: 6px; }
         .client-mobile-email { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px; }
         .client-mobile-row { display: flex; align-items: center; justify-content: space-between; }
 
@@ -224,19 +224,25 @@
             .action-label { font-size: 0.62rem; letter-spacing: 1px; }
             .desktop-table { display: none; }
             .mobile-clients { display: block; }
-            .fixed-social { bottom: 20px; right: 14px; }
+            .fixed-social { bottom: 90px; right: 14px; }
         }
-        @media (max-width: 380px) { .actions-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 380px) {
+            .actions-grid { grid-template-columns: 1fr 1fr; }
+            .action-card:last-child { grid-column: 1 / -1; }
+            .fixed-social { bottom: 84px; right: 12px; }
+            .fixed-social a { width: 40px; height: 40px; font-size: 17px; }
+        }
     </style>
+<link rel="stylesheet" href="/css/site-nav.css">
 </head>
 <body>
 
 <!-- Social -->
 <div class="fixed-social">
-    <a href="https://instagram.com/dreamgalleryphoto" target="_blank" aria-label="Instagram">
+    <a href="https://instagram.com/welcomestudio_photography" target="_blank" aria-label="Instagram">
         <i class="ti ti-brand-instagram"></i>
     </a>
-    <a href="https://wa.me/919876543210?text=Hi! I'm interested in your photography services." target="_blank" aria-label="WhatsApp">
+    <a href="https://wa.me/919787700156?text=Hi! I'm interested in your photography services." target="_blank" aria-label="WhatsApp">
         <i class="ti ti-brand-whatsapp"></i>
     </a>
 </div>
@@ -252,7 +258,7 @@
     <div class="sidebar-brand">
         <i class="ti ti-camera" aria-hidden="true"></i>
         <div class="sidebar-brand-text">
-            <span class="sidebar-brand-name">DREAM GALLERY</span>
+            <span class="sidebar-brand-name">WELCOME STUDIO</span>
             <span class="sidebar-sub" th:text="${owner != null ? owner.name : 'Admin'}">Admin</span>
         </div>
     </div>
@@ -371,6 +377,18 @@
         }
     });
 </script>
+
+
+<nav class="bottom-nav">
+    <ul>
+        <li><a href="/"><i class="ti ti-home"></i><span>Home</span></a></li>
+        <li><a href="/work"><i class="ti ti-video"></i><span>Work</span></a></li>
+        <li><a href="/select"><i class="ti ti-photo"></i><span>Select</span></a></li>
+        <li><a href="/packages-page"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
+        <li><a href="/contact"><i class="ti ti-phone"></i><span>Contact</span></a></li>
+    </ul>
+</nav>
+
 <script src="/js/constants.js"></script>
 </body>
 </html>

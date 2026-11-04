@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Photos — Saara Photography</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <style>
+        :root{--bg:#111111;--surface:#111111;--soft:#222222;--text:#ffffff;--muted:#f2b8d2;--pink:#e91e63;--line:rgba(233,30,99,0.22)}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;font-weight: 400}
+        .sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:#3a0a24;border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+        .sidebar-brand{padding:26px 20px 22px;border-bottom:1px solid var(--line);margin-bottom:16px}
+        .sidebar-brand h2{font-size:1rem;letter-spacing:3px;color:var(--pink)}
+        .sidebar-brand p{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:3px}
+        .sidebar-nav{flex:1;padding:0 8px}
+        .nav-section{padding:14px 12px 6px;font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+        .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:2px;border-radius:10px;text-decoration:none;color:var(--text);font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase;border:1px solid transparent;transition:all .25s}
+        .nav-item:hover,.nav-item.active{color:var(--pink);background:rgba(233,30,99,.12);border-color:var(--line)}
+        .sidebar-footer{padding:16px 8px;border-top:1px solid var(--line)}
+        .logout-btn{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-size:.75rem;letter-spacing:1.5px;text-transform:uppercase}
+        .logout-btn:hover{color:#ff6b6b}
+        .hamburger{display:none;position:fixed;top:16px;left:16px;z-index:200;background:var(--surface);border:1px solid var(--line);border-radius:8px;color:var(--pink);width:40px;height:40px;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem}
+        .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:99}
+        .sidebar-overlay.open{display:block}
+        @media(max-width:768px){.hamburger{display:flex}.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0!important;padding:72px 14px 90px!important}}
+
+        .main{margin-left:220px;flex:1;padding:36px 28px 90px;min-height:100vh}
+        .page-top{margin-bottom:26px}
+        .page-top h4{font-size:1.2rem;letter-spacing:3px}
+        .page-top h4 span{color:var(--pink)}
+        .page-top p{color:var(--muted);font-size:.78rem;margin-top:6px;letter-spacing:1px}
+
+        .msg{background:rgba(76,175,80,.15);border:1px solid rgba(76,175,80,.4);color:#9be39f;padding:11px 16px;border-radius:12px;margin-bottom:20px;font-size:.82rem}
+
+        .card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:26px;margin-bottom:30px;max-width:760px}
+        .card-label{font-size:.65rem;letter-spacing:4px;text-transform:uppercase;color:var(--pink);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+        .file-pick{display:flex;align-items:center;justify-content:center;gap:10px;padding:22px;border:1.5px dashed rgba(233,30,99,.5);border-radius:14px;color:var(--pink);cursor:pointer;font-size:.8rem;letter-spacing:2px;text-transform:uppercase;background:rgba(233,30,99,.05)}
+        .file-pick:hover{background:rgba(233,30,99,.12)}
+        .file-pick input{display:none}
+        #rows{margin-top:16px;display:flex;flex-direction:column;gap:12px}
+        .row{display:flex;gap:12px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px}
+        .row img{width:64px;height:64px;object-fit:cover;border-radius:10px;flex-shrink:0}
+        input[type=text]{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 14px;color:var(--text);font-family:inherit;font-weight:700;font-size:.88rem;outline:none}
+        input[type=text]:focus{border-color:var(--pink)}
+        input[type=text]::placeholder{color:#d79ab7}
+        .btn{display:inline-flex;align-items:center;gap:7px;padding:11px 26px;border-radius:40px;border:1px solid var(--pink);background:transparent;color:var(--pink);cursor:pointer;font-family:inherit;font-weight:700;font-size:.72rem;letter-spacing:2px;text-transform:uppercase;transition:all .25s}
+        .btn:hover{background:var(--pink);color:#fff}
+        .btn.del{border-color:rgba(255,107,107,.5);color:#ff8a8a}
+        .btn.del:hover{background:#e74c3c;color:#fff;border-color:#e74c3c}
+        #saveBtn{margin-top:16px;display:none}
+
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;max-width:1100px}
+        .ph{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+        .ph img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+        .ph-body{padding:14px;display:flex;flex-direction:column;gap:10px}
+        .ph-body label.replace{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+        .ph-body input[type=file]{font-size:.7rem;color:var(--muted);width:100%}
+        .ph-actions{display:flex;gap:8px;flex-wrap:wrap}
+        .empty{color:var(--muted);font-size:.85rem}
+        .sel{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 14px;color:var(--text);font-family:inherit;font-weight:700;font-size:.85rem;outline:none;margin-bottom:12px}
+        .sel:focus{border-color:var(--pink)}
+        .row .sel{margin-bottom:0;width:auto;min-width:120px}
+        .row .fields{display:flex;flex-direction:column;gap:8px;flex:1;min-width:0}
+        .cat-label{display:block;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+        .ph{position:relative}
+        .tag{position:absolute;top:10px;left:10px;z-index:2;background:var(--pink);color:#fff;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+    </style>
+
+<style id="pink-theme">
+/* ===== Medium dark pink + white + black theme ===== */
+:root{--pink-main:#e91e63;--pink-dark:#ad1457;--pink-deep:#c2185b;--black:#111111}
+html,body{font-family:"Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif !important}
+button,input,select,textarea{font-family:inherit !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card,.mob-client-card,.insta-item,.photo-item,.preview-item,.album-header,.drop-zone,.item{box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.sidebar{box-shadow:4px 0 18px rgba(0,0,0,.35)}
+.bottom-nav{box-shadow:0 -4px 16px rgba(0,0,0,.3)}
+button,.btn-save,.btn-add,.btn-copy,.btn-back,.back-btn,.submit,.logout-btn,.sidebar-logout{box-shadow:0 4px 12px rgba(0,0,0,.3)}
+input,select,textarea{box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.btn-back,.back-btn{background:var(--black) !important;color:#fff !important;border:1px solid var(--black) !important}
+.btn-back:hover,.back-btn:hover{background:var(--pink-main) !important;border-color:var(--pink-main) !important}
+.section-sep{border-color:var(--black) !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card{border-top:4px solid var(--black)}
+</style>
+
+<style id="pink-white-theme-overrides">
+:root { color-scheme: light !important; --theme-pink:#d95791; --theme-pink-dark:#c94480; --theme-pink-light:#f7dce8; --theme-white:#ffffff; --theme-black:#171317; --theme-muted:#6f6269; --theme-border:#efd0dd; }
+html { color-scheme: light !important; }
+body { background:#fff !important; color:var(--theme-black) !important; }
+body::before { opacity:.025 !important; }
+header, nav, aside, .sidebar, .topbar, .navbar, .header, .side-nav, .mobile-nav {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+}
+main, .main, .content, .main-content, .page-content, .workspace, .container, .wrap {
+  color:var(--theme-black);
+}
+.card, .box, .panel, .modal, .form-card, .stat-card, .table-wrap, .content-card,
+.package-card, .client-card, .upload-card, .success-card, .login-card {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+  box-shadow:0 5px 18px rgba(190,75,125,.10) !important;
+  transition:box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+}
+.card:hover, .box:hover, .panel:hover, .stat-card:hover, .package-card:hover, .client-card:hover {
+  box-shadow:0 8px 22px rgba(190,75,125,.15) !important;
+  border-color:#e7a9c4 !important;
+}
+h1,h2,h3,h4,h5,h6,p,label,small,span,td,th,li,div { }
+h1,h2,h3,h4,h5,h6,p,label,td,th { color:inherit; }
+.brand, .tag, .sidebar-brand h2, .section-title, .page-title, .logo-text,
+a:not(.btn):not([class*="button"]) { color:var(--theme-pink-dark) !important; }
+button, .btn, input[type="submit"], input[type="button"], .button, a.btn {
+  background:var(--theme-pink) !important; color:#fff !important;
+  border-color:var(--theme-pink) !important;
+  box-shadow:0 3px 10px rgba(217,87,145,.16) !important;
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+button:hover, .btn:hover, input[type="submit"]:hover, input[type="button"]:hover, .button:hover {
+  background:var(--theme-pink-dark) !important; transform:translateY(-1px);
+  box-shadow:0 5px 13px rgba(217,87,145,.22) !important;
+}
+input, select, textarea {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:#e8c5d5 !important;
+}
+input::placeholder, textarea::placeholder { color:#a99aa1 !important; }
+table th { background:var(--theme-pink-light) !important; color:#39232e !important; }
+table td { color:var(--theme-black) !important; border-color:#f0dce5 !important; }
+hr, .divider { border-color:var(--theme-border) !important; }
+.badge, .pill, .status { border-color:#edc4d6 !important; }
+@keyframes softFadeUp { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+.card, .box, .panel, .stat-card, .package-card, .client-card { animation:softFadeUp .45s ease both; }
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } }
+</style>
+
+<style id="work-photos-card-fix">
+/* Work Photos: fix the existing photo editor card to match the pink/white theme */
+.ph {
+  width:100%; max-width:300px; min-width:0;
+  background:#fff !important; color:#171317 !important;
+  border:1px solid #efd0dd !important;
+  border-radius:18px; overflow:hidden;
+  box-shadow:0 5px 16px rgba(190,75,125,.12) !important;
+  transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+  animation:workPhotoFade .4s ease both;
+}
+.ph:hover {
+  transform:translateY(-3px);
+  border-color:#e7a9c4 !important;
+  box-shadow:0 9px 22px rgba(190,75,125,.17) !important;
+}
+.ph-body { background:#fff !important; color:#171317 !important; padding:14px; }
+.ph-body label.replace, .ph-body .replace { color:#75636c !important; }
+.ph-body input[type="text"], .ph-body select.sel {
+  background:#fff !important; color:#171317 !important;
+  border:1px solid #e8c5d5 !important; border-radius:10px;
+  box-shadow:0 2px 6px rgba(190,75,125,.07) !important;
+}
+.ph-body input[type="file"] {
+  max-width:100%; color:#171317 !important; background:#fff !important;
+  font-size:.72rem;
+}
+.ph-body input[type="file"]::file-selector-button {
+  background:#f8e5ed; color:#9f3568; border:1px solid #edc4d6;
+  border-radius:7px; padding:6px 9px; margin-right:7px; cursor:pointer;
+}
+.ph-body .btn {
+  background:#d95791 !important; color:#fff !important;
+  border:1px solid #d95791 !important;
+  box-shadow:0 3px 9px rgba(217,87,145,.16) !important;
+}
+.ph-body .btn:hover { background:#c94480 !important; transform:translateY(-1px); }
+.ph-body .btn.del { background:#d95791 !important; color:#fff !important; border-color:#d95791 !important; }
+.ph-body .btn.del:hover { background:#c94480 !important; }
+@keyframes workPhotoFade { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+@media (prefers-reduced-motion:reduce) { .ph { animation:none !important; transition:none !important; } .ph:hover { transform:none; } }
+</style>
+
+<style id="dark-pink-white-theme">
+:root{--bg:#ffffff!important;--surface:#ffffff!important;--soft:#fff3f7!important;--text:#171317!important;--muted:#765b68!important;--pink:#c2185b!important;--pink-main:#c2185b!important;--pink-dark:#880e4f!important;--pink-deep:#ad1457!important;--theme-pink:#c2185b!important;--theme-pink-dark:#880e4f!important;--theme-pink-light:#fff0f5!important;--theme-white:#fff!important;--theme-black:#171317!important;--theme-muted:#765b68!important;--theme-border:#f0bfd2!important}
+html,body{background:#fff!important;color:#171317!important;color-scheme:light!important}
+body{font-weight:400!important}
+/* White surfaces; dark pink is the only strong theme colour. */
+.sidebar,.main,.card,.table-card,.table-wrapper,.ph,.ph-body,.panel,.form-card,.content-card,.modal-content,.stat-card,.dashboard-card,.section-card,.album-header,.row,.client-card,.package-card,.profile-card,.upload-card,.gallery-card,.auth-card,.login-card,.form-container,.page-card{background:#fff!important;color:#171317!important;border-color:#f0bfd2!important;box-shadow:0 5px 18px rgba(136,14,79,.08)!important}
+.sidebar{border-right:1px solid #f0bfd2!important}
+.sidebar-brand,.sidebar-footer{border-color:#f0bfd2!important}
+.sidebar-brand h2,.page-top h4 span,.card-label,.nav-section,.section-title,.section-label,.ph-body label,.cat-label{color:#c2185b!important}
+.nav-item,.logout-btn,.sidebar-nav a{color:#171317!important}
+.nav-item:hover,.nav-item.active,.logout-btn:hover,.sidebar-nav a:hover{background:#fff0f5!important;color:#171317!important;border-color:#c2185b!important}
+input,select,textarea,.sel,.ph-body input[type=text],.ph-body select{background:#fff!important;color:#171317!important;border:1px solid #e8b2c8!important}
+input::placeholder,textarea::placeholder{color:#987b88!important}
+button,.btn,.btn-primary,.btn-add,.save-btn,.action-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important;transition:all .22s ease!important}
+button:hover,.btn:hover,.btn-primary:hover,.btn-add:hover,.save-btn:hover,.action-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important;transform:translateY(-1px)}
+.btn.del,.btn-delete,.delete-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important}
+.btn.del:hover,.btn-delete:hover,.delete-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.file-pick{background:#fff5f8!important;color:#c2185b!important;border-color:#c2185b!important}
+.file-pick:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.tag,.badge,.status-badge{background:#c2185b!important;color:#fff!important}
+hr{border-color:#f0bfd2!important}
+.card,.ph,.table-card{border-radius:16px!important}
+.ph{overflow:hidden!important}
+.ph-body{color:#171317!important}
+/* Keep status colours legible while preventing dark panels. */
+.msg{background:#f0fff4!important;color:#236b3b!important}
+</style>
+<link rel="stylesheet" href="/css/site-nav.css">
+<style id="saara-theme">.bottom-nav{background:rgba(17,17,17,.95)!important;border-top:1px solid rgba(233,30,99,.25)!important}.bottom-nav ul li a{color:#ffffff!important;font-weight:700}.bottom-nav ul li a:hover,.bottom-nav ul li a.active{color:#e91e63!important}</style>
+</head>
+<body>
+
+<button class="hamburger" onclick="toggleSidebar()"><i class="ti ti-menu-2"></i></button>
+<div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand"><h2>Saara Photography</h2><p>Admin Panel</p></div>
+    <nav class="sidebar-nav">
+        <div class="nav-section">Main</div>
+     
+        <a th:href="@{/clients}" class="nav-item"><i class="ti ti-users"></i>Clients</a>
+        <div class="nav-section">Business</div>
+        <a th:href="@{/owner/home-photos}" class="nav-item active"><i class="ti ti-photo-star"></i>Work Photos</a>
+        <a th:href="@{/owner/packages}" class="nav-item"><i class="ti ti-diamond"></i>Packages</a>
+        <a th:href="@{/admin/contact-enquiries}" class="nav-item"><i class="ti ti-mail"></i>Contact Enquiries</a>
+        <a th:href="@{/owner/profile}" class="nav-item"><i class="ti ti-user-circle"></i>Profile</a>
+    </nav>
+    <div class="sidebar-footer">
+        <a th:href="@{/logout}" class="logout-btn"><i class="ti ti-logout"></i>Logout</a>
+    </div>
+</aside>
+
+<div class="main">
+    <div class="page-top">
+        <h4>Work <span>Photos</span></h4>
+        <p>Photo + title + category (Pre-Wedding / Wedding) choose pannunga. Andha category-la Work page-la photo varum.</p>
+    </div>
+
+    <div class="msg" th:if="${msg}" th:text="${msg}"></div>
+
+    <!-- ADD -->
+    <div class="card">
+        <p class="card-label"><i class="ti ti-plus"></i>Add Photos</p>
+        <form th:action="@{/owner/home-photos/upload}" method="post" enctype="multipart/form-data">
+            <label class="cat-label" for="bulkCat">Add these photos to</label>
+            <select id="bulkCat" class="sel">
+                <option value="PRE_WEDDING">Pre-Wedding</option>
+                <option value="WEDDING" selected>Wedding</option>
+            </select>
+            <label class="file-pick">
+                <i class="ti ti-upload"></i> Choose photos
+                <input type="file" id="files" name="files" accept="image/*" multiple>
+            </label>
+            <div id="rows"></div>
+            <button type="submit" class="btn" id="saveBtn"><i class="ti ti-device-floppy"></i>Save to Work Page</button>
+        </form>
+    </div>
+
+    <!-- EXISTING -->
+    <div class="card-label" style="margin-bottom:14px"><i class="ti ti-photo"></i>On the Work page now</div>
+    <p class="empty" th:if="${photos.isEmpty()}">Innum photos add pannala.</p>
+    <div class="grid">
+        <div class="ph" th:each="p : ${photos}">
+            <span class="tag" th:text="${p.categoryLabel}">Wedding</span>
+            <img th:src="${p.url}" th:alt="${p.title}">
+            <div class="ph-body">
+                <form th:action="@{/owner/home-photos/{id}/edit(id=${p.id})}" method="post" enctype="multipart/form-data" style="display:flex;flex-direction:column;gap:10px">
+                    <input type="text" name="title" th:value="${p.title}" maxlength="150" placeholder="Title" required>
+                    <select name="category" class="sel">
+                        <option value="PRE_WEDDING" th:selected="${p.category == 'PRE_WEDDING'}">Pre-Wedding</option>
+                        <option value="WEDDING" th:selected="${p.category == 'WEDDING'}">Wedding</option>
+                    </select>
+                    <label class="replace">Replace photo (optional)</label>
+                    <input type="file" name="file" accept="image/*">
+                    <button type="submit" class="btn"><i class="ti ti-device-floppy"></i>Save</button>
+                </form>
+                <form th:action="@{/owner/home-photos/{id}/delete(id=${p.id})}" method="post" onsubmit="return confirm('Remove this photo from home page?')">
+                    <button type="submit" class="btn del"><i class="ti ti-trash"></i>Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('open');}
+// One title box per chosen photo — each photo is saved as its own record
+document.getElementById('files').addEventListener('change', function () {
+    const rows = document.getElementById('rows');
+    rows.innerHTML = '';
+    Array.from(this.files).forEach(function (f) {
+        const row = document.createElement('div'); row.className = 'row';
+        const img = document.createElement('img'); img.src = URL.createObjectURL(f);
+        const inp = document.createElement('input'); inp.type = 'text'; inp.name = 'titles';
+        inp.placeholder = 'Title for ' + f.name; inp.maxLength = 150;
+        inp.value = f.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ');
+        const sel = document.createElement('select'); sel.name = 'categories'; sel.className = 'sel';
+        sel.innerHTML = '<option value="PRE_WEDDING">Pre-Wedding</option><option value="WEDDING">Wedding</option>';
+        sel.value = document.getElementById('bulkCat').value;
+        const box = document.createElement('div'); box.className = 'fields';
+        box.appendChild(inp); box.appendChild(sel);
+        row.appendChild(img); row.appendChild(box); rows.appendChild(row);
+    });
+    document.getElementById('bulkCat').onchange = function () {
+        document.querySelectorAll('#rows select').forEach(function (x) { x.value = document.getElementById('bulkCat').value; });
+    };
+    document.getElementById('saveBtn').style.display = this.files.length ? 'inline-flex' : 'none';
+});
+</script>
+
+
+<nav class="bottom-nav">
+    <ul>
+        <li><a href="/"><i class="ti ti-home"></i><span>Home</span></a></li>
+        <li><a href="/work"><i class="ti ti-video"></i><span>Work</span></a></li>
+        <li><a href="/select"><i class="ti ti-photo"></i><span>Select</span></a></li>
+        <li><a href="/packages-page"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
+        <li><a href="/contact"><i class="ti ti-phone"></i><span>Contact</span></a></li>
+    </ul>
+</nav>
+
+<!-- Floating Instagram -->
+<style>
+body .floating-social { position: fixed; right: 18px; bottom: 90px; display: flex; flex-direction: column; gap: 12px; z-index: 999; }
+body .floating-social a { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,.25); transition: transform .25s ease, box-shadow .25s ease; }
+body .floating-social a:hover { transform: scale(1.1); box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+body .floating-social .whatsapp-btn { background: #000000; }
+body .floating-social .instagram-btn { background: #e91e63; }
+@media (min-width: 768px) { body .floating-social { bottom: 100px; right: 30px; } }
+</style>
+<div class="floating-social">
+    <a href="https://www.instagram.com/saaraphotography05" target="_blank" rel="noopener" class="instagram-btn" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+</div>
+
+</body>
+</html>

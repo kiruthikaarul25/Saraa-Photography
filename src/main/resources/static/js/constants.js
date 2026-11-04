@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  DREAM GALLERY — SITE CONSTANTS
+ *  SAARA PHOTOGRAPHY — SITE CONSTANTS
  *  Edit only this file to update links/info across ALL pages
  * ============================================================
  */
@@ -8,20 +8,20 @@
 const DG = {
 
   /* ── Brand ── */
-  STUDIO_NAME    : "Dream Gallery Photography",
-  INSTA_HANDLE   : "@dreamgalleryphoto",       // shown as text on pages
-  LOCATION       : "Chennai · Tamil Nadu",
+  STUDIO_NAME    : "Saara Photography",
+  INSTA_HANDLE   : "@saaraphotography05",       // shown as text on pages
+  LOCATION       : "Destination Photographer",
 
   /* ── Social Links ── */
-  INSTA_URL      : "https://instagram.com/dreamgalleryphoto",
-  WHATSAPP_NUMBER: "919876543210",              // country code + number, no + or spaces
+  INSTA_URL      : "https://instagram.com/saaraphotography05",
+  WHATSAPP_NUMBER: "919786711698",              // country code + number, no + or spaces
   WHATSAPP_MSG   : "Hi! I'm interested in your photography services.",
 
   /* ── Contact ── */
-  PHONE_1        : "+91 98765 43210",
-  PHONE_2        : "+91 98765 43211",
-  EMAIL          : "hello@dreamgallery.in",
-  ADDRESS        : "123, Anna Nagar Main Road, Chennai — 600040",
+  PHONE_1        : "+91 97867 11698",
+  PHONE_2        : "+91 97867 11698",
+  EMAIL          : "",
+  ADDRESS        : "Saara Photography, Service wide",
   HOURS          : "Mon – Sat &nbsp;10 AM – 7 PM",
   HOURS_NOTE     : "Sunday by appointment",
 
@@ -58,7 +58,7 @@ const DG = {
     a.href = DG.INSTA_URL;
   });
 
-  /* ── 3. Instagram handle text (e.g. @dreamgalleryphoto) ── */
+  /* ── 3. Instagram handle text (e.g. @saaraphotography05) ── */
   document.querySelectorAll('.insta-handle').forEach(el => {
     el.textContent = DG.INSTA_HANDLE;
   });

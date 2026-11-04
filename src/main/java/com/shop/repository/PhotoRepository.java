@@ -19,4 +19,9 @@ public interface PhotoRepository
 
     // Owner photo count
     long countByOwnerIdAndIsDeletedFalse(int ownerId);
+
+    // Duplicate guard: same original name + same size already in this album
+    // (makes upload retries safe - a retried batch will not create duplicates)
+    boolean existsByAlbumIdAndFilenameEndingWithAndFileSizeAndIsDeletedFalse(
+            int albumId, String filenameSuffix, Long fileSize);
 }

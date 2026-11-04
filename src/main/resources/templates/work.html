@@ -1,361 +1,252 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Work — Dream Gallery Photography</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Raleway', sans-serif; background: #080808; color: #fff; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Work — Saara Photography</title>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif; font-weight: 400; background: #fff; color: #000; overflow-x: hidden; padding-bottom: 70px; }
 
-        /* SOCIAL FIXED — bottom right, contact page style */
-        .fixed-social {
-            position: fixed;
-            bottom: 90px;
-            right: 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 200;
-        }
-        .fixed-social a {
-            width: 46px; height: 46px;
-            border: 1px solid rgba(212,175,55,0.35);
-            background: rgba(8,8,8,0.85);
-            backdrop-filter: blur(12px);
-            display: flex; align-items: center; justify-content: center;
-            color: #D4AF37;
-            font-size: 20px;
-            text-decoration: none;
-            transition: border-color 0.3s, background 0.3s, transform 0.3s;
-        }
-        .fixed-social a:hover {
-            border-color: #D4AF37;
-            background: rgba(212,175,55,0.12);
-            transform: scale(1.1);
-        }
+    .fixed-social { position: fixed; bottom: 90px; right: 18px; display: flex; flex-direction: column; gap: 10px; z-index: 300; }
+    .fixed-social a { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,.25); transition: transform .25s; }
+    .fixed-social a:hover { transform: scale(1.1); }
+    .fixed-social .ig { background: #e91e63; } .fixed-social .wa { background: #ad1457; }
 
-        /* HERO */
-        .page-hero {
-            height: 55vh; min-height: 300px;
-            position: relative; display: flex;
-            align-items: center; justify-content: center; text-align: center; overflow: hidden;
-        }
-        .hero-bg {
-            position: absolute; inset: 0;
-            background: url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1600&auto=format&fit=crop') center/cover no-repeat;
-            animation: kbZoom 14s ease-in-out infinite alternate;
-        }
-        @keyframes kbZoom { from { transform: scale(1); } to { transform: scale(1.07); } }
-        .hero-overlay {
-            position: absolute; inset: 0;
-            background: linear-gradient(to bottom, rgba(8,8,8,0.4) 0%, rgba(8,8,8,0.65) 55%, rgba(8,8,8,1) 100%);
-        }
-        .hero-content { position: relative; z-index: 2; }
-        .eyebrow {
-            font-family: 'Raleway', sans-serif; font-size: 0.68rem;
-            letter-spacing: 5px; color: #D4AF37; text-transform: uppercase; margin-bottom: 14px;
-        }
-        .hero-content h1 {
-            font-family: 'Cinzel', serif; font-size: clamp(2rem,5vw,3.8rem);
-            font-weight: 300; letter-spacing: 6px; color: #fff;
-        }
-        .hero-content h1 span { color: #D4AF37; }
-        .gold-line {
-            width: 60px; height: 1px;
-            background: linear-gradient(to right, transparent, #D4AF37, transparent);
-            margin: 16px auto 0;
-        }
+    .hero { text-align: center; padding: 48px 20px 30px; background: linear-gradient(180deg, #ffe3ef 0%, #ffffff 100%); border-bottom: 4px solid #e91e63; }
+    .hero img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #e91e63; box-shadow: 0 6px 20px rgba(212,20,106,.45); margin-bottom: 14px; }
+    .hero-tag { display: block; font-size: 11px; letter-spacing: 6px; color: #e91e63; text-transform: uppercase; margin-bottom: 10px; }
+    .hero h1 { font-size: clamp(2rem, 6vw, 3.4rem); letter-spacing: 2px; }
+    .hero h1 span { color: #e91e63; }
+    .line { width: 50px; height: 3px; background: #e91e63; margin: 14px auto 0; }
 
-        /* FILTER BUTTONS */
-        .filter-bar {
-            display: flex; justify-content: center; flex-wrap: wrap;
-            gap: 10px; padding: 40px 20px 24px;
-        }
-        .cat-btn {
-            padding: 8px 22px;
-            border: 1px solid rgba(212,175,55,0.4);
-            background: transparent; color: #D4AF37;
-            border-radius: 40px; cursor: pointer;
-            font-family: 'Cinzel', serif; font-size: 0.7rem;
-            letter-spacing: 2px; text-transform: uppercase;
-            transition: all 0.3s;
-        }
-        .cat-btn:hover, .cat-btn.active {
-            background: #D4AF37; color: #000; border-color: #D4AF37;
-        }
+    /* category tabs */
+    .tabs { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; padding: 26px 16px 6px; background: #fff5f9; }
+    .tab { border: 2px solid #e91e63; background: #fff; color: #e91e63; padding: 9px 24px; border-radius: 999px; font: inherit; font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all .25s; }
+    .tab:hover, .tab.active { background: #e91e63; color: #fff; }
 
-        /* GALLERY MASONRY */
-        .gallery-section { padding: 10px 20px; max-width: 1200px; margin: 0 auto; }
-        .gallery-grid { columns: 3; column-gap: 12px; }
-        @media(max-width: 768px) { .gallery-grid { columns: 2; } }
-        @media(max-width: 480px) { .gallery-grid { columns: 1; } }
+    .block { padding: 30px 14px 20px; background: #fff5f9; }
+    .block.alt { background: #fff; }
+    .block-head { text-align: center; margin-bottom: 22px; }
+    .block-head h2 { font-size: clamp(1.4rem, 4vw, 2rem); letter-spacing: 4px; color: #ad1457; text-transform: uppercase; }
+    .block-head .count { display: inline-block; margin-top: 8px; background: #e91e63; color: #fff; font-size: .7rem; letter-spacing: 2px; padding: 4px 14px; border-radius: 999px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; max-width: 940px; margin: 0 auto; }
+    @media (max-width: 500px) { .grid { grid-template-columns: repeat(2, 1fr); gap: 4px; } }
+    .item { aspect-ratio: 1; position: relative; overflow: hidden; cursor: pointer; background: #ffe3ef; border-radius: 6px; }
+    .item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
+    .item:hover img { transform: scale(1.08); }
+    .item .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 10px 9px; background: linear-gradient(to top, rgba(163,15,85,.85), transparent); color: #fff; font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; text-align: center; }
+    .empty { text-align: center; padding: 26px 0 40px; color: #ad1457; }
 
-        .gallery-item {
-            break-inside: avoid; margin-bottom: 12px;
-            border-radius: 14px; overflow: hidden;
-            position: relative; cursor: pointer;
-            border: 1px solid rgba(212,175,55,0.08);
-            transition: border-color 0.3s;
-        }
-        .gallery-item:hover { border-color: rgba(212,175,55,0.4); }
-        .gallery-item img {
-            width: 100%; display: block;
-            transition: transform 0.6s ease;
-            pointer-events: none; user-select: none; -webkit-user-drag: none;
-        }
-        .gallery-item:hover img { transform: scale(1.06); }
-        .gallery-item .overlay {
-            position: absolute; inset: 0;
-            background: linear-gradient(transparent 45%, rgba(8,8,8,0.8));
-            opacity: 0; transition: opacity 0.35s;
-            display: flex; align-items: flex-end; padding: 16px;
-        }
-        .gallery-item:hover .overlay { opacity: 1; }
-        .overlay-label {
-            font-family: 'Cinzel', serif;
-            font-size: 0.7rem; letter-spacing: 2px;
-            color: #D4AF37; text-transform: uppercase;
-        }
+    /* viewer */
+    .viewer { position: fixed; inset: 0; background: rgba(17,17,17,.92); display: none; align-items: center; justify-content: center; z-index: 600; flex-direction: column; padding: 16px; }
+    .viewer.open { display: flex; }
+    .viewer img { max-width: 100%; max-height: 80vh; border-radius: 8px; border: 3px solid #e91e63; }
+    .viewer p { color: #fff; margin-top: 12px; letter-spacing: 2px; text-transform: uppercase; font-size: .8rem; }
+    .viewer button { position: absolute; top: 16px; right: 16px; background: #e91e63; color: #fff; border: 0; width: 42px; height: 42px; border-radius: 50%; font-size: 20px; cursor: pointer; }
 
-        /* ABOUT */
-        .about-section {
-            padding: 80px 20px 50px; max-width: 820px;
-            margin: 0 auto; text-align: center;
-        }
-        .section-eyebrow {
-            font-family: 'Raleway', sans-serif; font-size: 0.68rem;
-            letter-spacing: 5px; color: #D4AF37;
-            text-transform: uppercase; margin-bottom: 14px;
-        }
-        .about-section h2 {
-            font-family: 'Cinzel', serif; font-size: clamp(1.6rem,3vw,2.6rem);
-            font-weight: 300; letter-spacing: 4px; color: #fff; margin-bottom: 24px;
-        }
-        .about-section p {
-            color: #888; font-weight: 300; line-height: 1.95;
-            font-size: 0.95rem; margin-bottom: 14px;
-        }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: rgba(255,255,255,.96); backdrop-filter: blur(20px); border-top: 2px solid #e91e63; padding: 10px 0 max(10px, env(safe-area-inset-bottom)); }
+    .bottom-nav ul { display: flex; justify-content: space-around; list-style: none; max-width: 500px; margin: 0 auto; }
+    .bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #000; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 8px; transition: color .3s; }
+    .bottom-nav a i { font-size: 20px; }
+    .bottom-nav a:hover, .bottom-nav a.active { color: #e91e63; }
+  
+/* ===== Floating WhatsApp & Instagram Icons ===== */
+.floating-social { position: fixed; right: 18px; bottom: 90px; display: flex; flex-direction: column; gap: 12px; z-index: 999; }
+.floating-social a { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,.25); transition: transform .25s ease, box-shadow .25s ease; }
+.floating-social a:hover { transform: scale(1.1); box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+.floating-social .whatsapp-btn { background-color: #000000; }
+.floating-social .instagram-btn { background: #e91e63; }
+@media (min-width: 768px) { .floating-social { bottom: 100px; right: 30px; } }
+</style>
 
-        /* STATS */
-        .stats {
-            display: grid; grid-template-columns: repeat(3,1fr);
-            gap: 16px; max-width: 680px; margin: 50px auto; padding: 0 20px;
-        }
-        @media(max-width:480px) { .stats { grid-template-columns: 1fr; } }
-        .stat-item {
-            text-align: center; padding: 30px 16px;
-            background: #0e0e0e; border-radius: 16px;
-            border: 1px solid rgba(212,175,55,0.15);
-            transition: border-color 0.3s, transform 0.3s;
-        }
-        .stat-item:hover { border-color: rgba(212,175,55,0.5); transform: translateY(-4px); }
-        .stat-item h3 {
-            font-family: 'Cinzel', serif; font-size: 2.2rem;
-            font-weight: 400; color: #D4AF37;
-        }
-        .stat-item p {
-            font-family: 'Raleway', sans-serif; color: #666;
-            font-size: 0.75rem; letter-spacing: 2px;
-            text-transform: uppercase; margin-top: 6px;
-        }
+<style id="pink-theme">
+/* ===== Medium dark pink + white + black theme ===== */
+:root{--pink-main:#e91e63;--pink-dark:#ad1457;--pink-deep:#c2185b;--black:#111111}
+html,body{font-family:"Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif !important}
+button,input,select,textarea{font-family:inherit !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card,.mob-client-card,.insta-item,.photo-item,.preview-item,.album-header,.drop-zone,.item{box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.sidebar{box-shadow:4px 0 18px rgba(0,0,0,.35)}
+.bottom-nav{box-shadow:0 -4px 16px rgba(0,0,0,.3)}
+button,.btn-save,.btn-add,.btn-copy,.btn-back,.back-btn,.submit,.logout-btn,.sidebar-logout{box-shadow:0 4px 12px rgba(0,0,0,.3)}
+input,select,textarea{box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.btn-back,.back-btn{background:var(--black) !important;color:#fff !important;border:1px solid var(--black) !important}
+.btn-back:hover,.back-btn:hover{background:var(--pink-main) !important;border-color:var(--pink-main) !important}
+.section-sep{border-color:var(--black) !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card{border-top:4px solid var(--black)}
+</style>
 
-        /* TESTIMONIALS */
-        .testimonials { padding: 60px 20px; background: #0b0b0b; }
-        .testimonials .section-eyebrow { text-align: center; }
-        .testimonials h2 {
-            font-family: 'Cinzel', serif; font-size: clamp(1.4rem,3vw,2.2rem);
-            font-weight: 300; letter-spacing: 4px; color: #fff;
-            text-align: center; margin-bottom: 40px;
-        }
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(270px,1fr));
-            gap: 18px; max-width: 1000px; margin: 0 auto;
-        }
-        .t-card {
-            background: #111; border-radius: 16px; padding: 28px;
-            border: 1px solid rgba(212,175,55,0.12);
-            transition: transform 0.3s, border-color 0.3s;
-        }
-        .t-card:hover { transform: translateY(-5px); border-color: rgba(212,175,55,0.4); }
-        .stars { color: #D4AF37; font-size: 0.9rem; letter-spacing: 3px; margin-bottom: 14px; }
-        .t-card p {
-            color: #888; font-size: 0.88rem;
-            line-height: 1.75; font-style: italic; font-weight: 300;
-        }
-        .t-name {
-            margin-top: 16px; color: #D4AF37;
-            font-family: 'Cinzel', serif; font-size: 0.78rem;
-            letter-spacing: 1px; font-style: normal;
-        }
-
-        /* BOTTOM NAV */
-        .spacer { height: 80px; }
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-            background: rgba(8,8,8,0.95); backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(212,175,55,0.15);
-            padding: 10px 0 max(10px, env(safe-area-inset-bottom));
-        }
-        .bottom-nav ul {
-            display: flex; justify-content: space-around;
-            list-style: none; max-width: 520px; margin: 0 auto;
-        }
-        .bottom-nav ul li a {
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            text-decoration: none; color: #444;
-            font-family: 'Cinzel', serif; font-size: 8px;
-            letter-spacing: 2px; text-transform: uppercase;
-            transition: color 0.3s; padding: 4px 8px;
-        }
-        .bottom-nav ul li a i { font-size: 20px; }
-        .bottom-nav ul li a:hover, .bottom-nav ul li a.active { color: #D4AF37; }
-    </style>
+<style id="pink-white-theme-overrides">
+:root { color-scheme: light !important; --theme-pink:#d95791; --theme-pink-dark:#c94480; --theme-pink-light:#f7dce8; --theme-white:#ffffff; --theme-black:#171317; --theme-muted:#6f6269; --theme-border:#efd0dd; }
+html { color-scheme: light !important; }
+body { background:#fff !important; color:var(--theme-black) !important; }
+body::before { opacity:.025 !important; }
+header, nav, aside, .sidebar, .topbar, .navbar, .header, .side-nav, .mobile-nav {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+}
+main, .main, .content, .main-content, .page-content, .workspace, .container, .wrap {
+  color:var(--theme-black);
+}
+.card, .box, .panel, .modal, .form-card, .stat-card, .table-wrap, .content-card,
+.package-card, .client-card, .upload-card, .success-card, .login-card {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+  box-shadow:0 5px 18px rgba(190,75,125,.10) !important;
+  transition:box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+}
+.card:hover, .box:hover, .panel:hover, .stat-card:hover, .package-card:hover, .client-card:hover {
+  box-shadow:0 8px 22px rgba(190,75,125,.15) !important;
+  border-color:#e7a9c4 !important;
+}
+h1,h2,h3,h4,h5,h6,p,label,small,span,td,th,li,div { }
+h1,h2,h3,h4,h5,h6,p,label,td,th { color:inherit; }
+.brand, .tag, .sidebar-brand h2, .section-title, .page-title, .logo-text,
+a:not(.btn):not([class*="button"]) { color:var(--theme-pink-dark) !important; }
+button, .btn, input[type="submit"], input[type="button"], .button, a.btn {
+  background:var(--theme-pink) !important; color:#fff !important;
+  border-color:var(--theme-pink) !important;
+  box-shadow:0 3px 10px rgba(217,87,145,.16) !important;
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+button:hover, .btn:hover, input[type="submit"]:hover, input[type="button"]:hover, .button:hover {
+  background:var(--theme-pink-dark) !important; transform:translateY(-1px);
+  box-shadow:0 5px 13px rgba(217,87,145,.22) !important;
+}
+input, select, textarea {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:#e8c5d5 !important;
+}
+input::placeholder, textarea::placeholder { color:#a99aa1 !important; }
+table th { background:var(--theme-pink-light) !important; color:#39232e !important; }
+table td { color:var(--theme-black) !important; border-color:#f0dce5 !important; }
+hr, .divider { border-color:var(--theme-border) !important; }
+.badge, .pill, .status { border-color:#edc4d6 !important; }
+@keyframes softFadeUp { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+.card, .box, .panel, .stat-card, .package-card, .client-card { animation:softFadeUp .45s ease both; }
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } }
+</style>
+<style id="dark-pink-white-theme">
+:root{--bg:#ffffff!important;--surface:#ffffff!important;--soft:#fff3f7!important;--text:#171317!important;--muted:#765b68!important;--pink:#c2185b!important;--pink-main:#c2185b!important;--pink-dark:#880e4f!important;--pink-deep:#ad1457!important;--theme-pink:#c2185b!important;--theme-pink-dark:#880e4f!important;--theme-pink-light:#fff0f5!important;--theme-white:#fff!important;--theme-black:#171317!important;--theme-muted:#765b68!important;--theme-border:#f0bfd2!important}
+html,body{background:#fff!important;color:#171317!important;color-scheme:light!important}
+body{font-weight:400!important}
+/* White surfaces; dark pink is the only strong theme colour. */
+.sidebar,.main,.card,.table-card,.table-wrapper,.ph,.ph-body,.panel,.form-card,.content-card,.modal-content,.stat-card,.dashboard-card,.section-card,.album-header,.row,.client-card,.package-card,.profile-card,.upload-card,.gallery-card,.auth-card,.login-card,.form-container,.page-card{background:#fff!important;color:#171317!important;border-color:#f0bfd2!important;box-shadow:0 5px 18px rgba(136,14,79,.08)!important}
+.sidebar{border-right:1px solid #f0bfd2!important}
+.sidebar-brand,.sidebar-footer{border-color:#f0bfd2!important}
+.sidebar-brand h2,.page-top h4 span,.card-label,.nav-section,.section-title,.section-label,.ph-body label,.cat-label{color:#c2185b!important}
+.nav-item,.logout-btn,.sidebar-nav a{color:#171317!important}
+.nav-item:hover,.nav-item.active,.logout-btn:hover,.sidebar-nav a:hover{background:#fff0f5!important;color:#171317!important;border-color:#c2185b!important}
+input,select,textarea,.sel,.ph-body input[type=text],.ph-body select{background:#fff!important;color:#171317!important;border:1px solid #e8b2c8!important}
+input::placeholder,textarea::placeholder{color:#987b88!important}
+button,.btn,.btn-primary,.btn-add,.save-btn,.action-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important;transition:all .22s ease!important}
+button:hover,.btn:hover,.btn-primary:hover,.btn-add:hover,.save-btn:hover,.action-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important;transform:translateY(-1px)}
+.btn.del,.btn-delete,.delete-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important}
+.btn.del:hover,.btn-delete:hover,.delete-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.file-pick{background:#fff5f8!important;color:#c2185b!important;border-color:#c2185b!important}
+.file-pick:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.tag,.badge,.status-badge{background:#c2185b!important;color:#fff!important}
+hr{border-color:#f0bfd2!important}
+.card,.ph,.table-card{border-radius:16px!important}
+.ph{overflow:hidden!important}
+.ph-body{color:#171317!important}
+/* Keep status colours legible while preventing dark panels. */
+.msg{background:#f0fff4!important;color:#236b3b!important}
+</style>
 </head>
 <body>
 
-<!-- SOCIAL — bottom right, above bottom nav -->
-<div class="fixed-social">
-    <a href="https://instagram.com/dreamgalleryphoto" target="_blank" aria-label="Instagram">
-        <i class="ti ti-brand-instagram"></i>
-    </a>
-    <a href="https://wa.me/919999999999?text=Hi! I'm interested in your photography services." target="_blank" aria-label="WhatsApp">
-        <i class="ti ti-brand-whatsapp"></i>
-    </a>
+<div class="hero">
+  <img src="/images/logo.png" alt="Saara Photography logo">
+  <span class="hero-tag">Saara Photography</span>
+  <h1>Our <span>Work</span></h1>
+  <div class="line"></div>
 </div>
 
-<!-- HERO -->
-<div class="page-hero">
-    <div class="hero-bg"></div>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-        <p class="eyebrow">Dream Gallery Photography</p>
-        <h1>Our <span>Work</span></h1>
-        <div class="gold-line"></div>
+<div class="tabs">
+  <button class="tab active" data-f="all">All</button>
+  <button class="tab" data-f="pre">Pre-Wedding</button>
+  <button class="tab" data-f="wed">Wedding</button>
+</div>
+
+<!-- PRE-WEDDING -->
+<section class="block" id="pre">
+  <div class="block-head">
+    <h2>Pre-Wedding</h2>
+    <span class="count" th:text="${#lists.size(preWedding)} + ' photos'">0 photos</span>
+  </div>
+  <div class="grid" th:if="${!#lists.isEmpty(preWedding)}">
+    <div class="item" th:each="hp : ${preWedding}" th:attr="data-src=${hp.url},data-title=${hp.title}">
+      <img th:src="${hp.url}" th:alt="${hp.title}" loading="lazy">
+      <div class="cap" th:text="${hp.title}"></div>
     </div>
-</div>
+  </div>
+  <p class="empty" th:if="${#lists.isEmpty(preWedding)}">Pre-Wedding photos coming soon.</p>
+</section>
 
-<!-- FILTER -->
-<div class="filter-bar">
-    <button class="cat-btn active" data-cat="all">All</button>
-    <button class="cat-btn" data-cat="wedding">Wedding</button>
-    <button class="cat-btn" data-cat="prewedding">Pre-Wedding</button>
-    <button class="cat-btn" data-cat="reception">Reception</button>
-    <button class="cat-btn" data-cat="portrait">Portrait</button>
-</div>
-
-<!-- GALLERY -->
-<div class="gallery-section">
-    <div class="gallery-grid">
-        <div class="gallery-item" data-cat="wedding">
-            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=600&auto=format&fit=crop" alt="Wedding">
-            <div class="overlay"><span class="overlay-label">Wedding</span></div>
-        </div>
-        <div class="gallery-item" data-cat="prewedding">
-            <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=600&auto=format&fit=crop" alt="Pre-Wedding">
-            <div class="overlay"><span class="overlay-label">Pre-Wedding</span></div>
-        </div>
-        <div class="gallery-item" data-cat="wedding">
-            <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&auto=format&fit=crop" alt="Wedding">
-            <div class="overlay"><span class="overlay-label">Wedding</span></div>
-        </div>
-        <div class="gallery-item" data-cat="reception">
-            <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&auto=format&fit=crop" alt="Reception">
-            <div class="overlay"><span class="overlay-label">Reception</span></div>
-        </div>
-        <div class="gallery-item" data-cat="portrait">
-            <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=600&auto=format&fit=crop" alt="Portrait">
-            <div class="overlay"><span class="overlay-label">Portrait</span></div>
-        </div>
-        <div class="gallery-item" data-cat="prewedding">
-            <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&auto=format&fit=crop" alt="Pre-Wedding">
-            <div class="overlay"><span class="overlay-label">Pre-Wedding</span></div>
-        </div>
-        <div class="gallery-item" data-cat="wedding">
-            <img src="https://images.unsplash.com/photo-1550005809-91ad75fb315f?w=600&auto=format&fit=crop" alt="Wedding">
-            <div class="overlay"><span class="overlay-label">Wedding</span></div>
-        </div>
-        <div class="gallery-item" data-cat="reception">
-            <img src="https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&auto=format&fit=crop" alt="Reception">
-            <div class="overlay"><span class="overlay-label">Reception</span></div>
-        </div>
-        <div class="gallery-item" data-cat="portrait">
-            <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&auto=format&fit=crop" alt="Portrait">
-            <div class="overlay"><span class="overlay-label">Portrait</span></div>
-        </div>
+<!-- WEDDING -->
+<section class="block alt" id="wed">
+  <div class="block-head">
+    <h2>Wedding</h2>
+    <span class="count" th:text="${#lists.size(wedding)} + ' photos'">0 photos</span>
+  </div>
+  <div class="grid" th:if="${!#lists.isEmpty(wedding)}">
+    <div class="item" th:each="hp : ${wedding}" th:attr="data-src=${hp.url},data-title=${hp.title}">
+      <img th:src="${hp.url}" th:alt="${hp.title}" loading="lazy">
+      <div class="cap" th:text="${hp.title}"></div>
     </div>
+  </div>
+  <p class="empty" th:if="${#lists.isEmpty(wedding)}">Wedding photos coming soon.</p>
+</section>
+
+<div class="viewer" id="viewer">
+  <button type="button" id="vClose" aria-label="Close"><i class="ti ti-x"></i></button>
+  <img id="vImg" src="" alt="">
+  <p id="vTitle"></p>
 </div>
 
-<!-- ABOUT -->
-<div class="about-section">
-    <p class="section-eyebrow">Who We Are</p>
-    <h2>About Us</h2>
-    <p>We are a passionate team of photographers and cinematographers dedicated to capturing your most precious moments. With over 8 years of experience in Tamil Nadu wedding photography, we bring creativity, emotion, and artistry to every frame.</p>
-    <p>Our approach is simple — we tell your story the way it deserves to be told. Authentic, beautiful, and timeless.</p>
-</div>
-
-<!-- STATS -->
-<div class="stats">
-    <div class="stat-item"><h3>500+</h3><p>Weddings</p></div>
-    <div class="stat-item"><h3>8+</h3><p>Years</p></div>
-    <div class="stat-item"><h3>50K+</h3><p>Photos</p></div>
-</div>
-
-<!-- TESTIMONIALS -->
-<div class="testimonials">
-    <p class="section-eyebrow">Happy Couples</p>
-    <h2>What They Say</h2>
-    <div class="testimonial-grid">
-        <div class="t-card">
-            <div class="stars">★★★★★</div>
-            <p>"Dream Gallery captured our wedding beautifully. Every photo tells our story perfectly. We couldn't be happier!"</p>
-            <p class="t-name">— Priya &amp; Karthik</p>
-        </div>
-        <div class="t-card">
-            <div class="stars">★★★★★</div>
-            <p>"The team was so professional and made us feel comfortable throughout. The photos are absolutely stunning!"</p>
-            <p class="t-name">— Anitha &amp; Rajesh</p>
-        </div>
-        <div class="t-card">
-            <div class="stars">★★★★★</div>
-            <p>"Best decision we made for our wedding. The photos exceeded all our expectations. Truly magical work!"</p>
-            <p class="t-name">— Deepa &amp; Suresh</p>
-        </div>
-    </div>
-</div>
-
-<div class="spacer"></div>
-
-<!-- BOTTOM NAV -->
 <nav class="bottom-nav">
-    <ul>
-        <li><a href="/"><i class="ti ti-home"></i><span>Home</span></a></li>
-        <li><a href="/work" class="active"><i class="ti ti-movie"></i><span>Work</span></a></li>
-        <li><a href="/select"><i class="ti ti-photo"></i><span>Select</span></a></li>
-        <li><a href="/packages-page"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
-        <li><a href="/contact"><i class="ti ti-phone"></i><span>Contact</span></a></li>
-    </ul>
+  <ul>
+    <li><a href="/"><i class="ti ti-home"></i><span>Home</span></a></li>
+    <li><a href="/work" class="active"><i class="ti ti-video"></i><span>Work</span></a></li>
+    <li><a href="/select"><i class="ti ti-photo"></i><span>Select</span></a></li>
+    <li><a href="/packages-page"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
+    <li><a href="/contact"><i class="ti ti-phone"></i><span>Contact</span></a></li>
+  </ul>
 </nav>
 
 <script>
-document.querySelectorAll('.cat-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        const cat = this.dataset.cat;
-        document.querySelectorAll('.gallery-item').forEach(item => {
-            item.style.display = (cat === 'all' || item.dataset.cat === cat) ? 'block' : 'none';
-        });
+  /* category tabs */
+  document.querySelectorAll('.tab').forEach(function (t) {
+    t.addEventListener('click', function () {
+      document.querySelectorAll('.tab').forEach(function (x) { x.classList.remove('active'); });
+      t.classList.add('active');
+      var f = t.dataset.f;
+      document.getElementById('pre').style.display = (f === 'all' || f === 'pre') ? '' : 'none';
+      document.getElementById('wed').style.display = (f === 'all' || f === 'wed') ? '' : 'none';
     });
-});
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('keydown', e => {
-    if (e.key === 'PrintScreen' || (e.ctrlKey && ['s','u','p'].includes(e.key.toLowerCase())) || e.key === 'F12') e.preventDefault();
-});
+  });
+  /* photo viewer */
+  var viewer = document.getElementById('viewer');
+  document.querySelectorAll('.item').forEach(function (it) {
+    it.addEventListener('click', function () {
+      document.getElementById('vImg').src = it.dataset.src;
+      document.getElementById('vTitle').textContent = it.dataset.title || '';
+      viewer.classList.add('open');
+    });
+  });
+  viewer.addEventListener('click', function (e) { if (e.target === viewer || e.target.closest('#vClose')) viewer.classList.remove('open'); });
+  /* screenshot / right-click protection (same as home page) */
+  document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
 </script>
-<script src="/js/constants.js"></script>
+
+<!-- Floating Instagram -->
+<div class="floating-social">
+    <a href="https://www.instagram.com/saaraphotography05" target="_blank" rel="noopener" class="instagram-btn" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+</div>
+
 </body>
 </html>

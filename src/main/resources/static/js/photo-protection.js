@@ -1,5 +1,5 @@
 // ============================================
-// Dream Gallery Photography — Photo Protection
+// Saara Photography — Photo Protection
 // ============================================
 
 (function () {
@@ -83,7 +83,7 @@
                 document.body.innerHTML = `
                     <div style="display:flex;align-items:center;
                     justify-content:center;height:100vh;
-                    background:#0a0a0a;color:#D4AF37;
+                    background:#ffffff;color:#e0357a;
                     font-family:Poppins,sans-serif;text-align:center;">
                         <div>
                             <div style="font-size:3rem">🔒</div>

@@ -31,6 +31,12 @@ public class Package {
     @Column(length = 3)
     private String currency = "INR";
 
+    @Column(columnDefinition = "TEXT")
+    private String features;
+
+    @Column(name = "is_featured")
+    private Boolean featured = false;
+
     @Column(name = "is_active")
     private Boolean isActive = true;
 
@@ -63,6 +69,8 @@ public class Package {
     public BigDecimal getPrice()        { return price; }
     public String getCurrency()         { return currency; }
     public Boolean getIsActive()        { return isActive; }
+    public String getFeatures()         { return features; }
+    public Boolean getFeatured()        { return featured; }
     public LocalDateTime getCreatedAt() { return createdAt; }
 
     // ─── Setters ────────────────────────────────────
@@ -74,6 +82,8 @@ public class Package {
     public void setPrice(BigDecimal price)            { this.price = price; }
     public void setCurrency(String currency)          { this.currency = currency; }
     public void setIsActive(Boolean isActive)         { this.isActive = isActive; }
+    public void setFeatures(String features)          { this.features = features; }
+    public void setFeatured(Boolean featured)         { this.featured = featured; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     // ─── Builder ────────────────────────────────────

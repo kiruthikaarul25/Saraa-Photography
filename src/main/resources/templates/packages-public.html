@@ -1,235 +1,242 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Packages — Dream Gallery Photography</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-    <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Raleway', sans-serif; background: #080808; color: #fff; overflow-x: hidden; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Packages — Saara Photography</title>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif; font-weight: 400; background: #fff; color: #000; overflow-x: hidden; }
+    button, input, textarea { font-family: inherit; font-weight: 700; }
 
-        /* ── FIXED SOCIAL ── */
-        .fixed-social { position: fixed; bottom: 90px; right: 18px; display: flex; flex-direction: column; gap: 10px; z-index: 300; }
-        .fixed-social a { width: 46px; height: 46px; border: 1px solid rgba(212,175,55,0.35); background: rgba(8,8,8,0.85); backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; color: #D4AF37; font-size: 20px; text-decoration: none; transition: all 0.3s; }
-        .fixed-social a:hover { border-color: #D4AF37; background: rgba(212,175,55,0.12); transform: scale(1.1); }
+    .fixed-social { position: fixed; bottom: 90px; right: 18px; display: flex; flex-direction: column; gap: 10px; z-index: 300; }
+    .fixed-social a { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,.25); transition: transform .25s; }
+    .fixed-social a:hover { transform: scale(1.1); }
+    .fixed-social .ig { background: #e91e63; } .fixed-social .wa { background: #ad1457; }
 
-        /* ── PAGE HERO ── */
-        .page-hero {
-            height: 45vh;
-            position: relative;
-            overflow: hidden;
-            display: flex; align-items: flex-end; justify-content: center;
-            padding-bottom: 48px;
-        }
-        .page-hero-bg {
-            position: absolute; inset: 0;
-            background-image: url('https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=1600&auto=format&fit=crop');
-            background-size: cover; background-position: center top;
-            transform: scale(1.04);
-            animation: subtleZoom 8s ease-in-out forwards;
-        }
-        @keyframes subtleZoom { from { transform: scale(1.04); } to { transform: scale(1.0); } }
-        .page-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(8,8,8,0.3) 0%, rgba(8,8,8,0.0) 40%, rgba(8,8,8,0.9) 100%); }
-        .page-hero-content { position: relative; z-index: 2; text-align: center; }
-        .page-hero-tag { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 6px; color: #D4AF37; text-transform: uppercase; display: block; margin-bottom: 12px; opacity: 0; animation: fadeUp 1s ease 0.3s forwards; }
-        .page-hero-content h1 { font-family: 'Cinzel', serif; font-size: clamp(2rem, 6vw, 3.6rem); color: #fff; font-weight: 300; letter-spacing: 6px; opacity: 0; animation: fadeUp 1s ease 0.6s forwards; }
-        .page-hero-content h1 span { color: #D4AF37; }
-        .hero-gold-line { width: 40px; height: 1px; background: #D4AF37; margin: 14px auto 0; opacity: 0; animation: fadeUp 1s ease 0.9s forwards; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    /* HERO */
+    .hero { text-align: center; padding: 48px 20px 30px; background: linear-gradient(180deg, #ffe3ef 0%, #ffffff 100%); border-bottom: 4px solid #e91e63; }
+    .hero img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #e91e63; box-shadow: 0 6px 20px rgba(212,20,106,.45); margin-bottom: 14px; }
+    .hero-tag { display: block; font-size: 11px; letter-spacing: 6px; color: #e91e63; text-transform: uppercase; margin-bottom: 10px; }
+    .hero h1 { font-size: clamp(2rem, 6vw, 3.4rem); letter-spacing: 2px; }
+    .hero h1 span { color: #e91e63; }
+    .line { width: 50px; height: 3px; background: #e91e63; margin: 14px auto 0; }
 
-        /* ── SECTION ── */
-        .section { padding: 70px 20px; }
-        .section-inner { max-width: 1000px; margin: 0 auto; }
-        .sec-tag { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 5px; color: #D4AF37; text-transform: uppercase; opacity: 0.7; display: block; margin-bottom: 10px; text-align: center; }
-        .sec-title { font-family: 'Cinzel', serif; font-size: clamp(1.3rem, 3.5vw, 1.9rem); color: #e8e0d5; font-weight: 300; letter-spacing: 3px; text-align: center; margin-bottom: 8px; }
-        .sec-line { width: 40px; height: 1px; background: #D4AF37; margin: 14px auto 50px; }
+    /* PACKAGES */
+    .section { padding: 40px 20px 60px; background: #fff5f9; }
+    .inner { max-width: 1000px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 960px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+    .pkg-card { background: #fff; border: 2px solid #e91e63; border-radius: 18px; padding: 34px 26px 28px; position: relative; display: flex; flex-direction: column; transition: transform .3s, border-color .3s, box-shadow .3s; animation: up .6s ease both; }
+    .pkg-card:hover { transform: translateY(-6px); border-color: #e91e63; box-shadow: 0 12px 28px rgba(212,20,106,.25); }
+    .pkg-card.featured { background: linear-gradient(180deg,#ffe3ef,#fff); border-color: #ad1457; border-width: 3px; }
+    @keyframes up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    .pkg-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #e91e63; color: #fff; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 5px 16px; border-radius: 999px; white-space: nowrap; }
+    .pkg-icon { font-size: 30px; color: #e91e63; margin-bottom: 12px; }
+    .pkg-name { font-size: 1.5rem; margin-bottom: 6px; }
+    .pkg-price { font-size: 2rem; color: #e91e63; }
+    .pkg-sub { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; }
+    .pkg-desc { font-size: .95rem; line-height: 1.5; margin-bottom: 16px; }
+    .pkg-features { list-style: none; margin-bottom: 22px; flex: 1; }
+    .pkg-features li { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid #f7c4d9; font-size: .92rem; }
+    .pkg-features i { color: #e91e63; margin-top: 3px; }
+    .pkg-btn { display: block; text-align: center; background: #ad1457; color: #fff; text-decoration: none; padding: 12px; border-radius: 999px; transition: background .25s; }
+    .pkg-btn:hover, .pkg-card.featured .pkg-btn { background: #e91e63; }
+    .pkg-card.featured .pkg-btn:hover { background: #000; }
 
-        /* ── PACKAGES GRID ── */
-        .pkg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        @media(max-width: 750px) { .pkg-grid { grid-template-columns: 1fr; } }
-        @media(min-width: 751px) and (max-width: 960px) { .pkg-grid { grid-template-columns: repeat(2,1fr); } }
 
-        .pkg-card {
-            border: 1px solid rgba(212,175,55,0.12);
-            padding: 36px 28px 32px;
-            position: relative;
-            overflow: hidden;
-            transition: border-color 0.35s, transform 0.35s;
-            display: flex; flex-direction: column;
-        }
-        .pkg-card::after { content:''; position:absolute; top:0; left:0; right:0; height:1px; background: linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent); opacity:0; transition:opacity 0.35s; }
-        .pkg-card:hover { border-color: rgba(212,175,55,0.4); transform: translateY(-6px); }
-        .pkg-card:hover::after { opacity: 1; }
-        .pkg-card.featured { border-color: rgba(212,175,55,0.35); }
-        .pkg-card.featured::after { opacity: 1; }
 
-        .pkg-badge { font-family:'Cinzel',serif; font-size:8px; letter-spacing:3px; text-transform:uppercase; color:#080808; background:#D4AF37; padding:4px 14px; display:inline-block; margin-bottom:24px; align-self:flex-start; }
 
-        .pkg-icon { font-size: 28px; color: rgba(212,175,55,0.4); margin-bottom: 18px; }
-        .pkg-name { font-family:'Cinzel',serif; font-size:1.15rem; letter-spacing:4px; color:#e8e0d5; font-weight:300; margin-bottom:10px; text-transform:uppercase; }
-        .pkg-price { font-family:'Cinzel',serif; font-size:2rem; color:#D4AF37; font-weight:300; margin-bottom:4px; }
-        .pkg-price-sub { font-size:0.72rem; color:rgba(212,175,55,0.5); letter-spacing:2px; text-transform:uppercase; margin-bottom:18px; }
-        .pkg-desc { font-size:0.78rem; color:#555; letter-spacing:1px; line-height:1.8; margin-bottom:22px; padding-bottom:22px; border-bottom:1px solid rgba(255,255,255,0.05); }
-        .pkg-features { list-style:none; margin-bottom:28px; flex:1; }
-        .pkg-features li { font-size:0.76rem; color:#777; padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.04); letter-spacing:1px; display:flex; align-items:center; gap:10px; }
-        .pkg-features li:last-child { border-bottom:none; }
-        .pkg-features li i { color:#D4AF37; font-size:14px; flex-shrink:0; }
-        .pkg-btn { font-family:'Cinzel',serif; font-size:8px; letter-spacing:3px; text-transform:uppercase; padding:12px 24px; border:1px solid rgba(212,175,55,0.4); color:#D4AF37; text-decoration:none; display:block; text-align:center; transition:all 0.3s; margin-top:auto; }
-        .pkg-btn:hover, .pkg-card.featured .pkg-btn { background:#D4AF37; color:#080808; border-color:#D4AF37; }
-        .pkg-card.featured .pkg-btn:hover { background:#c49e30; }
+    .empty { text-align: center; padding: 40px 0; grid-column: 1 / -1; }
 
-        /* DB dynamic cards */
-        .pkg-card-db { border:1px solid rgba(212,175,55,0.12); padding:32px 26px; position:relative; overflow:hidden; transition:border-color 0.35s, transform 0.35s; }
-        .pkg-card-db::after { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(212,175,55,0.5),transparent); opacity:0; transition:opacity 0.35s; }
-        .pkg-card-db:hover { border-color:rgba(212,175,55,0.4); transform:translateY(-5px); }
-        .pkg-card-db:hover::after { opacity:1; }
+    /* CTA */
+    .cta { background: linear-gradient(135deg,#ad1457,#e91e63); color: #fff; text-align: center; padding: 50px 20px; }
+    .cta h2 { font-size: 1.8rem; margin-bottom: 8px; }
+    .cta h2 span { color: #ffd6e8; }
+    .cta a { display: inline-block; margin-top: 18px; background: #fff; color: #ad1457; text-decoration: none; padding: 12px 34px; border-radius: 999px; }
 
-        /* ── CTA STRIP ── */
-        .cta-strip { text-align:center; padding:60px 20px; border-top:1px solid rgba(212,175,55,0.08); }
-        .cta-strip h2 { font-family:'Cinzel',serif; font-size:clamp(1.2rem,3vw,1.7rem); color:#e8e0d5; font-weight:300; letter-spacing:3px; margin-bottom:10px; }
-        .cta-strip p { font-size:0.78rem; color:#555; letter-spacing:2px; margin-bottom:28px; text-transform:uppercase; }
-        .cta-btn { font-family:'Cinzel',serif; font-size:9px; letter-spacing:3px; text-transform:uppercase; padding:14px 40px; background:#D4AF37; color:#080808; text-decoration:none; display:inline-block; transition:background 0.3s; }
-        .cta-btn:hover { background:#c49e30; }
+    /* NAV */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: rgba(255,255,255,.96); backdrop-filter: blur(20px); border-top: 2px solid #e91e63; padding: 10px 0 max(10px, env(safe-area-inset-bottom)); }
+    .bottom-nav ul { display: flex; justify-content: space-around; list-style: none; max-width: 500px; margin: 0 auto; }
+    .bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #000; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 8px; transition: color .3s; }
+    .bottom-nav a i { font-size: 20px; }
+    .bottom-nav a:hover, .bottom-nav a.active { color: #e91e63; }
+    .spacer { height: 80px; }
+  
+/* ===== Floating WhatsApp & Instagram Icons ===== */
+.floating-social { position: fixed; right: 18px; bottom: 90px; display: flex; flex-direction: column; gap: 12px; z-index: 999; }
+.floating-social a { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,.25); transition: transform .25s ease, box-shadow .25s ease; }
+.floating-social a:hover { transform: scale(1.1); box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+.floating-social .whatsapp-btn { background-color: #000000; }
+.floating-social .instagram-btn { background: #e91e63; }
+@media (min-width: 768px) { .floating-social { bottom: 100px; right: 30px; } }
+</style>
 
-        /* ── BOTTOM NAV ── */
-        .bottom-nav { position:fixed; bottom:0; left:0; right:0; z-index:200; background:rgba(8,8,8,0.92); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-top:1px solid rgba(212,175,55,0.15); padding:10px 0 max(10px, env(safe-area-inset-bottom)); }
-        .bottom-nav ul { display:flex; justify-content:space-around; list-style:none; max-width:500px; margin:0 auto; }
-        .bottom-nav ul li a { display:flex; flex-direction:column; align-items:center; gap:4px; text-decoration:none; color:#444; font-family:'Cinzel',serif; font-size:8px; letter-spacing:2px; text-transform:uppercase; transition:color 0.3s; padding:4px 8px; }
-        .bottom-nav ul li a i { font-size:20px; transition:transform 0.3s; }
-        .bottom-nav ul li a:hover i { transform:translateY(-3px); }
-        .bottom-nav ul li a:hover, .bottom-nav ul li a.active { color:#D4AF37; }
+<style id="pink-theme">
+/* ===== Medium dark pink + white + black theme ===== */
+:root{--pink-main:#e91e63;--pink-dark:#ad1457;--pink-deep:#c2185b;--black:#111111}
+html,body{font-family:"Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif !important}
+button,input,select,textarea{font-family:inherit !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card,.mob-client-card,.insta-item,.photo-item,.preview-item,.album-header,.drop-zone,.item{box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.sidebar{box-shadow:4px 0 18px rgba(0,0,0,.35)}
+.bottom-nav{box-shadow:0 -4px 16px rgba(0,0,0,.3)}
+button,.btn-save,.btn-add,.btn-copy,.btn-back,.back-btn,.submit,.logout-btn,.sidebar-logout{box-shadow:0 4px 12px rgba(0,0,0,.3)}
+input,select,textarea{box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.btn-back,.back-btn{background:var(--black) !important;color:#fff !important;border:1px solid var(--black) !important}
+.btn-back:hover,.back-btn:hover{background:var(--pink-main) !important;border-color:var(--pink-main) !important}
+.section-sep{border-color:var(--black) !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card{border-top:4px solid var(--black)}
+</style>
 
-        .spacer { height: 80px; }
-        .animate-in { opacity:0; transform:translateY(22px); transition:opacity 0.7s ease, transform 0.7s ease; }
-        .animate-in.visible { opacity:1; transform:translateY(0); }
-        .empty-state { text-align:center; padding:60px 20px; }
-        .empty-state h3 { font-family:'Cinzel',serif; color:#D4AF37; letter-spacing:3px; font-weight:300; margin-bottom:10px; }
-        .empty-state p { color:#555; font-size:0.8rem; letter-spacing:2px; }
-    </style>
+<style id="pink-white-theme-overrides">
+:root { color-scheme: light !important; --theme-pink:#d95791; --theme-pink-dark:#c94480; --theme-pink-light:#f7dce8; --theme-white:#ffffff; --theme-black:#171317; --theme-muted:#6f6269; --theme-border:#efd0dd; }
+html { color-scheme: light !important; }
+body { background:#fff !important; color:var(--theme-black) !important; }
+body::before { opacity:.025 !important; }
+header, nav, aside, .sidebar, .topbar, .navbar, .header, .side-nav, .mobile-nav {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+}
+main, .main, .content, .main-content, .page-content, .workspace, .container, .wrap {
+  color:var(--theme-black);
+}
+.card, .box, .panel, .modal, .form-card, .stat-card, .table-wrap, .content-card,
+.package-card, .client-card, .upload-card, .success-card, .login-card {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+  box-shadow:0 5px 18px rgba(190,75,125,.10) !important;
+  transition:box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+}
+.card:hover, .box:hover, .panel:hover, .stat-card:hover, .package-card:hover, .client-card:hover {
+  box-shadow:0 8px 22px rgba(190,75,125,.15) !important;
+  border-color:#e7a9c4 !important;
+}
+h1,h2,h3,h4,h5,h6,p,label,small,span,td,th,li,div { }
+h1,h2,h3,h4,h5,h6,p,label,td,th { color:inherit; }
+.brand, .tag, .sidebar-brand h2, .section-title, .page-title, .logo-text,
+a:not(.btn):not([class*="button"]) { color:var(--theme-pink-dark) !important; }
+button, .btn, input[type="submit"], input[type="button"], .button, a.btn {
+  background:var(--theme-pink) !important; color:#fff !important;
+  border-color:var(--theme-pink) !important;
+  box-shadow:0 3px 10px rgba(217,87,145,.16) !important;
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+button:hover, .btn:hover, input[type="submit"]:hover, input[type="button"]:hover, .button:hover {
+  background:var(--theme-pink-dark) !important; transform:translateY(-1px);
+  box-shadow:0 5px 13px rgba(217,87,145,.22) !important;
+}
+input, select, textarea {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:#e8c5d5 !important;
+}
+input::placeholder, textarea::placeholder { color:#a99aa1 !important; }
+table th { background:var(--theme-pink-light) !important; color:#39232e !important; }
+table td { color:var(--theme-black) !important; border-color:#f0dce5 !important; }
+hr, .divider { border-color:var(--theme-border) !important; }
+.badge, .pill, .status { border-color:#edc4d6 !important; }
+@keyframes softFadeUp { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+.card, .box, .panel, .stat-card, .package-card, .client-card { animation:softFadeUp .45s ease both; }
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } }
+</style>
+<style id="dark-pink-white-theme">
+:root{--bg:#ffffff!important;--surface:#ffffff!important;--soft:#fff3f7!important;--text:#171317!important;--muted:#765b68!important;--pink:#c2185b!important;--pink-main:#c2185b!important;--pink-dark:#880e4f!important;--pink-deep:#ad1457!important;--theme-pink:#c2185b!important;--theme-pink-dark:#880e4f!important;--theme-pink-light:#fff0f5!important;--theme-white:#fff!important;--theme-black:#171317!important;--theme-muted:#765b68!important;--theme-border:#f0bfd2!important}
+html,body{background:#fff!important;color:#171317!important;color-scheme:light!important}
+body{font-weight:400!important}
+/* White surfaces; dark pink is the only strong theme colour. */
+.sidebar,.main,.card,.table-card,.table-wrapper,.ph,.ph-body,.panel,.form-card,.content-card,.modal-content,.stat-card,.dashboard-card,.section-card,.album-header,.row,.client-card,.package-card,.profile-card,.upload-card,.gallery-card,.auth-card,.login-card,.form-container,.page-card{background:#fff!important;color:#171317!important;border-color:#f0bfd2!important;box-shadow:0 5px 18px rgba(136,14,79,.08)!important}
+.sidebar{border-right:1px solid #f0bfd2!important}
+.sidebar-brand,.sidebar-footer{border-color:#f0bfd2!important}
+.sidebar-brand h2,.page-top h4 span,.card-label,.nav-section,.section-title,.section-label,.ph-body label,.cat-label{color:#c2185b!important}
+.nav-item,.logout-btn,.sidebar-nav a{color:#171317!important}
+.nav-item:hover,.nav-item.active,.logout-btn:hover,.sidebar-nav a:hover{background:#fff0f5!important;color:#171317!important;border-color:#c2185b!important}
+input,select,textarea,.sel,.ph-body input[type=text],.ph-body select{background:#fff!important;color:#171317!important;border:1px solid #e8b2c8!important}
+input::placeholder,textarea::placeholder{color:#987b88!important}
+button,.btn,.btn-primary,.btn-add,.save-btn,.action-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important;transition:all .22s ease!important}
+button:hover,.btn:hover,.btn-primary:hover,.btn-add:hover,.save-btn:hover,.action-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important;transform:translateY(-1px)}
+.btn.del,.btn-delete,.delete-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important}
+.btn.del:hover,.btn-delete:hover,.delete-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.file-pick{background:#fff5f8!important;color:#c2185b!important;border-color:#c2185b!important}
+.file-pick:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.tag,.badge,.status-badge{background:#c2185b!important;color:#fff!important}
+hr{border-color:#f0bfd2!important}
+.card,.ph,.table-card{border-radius:16px!important}
+.ph{overflow:hidden!important}
+.ph-body{color:#171317!important}
+/* Keep status colours legible while preventing dark panels. */
+.msg{background:#f0fff4!important;color:#236b3b!important}
+</style>
 </head>
 <body>
 
-<!-- Fixed Social -->
-<div class="fixed-social">
-    <a href="https://instagram.com/dreamgalleryphoto" target="_blank" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
-    <a href="https://wa.me/919876543210?text=Hi! I'm interested in your photography services." target="_blank" aria-label="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
+<div class="hero">
+  <img src="/images/logo.png" alt="Saara Photography logo">
+  <span class="hero-tag">Saara Photography</span>
+  <h1>Our <span>Packages</span></h1>
+  <div class="line"></div>
 </div>
 
-<!-- Page Hero -->
-<div class="page-hero">
-    <div class="page-hero-bg"></div>
-    <div class="page-hero-overlay"></div>
-    <div class="page-hero-content">
-        <span class="page-hero-tag">Dream Gallery Photography</span>
-        <h1>Our <span>Packages</span></h1>
-        <div class="hero-gold-line"></div>
-    </div>
-</div>
-
-<!-- Packages Section -->
 <section class="section">
-    <div class="section-inner">
-        <span class="sec-tag">Choose Your Story</span>
-        <h2 class="sec-title">Photography Packages</h2>
-        <div class="sec-line"></div>
-
-        <!-- DB-driven packages (Thymeleaf) -->
-        <div class="pkg-grid" th:if="${packages != null and !#lists.isEmpty(packages)}">
-            <div class="pkg-card-db animate-in" th:each="pkg : ${packages}">
-                <i class="ti ti-camera pkg-icon"></i>
-                <div class="pkg-name" th:text="${pkg.name}"></div>
-                <div class="pkg-price">₹<span th:text="${pkg.price}"></span></div>
-                <div class="pkg-price-sub">onwards</div>
-                <div class="pkg-desc" th:text="${pkg.description}"></div>
-                <a href="/contact" class="pkg-btn">Book Now</a>
-            </div>
-        </div>
-
-        <!-- Fallback static packages when DB is empty -->
-        <div class="pkg-grid" th:if="${packages == null or #lists.isEmpty(packages)}">
-            <!-- Silver -->
-            <div class="pkg-card animate-in">
-                <i class="ti ti-camera pkg-icon"></i>
-                <div class="pkg-name">Silver</div>
-                <div class="pkg-price">₹25,000</div>
-                <div class="pkg-price-sub">onwards</div>
-                <p class="pkg-desc">Perfect for intimate ceremonies and small gatherings.</p>
-                <ul class="pkg-features">
-                    <li><i class="ti ti-check"></i>4 Hours Coverage</li>
-                    <li><i class="ti ti-check"></i>1 Photographer</li>
-                    <li><i class="ti ti-check"></i>200 Edited Photos</li>
-                    <li><i class="ti ti-check"></i>Online Gallery</li>
-                    <li><i class="ti ti-check"></i>USB Delivery</li>
-                </ul>
-                <a href="/contact" class="pkg-btn">Enquire Now</a>
-            </div>
-
-            <!-- Gold -->
-            <div class="pkg-card featured animate-in">
-                <div class="pkg-badge">Most Popular</div>
-                <i class="ti ti-diamond pkg-icon"></i>
-                <div class="pkg-name">Gold</div>
-                <div class="pkg-price">₹55,000</div>
-                <div class="pkg-price-sub">onwards</div>
-                <p class="pkg-desc">Full-day coverage for your complete wedding journey.</p>
-                <ul class="pkg-features">
-                    <li><i class="ti ti-check"></i>Full Day Coverage</li>
-                    <li><i class="ti ti-check"></i>2 Photographers</li>
-                    <li><i class="ti ti-check"></i>500+ Edited Photos</li>
-                    <li><i class="ti ti-check"></i>Cinematic Highlights Reel</li>
-                    <li><i class="ti ti-check"></i>Album (20 Pages)</li>
-                    <li><i class="ti ti-check"></i>Online Gallery</li>
-                </ul>
-                <a href="/contact" class="pkg-btn">Enquire Now</a>
-            </div>
-
-            <!-- Platinum -->
-            <div class="pkg-card animate-in">
-                <i class="ti ti-crown pkg-icon"></i>
-                <div class="pkg-name">Platinum</div>
-                <div class="pkg-price">₹95,000</div>
-                <div class="pkg-price-sub">onwards</div>
-                <p class="pkg-desc">Luxury coverage — every detail, every emotion, forever.</p>
-                <ul class="pkg-features">
-                    <li><i class="ti ti-check"></i>2-Day Coverage</li>
-                    <li><i class="ti ti-check"></i>3 Photographers + Drone</li>
-                    <li><i class="ti ti-check"></i>Unlimited Edited Photos</li>
-                    <li><i class="ti ti-check"></i>Full Cinematic Film</li>
-                    <li><i class="ti ti-check"></i>Premium Album (40 Pages)</li>
-                    <li><i class="ti ti-check"></i>Same-Day Edit</li>
-                    <li><i class="ti ti-check"></i>Pre-Wedding Shoot</li>
-                </ul>
-                <a href="/contact" class="pkg-btn">Enquire Now</a>
-            </div>
-        </div>
-    </div>
+  <div class="inner">
+    <div class="grid" id="grid" style="margin-top:30px"></div>
+  </div>
 </section>
 
-<!-- CTA Strip -->
-<div class="cta-strip animate-in">
-    <h2>Need a Custom Package?</h2>
-    <p>We craft experiences tailored just for you</p>
-    <a href="/contact" class="cta-btn">Talk to Us</a>
+<div class="cta">
+  <h2>Need a <span>Custom</span> Package?</h2>
+  <p>We craft experiences tailored just for you</p>
+  <a href="/contact">Talk to Us</a>
 </div>
 
 <div class="spacer"></div>
 
-<!-- Bottom Nav -->
 <nav class="bottom-nav">
-    <ul>
-        <li><a href="/"><i class="ti ti-home"></i><span>Home</span></a></li>
-        <li><a href="/work"><i class="ti ti-video"></i><span>Work</span></a></li>
-        <li><a href="/packages-page" class="active"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
-        <li><a href="/contact"><i class="ti ti-phone"></i><span>Contact</span></a></li>
-    </ul>
+  <ul>
+    <li><a href="/"><i class="ti ti-home"></i><span>Home</span></a></li>
+    <li><a href="/work"><i class="ti ti-video"></i><span>Work</span></a></li>
+    <li><a href="/select"><i class="ti ti-photo"></i><span>Select</span></a></li>
+    <li><a href="/packages-page" class="active"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
+    <li><a href="/contact"><i class="ti ti-phone"></i><span>Contact</span></a></li>
+  </ul>
 </nav>
 
 <script>
-    const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.08 });
-    document.querySelectorAll('.animate-in').forEach(el => obs.observe(el));
+  /* View-only page. Add / edit / delete of packages is done ONLY in the admin panel (/owner/packages). */
+  const API = '/api/packages';
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const icons = ['ti-camera', 'ti-diamond', 'ti-crown'];
+
+  async function loadPackages() {
+    let packages = [];
+    try {
+      const r = await fetch(API, { cache: 'no-store' });
+      packages = r.ok ? await r.json() : [];
+    } catch (e) { packages = []; }
+    const grid = document.getElementById('grid');
+    if (!packages.length) { grid.innerHTML = '<p class="empty">No packages yet.</p>'; return; }
+    grid.innerHTML = packages.map((p, i) => `
+      <div class="pkg-card ${p.featured ? 'featured' : ''}">
+        ${p.featured ? '<div class="pkg-badge">Most Popular</div>' : ''}
+        <i class="ti ${icons[i % 3]} pkg-icon"></i>
+        <div class="pkg-name">${esc(p.name)}</div>
+        <div class="pkg-price">₹${Number(p.price).toLocaleString('en-IN')}</div>
+        <div class="pkg-sub">onwards</div>
+        <p class="pkg-desc">${esc(p.description)}</p>
+        <ul class="pkg-features">${p.features.map(f => `<li><i class="ti ti-check"></i>${esc(f)}</li>`).join('')}</ul>
+        <a href="/contact" class="pkg-btn">Enquire Now</a>
+      </div>`).join('');
+  }
+  loadPackages();
 </script>
-<script src="/js/constants.js"></script>
+
+<!-- Floating Instagram -->
+<div class="floating-social">
+    <a href="https://www.instagram.com/saaraphotography05" target="_blank" rel="noopener" class="instagram-btn" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+</div>
+
 </body>
 </html>

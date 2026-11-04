@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Packages — Saara Photography</title>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Calibri','Carlito','Segoe UI',sans-serif; font-weight: 700; background: #fff; color: #000; overflow-x: hidden; }
+    button, input, textarea { font-family: inherit; font-weight: 700; }
+
+    .fixed-social { position: fixed; bottom: 90px; right: 18px; display: flex; flex-direction: column; gap: 10px; z-index: 300; }
+    .fixed-social a { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,.25); transition: transform .25s; }
+    .fixed-social a:hover { transform: scale(1.1); }
+    .fixed-social .ig { background: #d4146a; } .fixed-social .wa { background: #000; }
+
+    /* HERO */
+    .hero { text-align: center; padding: 48px 20px 10px; }
+    .hero img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #d4146a; box-shadow: 0 6px 20px rgba(212,20,106,.45); margin-bottom: 14px; }
+    .hero-tag { display: block; font-size: 11px; letter-spacing: 6px; color: #d4146a; text-transform: uppercase; margin-bottom: 10px; }
+    .hero h1 { font-size: clamp(2rem, 6vw, 3.4rem); letter-spacing: 2px; }
+    .hero h1 span { color: #d4146a; }
+    .line { width: 50px; height: 3px; background: #d4146a; margin: 14px auto 0; }
+
+    /* ADMIN BAR */
+    .admin-bar { display: none; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; background: #000; color: #fff; padding: 12px 16px; margin: 24px auto 0; max-width: 1000px; border-radius: 12px; font-size: .9rem; }
+    .admin-bar button { background: #d4146a; color: #fff; border: 0; padding: 9px 20px; border-radius: 999px; cursor: pointer; font-size: .85rem; }
+    .admin-bar button.ghost { background: transparent; border: 2px solid #fff; }
+
+    /* PACKAGES */
+    .section { padding: 40px 20px 60px; }
+    .inner { max-width: 1000px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 960px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+    .pkg-card { border: 2px solid #000; border-radius: 18px; padding: 34px 26px 28px; position: relative; display: flex; flex-direction: column; transition: transform .3s, border-color .3s, box-shadow .3s; animation: up .6s ease both; }
+    .pkg-card:hover { transform: translateY(-6px); border-color: #d4146a; box-shadow: 0 12px 28px rgba(212,20,106,.25); }
+    .pkg-card.featured { border-color: #d4146a; border-width: 3px; }
+    @keyframes up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    .pkg-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #d4146a; color: #fff; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 5px 16px; border-radius: 999px; white-space: nowrap; }
+    .pkg-icon { font-size: 30px; color: #d4146a; margin-bottom: 12px; }
+    .pkg-name { font-size: 1.5rem; margin-bottom: 6px; }
+    .pkg-price { font-size: 2rem; color: #d4146a; }
+    .pkg-sub { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; }
+    .pkg-desc { font-size: .95rem; line-height: 1.5; margin-bottom: 16px; }
+    .pkg-features { list-style: none; margin-bottom: 22px; flex: 1; }
+    .pkg-features li { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid #eee; font-size: .92rem; }
+    .pkg-features i { color: #d4146a; margin-top: 3px; }
+    .pkg-btn { display: block; text-align: center; background: #000; color: #fff; text-decoration: none; padding: 12px; border-radius: 999px; transition: background .25s; }
+    .pkg-btn:hover, .pkg-card.featured .pkg-btn { background: #d4146a; }
+    .pkg-card.featured .pkg-btn:hover { background: #000; }
+    .admin-actions { display: flex; gap: 10px; margin-top: 12px; }
+    .admin-actions button { flex: 1; padding: 9px; border-radius: 999px; border: 2px solid #000; background: #fff; cursor: pointer; }
+    .admin-actions button:hover { background: #000; color: #fff; }
+    .admin-actions button.del { border-color: #d4146a; color: #d4146a; }
+    .admin-actions button.del:hover { background: #d4146a; color: #fff; }
+    .empty { text-align: center; padding: 40px 0; grid-column: 1 / -1; }
+
+    /* CTA */
+    .cta { background: #000; color: #fff; text-align: center; padding: 50px 20px; }
+    .cta h2 { font-size: 1.8rem; margin-bottom: 8px; }
+    .cta h2 span { color: #d4146a; }
+    .cta a { display: inline-block; margin-top: 18px; background: #d4146a; color: #fff; text-decoration: none; padding: 12px 34px; border-radius: 999px; }
+
+    /* MODAL */
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 500; }
+    .modal.open { display: flex; }
+    .box { background: #fff; border-radius: 16px; padding: 26px 22px; width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto; border-top: 6px solid #d4146a; }
+    .box h3 { font-size: 1.3rem; margin-bottom: 14px; }
+    .box label { display: block; font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; margin: 12px 0 5px; }
+    .box input[type=text], .box input[type=number], .box textarea { width: 100%; padding: 11px 12px; border: 2px solid #000; border-radius: 10px; font-size: 1rem; }
+    .box input:focus, .box textarea:focus { outline: none; border-color: #d4146a; }
+    .box textarea { min-height: 90px; resize: vertical; }
+    .check { display: flex; align-items: center; gap: 8px; margin-top: 14px; }
+    .row { display: flex; gap: 10px; margin-top: 20px; }
+    .row button { flex: 1; padding: 12px; border-radius: 999px; border: 2px solid #000; cursor: pointer; background: #fff; }
+    .row .save { background: #d4146a; border-color: #d4146a; color: #fff; }
+
+    /* NAV */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: rgba(255,255,255,.96); backdrop-filter: blur(20px); border-top: 2px solid #d4146a; padding: 10px 0 max(10px, env(safe-area-inset-bottom)); }
+    .bottom-nav ul { display: flex; justify-content: space-around; list-style: none; max-width: 500px; margin: 0 auto; }
+    .bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 4px; text-decoration: none; color: #000; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 8px; transition: color .3s; }
+    .bottom-nav a i { font-size: 20px; }
+    .bottom-nav a:hover, .bottom-nav a.active { color: #d4146a; }
+    .spacer { height: 80px; }
+  </style>
+</head>
+<body>
+
+<div class="fixed-social">
+  <a class="ig" href="https://www.instagram.com/saaraphotography05" target="_blank" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+  <a class="wa" href="https://wa.me/919786711698?text=Hi!%20I'm%20interested%20in%20your%20photography%20services." target="_blank" aria-label="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
+</div>
+
+<div class="hero">
+  <img src="/images/logo.png" alt="Saara Photography logo">
+  <span class="hero-tag">Saara Photography</span>
+  <h1>Our <span>Packages</span></h1>
+  <div class="line"></div>
+</div>
+
+<section class="section">
+  <div class="inner">
+    <div class="admin-bar" id="adminBar">
+      <span><i class="ti ti-shield-lock"></i> Admin mode</span>
+      <button onclick="openForm()"><i class="ti ti-plus"></i> Add package</button>
+      <button class="ghost" onclick="setAdmin(false)">Logout</button>
+    </div>
+    <div class="grid" id="grid" style="margin-top:30px"></div>
+  </div>
+</section>
+
+<div class="cta">
+  <h2>Need a <span>Custom</span> Package?</h2>
+  <p>We craft experiences tailored just for you</p>
+  <a href="/contact">Talk to Us</a>
+</div>
+
+<div class="spacer"></div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="modal" id="modal">
+  <div class="box">
+    <h3 id="formTitle">Add package</h3>
+    <label>Package name</label>
+    <input type="text" id="fName" maxlength="60">
+    <label>Price (₹)</label>
+    <input type="number" id="fPrice" min="0">
+    <label>Description</label>
+    <textarea id="fDesc"></textarea>
+    <label>Features (one per line)</label>
+    <textarea id="fFeatures"></textarea>
+    <div class="check"><input type="checkbox" id="fFeatured"><span>Show "Most Popular" badge</span></div>
+    <div class="row">
+      <button onclick="closeForm()">Cancel</button>
+      <button class="save" onclick="savePkg()">Save</button>
+    </div>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <ul>
+    <li><a href="/"><i class="ti ti-home"></i><span>Home</span></a></li>
+    <li><a href="/work"><i class="ti ti-video"></i><span>Work</span></a></li>
+    <li><a href="/select"><i class="ti ti-photo"></i><span>Select</span></a></li>
+    <li><a href="/packages-page" class="active"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
+    <li><a href="/contact"><i class="ti ti-phone"></i><span>Contact</span></a></li>
+  </ul>
+</nav>
+
+<script>
+  /* ── STORAGE (backend step-la idhai maathuvom) ── */
+  const KEY = 'saara_packages';
+  const ADMIN_KEY = 'saara_admin';
+  const DEFAULTS = [
+    { id: 1, name: 'Silver', price: 25000, description: 'Perfect for intimate ceremonies and small gatherings.', featured: false,
+      features: ['4 Hours Coverage', '1 Photographer', '200 Edited Photos', 'Online Gallery', 'USB Delivery'] },
+    { id: 2, name: 'Gold', price: 55000, description: 'Full-day coverage for your complete wedding journey.', featured: true,
+      features: ['Full Day Coverage', '2 Photographers', '500+ Edited Photos', 'Cinematic Highlights Reel', 'Album (20 Pages)', 'Online Gallery'] },
+    { id: 3, name: 'Platinum', price: 95000, description: 'Luxury coverage — every detail, every emotion, forever.', featured: false,
+      features: ['2-Day Coverage', '3 Photographers + Drone', 'Unlimited Edited Photos', 'Full Cinematic Film', 'Premium Album (40 Pages)', 'Same-Day Edit', 'Pre-Wedding Shoot'] }
+  ];
+
+  function loadPackages() {
+    try { const d = JSON.parse(localStorage.getItem(KEY)); if (Array.isArray(d)) return d; } catch (e) {}
+    return DEFAULTS;
+  }
+  function savePackages(list) { localStorage.setItem(KEY, JSON.stringify(list)); }
+
+  let packages = loadPackages();
+  const isAdmin = () => localStorage.getItem(ADMIN_KEY) === '1';
+  function setAdmin(on) { localStorage.setItem(ADMIN_KEY, on ? '1' : '0'); render(); }
+
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const icons = ['ti-camera', 'ti-diamond', 'ti-crown'];
+
+  /* ── RENDER ── */
+  function render() {
+    const admin = isAdmin();
+    document.getElementById('adminBar').style.display = admin ? 'flex' : 'none';
+    const grid = document.getElementById('grid');
+    if (!packages.length) { grid.innerHTML = '<p class="empty">No packages yet.</p>'; return; }
+    grid.innerHTML = packages.map((p, i) => `
+      <div class="pkg-card ${p.featured ? 'featured' : ''}">
+        ${p.featured ? '<div class="pkg-badge">Most Popular</div>' : ''}
+        <i class="ti ${icons[i % 3]} pkg-icon"></i>
+        <div class="pkg-name">${esc(p.name)}</div>
+        <div class="pkg-price">₹${Number(p.price).toLocaleString('en-IN')}</div>
+        <div class="pkg-sub">onwards</div>
+        <p class="pkg-desc">${esc(p.description)}</p>
+        <ul class="pkg-features">${p.features.map(f => `<li><i class="ti ti-check"></i>${esc(f)}</li>`).join('')}</ul>
+        <a href="/contact" class="pkg-btn">Enquire Now</a>
+        ${admin ? `<div class="admin-actions">
+          <button onclick="openForm(${p.id})"><i class="ti ti-edit"></i> Edit</button>
+          <button class="del" onclick="removePkg(${p.id})"><i class="ti ti-trash"></i> Delete</button>
+        </div>` : ''}
+      </div>`).join('');
+  }
+
+  /* ── ADD / EDIT ── */
+  let editingId = null;
+  function openForm(id) {
+    editingId = id || null;
+    const p = packages.find(x => x.id === id) || { name: '', price: '', description: '', features: [], featured: false };
+    document.getElementById('formTitle').textContent = id ? 'Edit package' : 'Add package';
+    document.getElementById('fName').value = p.name;
+    document.getElementById('fPrice').value = p.price;
+    document.getElementById('fDesc').value = p.description;
+    document.getElementById('fFeatures').value = p.features.join('\n');
+    document.getElementById('fFeatured').checked = !!p.featured;
+    document.getElementById('modal').classList.add('open');
+  }
+  function closeForm() { document.getElementById('modal').classList.remove('open'); }
+
+  function savePkg() {
+    const name = document.getElementById('fName').value.trim();
+    const price = Number(document.getElementById('fPrice').value);
+    if (!name || !(price >= 0) || document.getElementById('fPrice').value === '') { alert('Name and price kudunga'); return; }
+    const item = {
+      id: editingId || Date.now(),
+      name, price,
+      description: document.getElementById('fDesc').value.trim(),
+      features: document.getElementById('fFeatures').value.split('\n').map(s => s.trim()).filter(Boolean),
+      featured: document.getElementById('fFeatured').checked
+    };
+    packages = editingId ? packages.map(p => p.id === editingId ? item : p) : [...packages, item];
+    savePackages(packages);
+    closeForm();
+    render();
+  }
+
+  function removePkg(id) {
+    if (!confirm('Indha package-a delete pannanuma?')) return;
+    packages = packages.filter(p => p.id !== id);
+    savePackages(packages);
+    render();
+  }
+
+  /* TEST ONLY: Ctrl+Shift+A = admin mode on/off (login page vandha aprom remove pannidalam) */
+  document.addEventListener('keydown', e => {
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') { e.preventDefault(); setAdmin(!isAdmin()); }
+  });
+  document.getElementById('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeForm(); });
+
+  render();
+</script>
+</body>
+</html>

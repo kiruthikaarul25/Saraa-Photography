@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Client — Dream Gallery Photography</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Edit Client — Saara Photography</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
+:root{color-scheme:dark}
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
-            --gold: #c9a84c; --gold-light: #e2c97e; --gold-dim: rgba(201,168,76,0.12);
-            --gold-border: rgba(201,168,76,0.25); --bg: #080808; --surface: #0e0e0e;
-            --surface2: #141414; --surface3: #1c1c1c; --border: rgba(201,168,76,0.2);
-            --text: #e8e0d0; --text-muted: #6a6050; --red: #c0392b;
+            --gold: #e91e63; --gold-light: #f78fb3; --gold-dim: rgba(233,30,99,0.12);
+            --gold-border: rgba(233,30,99,0.25); --bg:#c2185b; --surface:#111111;
+            --surface2: #d81b60; --surface3: #333333; --border: rgba(233,30,99,0.2);
+            --text:#ffffff; --text-muted:#f2b8d2; --red: #c0392b;
         }
-        body { background: var(--bg); color: var(--text); font-family: 'Raleway', sans-serif; min-height: 100vh; display: flex; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif; min-height: 100vh; display: flex; }
 
         .sidebar {
             width: 240px; min-height: 100vh; background: var(--surface);
@@ -23,7 +26,7 @@
             z-index: 200; transition: transform 0.3s ease;
         }
         .sidebar-brand {
-            font-family: 'Cinzel', serif; font-size: 15px; font-weight: 700;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif; font-size: 15px; font-weight:700;
             color: var(--gold); letter-spacing: 0.12em; padding: 0 8px 28px;
             border-bottom: 1px solid var(--border); margin-bottom: 20px;
             display: flex; align-items: center; gap: 10px;
@@ -31,7 +34,7 @@
         .sidebar a {
             display: flex; align-items: center; gap: 10px; padding: 10px 12px;
             border-radius: 8px; color: var(--text-muted); text-decoration: none;
-            font-size: 13px; font-weight: 500; letter-spacing: 0.04em;
+            font-size: 13px; font-weight:700; letter-spacing: 0.04em;
             margin-bottom: 2px; transition: all 0.2s;
         }
         .sidebar a:hover { background: var(--gold-dim); color: var(--gold); }
@@ -55,11 +58,11 @@
         .btn-back {
             display: flex; align-items: center; gap: 6px; padding: 8px 16px;
             border-radius: 20px; border: 1px solid var(--border); background: transparent;
-            color: var(--text-muted); font-family: 'Raleway', sans-serif;
+            color: var(--text-muted); font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
             font-size: 13px; text-decoration: none; transition: all 0.2s;
         }
         .btn-back:hover { border-color: var(--gold); color: var(--gold); }
-        .page-title { font-family: 'Cinzel', serif; font-size: 20px; font-weight: 600; color: var(--gold-light); letter-spacing: 0.06em; }
+        .page-title { font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif; font-size: 20px; font-weight:700; color: var(--gold-light); letter-spacing: 0.06em; }
 
         .form-card {
             background: var(--surface); border: 1px solid var(--border);
@@ -73,7 +76,7 @@
         .field { margin-bottom: 20px; }
         .field label {
             display: block; font-size: 11px; letter-spacing: 0.14em;
-            text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; font-weight: 600;
+            text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; font-weight:700;
         }
         .input-wrap { position: relative; }
         .input-wrap i {
@@ -84,7 +87,7 @@
         .field input, .field select, .field textarea {
             width: 100%; background: var(--surface2); border: 1px solid var(--border);
             border-radius: 10px; padding: 12px 14px 12px 42px; color: var(--text);
-            font-family: 'Raleway', sans-serif; font-size: 14px; outline: none;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif; font-size: 14px; outline: none;
             transition: border-color 0.2s;
         }
         .field input::placeholder, .field textarea::placeholder { color: var(--text-muted); }
@@ -104,12 +107,12 @@
         .btn-save {
             width: 100%; margin-top: 8px; padding: 14px; background: transparent;
             border: 1px solid var(--gold); color: var(--gold); border-radius: 40px;
-            cursor: pointer; font-family: 'Cinzel', serif; font-size: 12px;
+            cursor: pointer; font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif; font-size: 12px;
             letter-spacing: 0.12em; text-transform: uppercase;
             display: flex; align-items: center; justify-content: center; gap: 8px;
             transition: all 0.3s;
         }
-        .btn-save:hover { background: var(--gold); color: #000; }
+        .btn-save:hover { background: var(--gold); color:#fff; }
 
         @media (max-width: 768px) {
             .hamburger { display: flex; }
@@ -118,7 +121,140 @@
             .main { margin-left: 0; padding: 72px 16px 40px; }
             .form-card { padding: 24px 18px; }
         }
+
+        @media (max-width: 360px) {
+            .main { padding: 64px 10px 32px; }
+            .form-card { padding: 18px 14px; border-radius: 12px; }
+            .field { margin-bottom: 16px; }
+            .page-title { font-size: 17px; }
+        }
     </style>
+<link rel="stylesheet" href="/css/site-nav.css">
+<style id="saara-theme">body{font-weight: 400}button,input,select,textarea{font-family:inherit;font-weight:700}.bottom-nav{background:rgba(17,17,17,.95)!important;border-top:1px solid rgba(233,30,99,.25)!important}.bottom-nav ul li a{color:#ffffff!important;font-family:inherit!important;font-weight:700}.bottom-nav ul li a:hover,.bottom-nav ul li a.active{color:#e91e63!important}</style>
+
+<style id="pink-theme">
+/* ===== Medium dark pink + white + black theme ===== */
+:root{--pink-main:#e91e63;--pink-dark:#ad1457;--pink-deep:#c2185b;--black:#111111}
+html,body{font-family:"Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif !important}
+button,input,select,textarea{font-family:inherit !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card,.mob-client-card,.insta-item,.photo-item,.preview-item,.album-header,.drop-zone,.item{box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.sidebar{box-shadow:4px 0 18px rgba(0,0,0,.35)}
+.bottom-nav{box-shadow:0 -4px 16px rgba(0,0,0,.3)}
+button,.btn-save,.btn-add,.btn-copy,.btn-back,.back-btn,.submit,.logout-btn,.sidebar-logout{box-shadow:0 4px 12px rgba(0,0,0,.3)}
+input,select,textarea{box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.btn-back,.back-btn{background:var(--black) !important;color:#fff !important;border:1px solid var(--black) !important}
+.btn-back:hover,.back-btn:hover{background:var(--pink-main) !important;border-color:var(--pink-main) !important}
+.section-sep{border-color:var(--black) !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card{border-top:4px solid var(--black)}
+
+/* dark pages: pink background, black cards, white headings */
+.main h1,.main h1 span,.page-title,.page-title span,.main>.section-label,.main>.page-top *,.page-header *,.main>h2,.main>p{color:#fff !important}
+.main .section-label,.main .section-title{color:#fff !important}
+.sidebar{background:#111111 !important;border-right:3px solid var(--pink-main)}
+.album-header{background:#111111 !important}
+.album-header *{color:#fff !important}
+.album-header .badge,.album-header [class*=count]{color:#fff !important}
+</style>
+
+<style id="pink-white-theme-overrides">
+:root { color-scheme: light !important; --theme-pink:#d95791; --theme-pink-dark:#c94480; --theme-pink-light:#f7dce8; --theme-white:#ffffff; --theme-black:#171317; --theme-muted:#6f6269; --theme-border:#efd0dd; }
+html { color-scheme: light !important; }
+body { background:#fff !important; color:var(--theme-black) !important; }
+body::before { opacity:.025 !important; }
+header, nav, aside, .sidebar, .topbar, .navbar, .header, .side-nav, .mobile-nav {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+}
+main, .main, .content, .main-content, .page-content, .workspace, .container, .wrap {
+  color:var(--theme-black);
+}
+.card, .box, .panel, .modal, .form-card, .stat-card, .table-wrap, .content-card,
+.package-card, .client-card, .upload-card, .success-card, .login-card {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+  box-shadow:0 5px 18px rgba(190,75,125,.10) !important;
+  transition:box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+}
+.card:hover, .box:hover, .panel:hover, .stat-card:hover, .package-card:hover, .client-card:hover {
+  box-shadow:0 8px 22px rgba(190,75,125,.15) !important;
+  border-color:#e7a9c4 !important;
+}
+h1,h2,h3,h4,h5,h6,p,label,small,span,td,th,li,div { }
+h1,h2,h3,h4,h5,h6,p,label,td,th { color:inherit; }
+.brand, .tag, .sidebar-brand h2, .section-title, .page-title, .logo-text,
+a:not(.btn):not([class*="button"]) { color:var(--theme-pink-dark) !important; }
+button, .btn, input[type="submit"], input[type="button"], .button, a.btn {
+  background:var(--theme-pink) !important; color:#fff !important;
+  border-color:var(--theme-pink) !important;
+  box-shadow:0 3px 10px rgba(217,87,145,.16) !important;
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+button:hover, .btn:hover, input[type="submit"]:hover, input[type="button"]:hover, .button:hover {
+  background:var(--theme-pink-dark) !important; transform:translateY(-1px);
+  box-shadow:0 5px 13px rgba(217,87,145,.22) !important;
+}
+input, select, textarea {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:#e8c5d5 !important;
+}
+input::placeholder, textarea::placeholder { color:#a99aa1 !important; }
+table th { background:var(--theme-pink-light) !important; color:#39232e !important; }
+table td { color:var(--theme-black) !important; border-color:#f0dce5 !important; }
+hr, .divider { border-color:var(--theme-border) !important; }
+.badge, .pill, .status { border-color:#edc4d6 !important; }
+@keyframes softFadeUp { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+.card, .box, .panel, .stat-card, .package-card, .client-card { animation:softFadeUp .45s ease both; }
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } }
+</style>
+<style id="dark-pink-white-theme">
+:root{--bg:#ffffff!important;--surface:#ffffff!important;--soft:#fff3f7!important;--text:#171317!important;--muted:#765b68!important;--pink:#c2185b!important;--pink-main:#c2185b!important;--pink-dark:#880e4f!important;--pink-deep:#ad1457!important;--theme-pink:#c2185b!important;--theme-pink-dark:#880e4f!important;--theme-pink-light:#fff0f5!important;--theme-white:#fff!important;--theme-black:#171317!important;--theme-muted:#765b68!important;--theme-border:#f0bfd2!important}
+html,body{background:#fff!important;color:#171317!important;color-scheme:light!important}
+body{font-weight:400!important}
+/* White surfaces; dark pink is the only strong theme colour. */
+.sidebar,.main,.card,.table-card,.table-wrapper,.ph,.ph-body,.panel,.form-card,.content-card,.modal-content,.stat-card,.dashboard-card,.section-card,.album-header,.row,.client-card,.package-card,.profile-card,.upload-card,.gallery-card,.auth-card,.login-card,.form-container,.page-card{background:#fff!important;color:#171317!important;border-color:#f0bfd2!important;box-shadow:0 5px 18px rgba(136,14,79,.08)!important}
+.sidebar{border-right:1px solid #f0bfd2!important}
+.sidebar-brand,.sidebar-footer{border-color:#f0bfd2!important}
+.sidebar-brand h2,.page-top h4 span,.card-label,.nav-section,.section-title,.section-label,.ph-body label,.cat-label{color:#c2185b!important}
+.nav-item,.logout-btn,.sidebar-nav a{color:#171317!important}
+.nav-item:hover,.nav-item.active,.logout-btn:hover,.sidebar-nav a:hover{background:#fff0f5!important;color:#171317!important;border-color:#c2185b!important}
+input,select,textarea,.sel,.ph-body input[type=text],.ph-body select{background:#fff!important;color:#171317!important;border:1px solid #e8b2c8!important}
+input::placeholder,textarea::placeholder{color:#987b88!important}
+button,.btn,.btn-primary,.btn-add,.save-btn,.action-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important;transition:all .22s ease!important}
+button:hover,.btn:hover,.btn-primary:hover,.btn-add:hover,.save-btn:hover,.action-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important;transform:translateY(-1px)}
+.btn.del,.btn-delete,.delete-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important}
+.btn.del:hover,.btn-delete:hover,.delete-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.file-pick{background:#fff5f8!important;color:#c2185b!important;border-color:#c2185b!important}
+.file-pick:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.tag,.badge,.status-badge{background:#c2185b!important;color:#fff!important}
+hr{border-color:#f0bfd2!important}
+.card,.ph,.table-card{border-radius:16px!important}
+.ph{overflow:hidden!important}
+.ph-body{color:#171317!important}
+/* Keep status colours legible while preventing dark panels. */
+.msg{background:#f0fff4!important;color:#236b3b!important}
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+<style id="pink-calendar">
+/* ===== White + pink calendar ===== */
+.flatpickr-calendar{background:#fff!important;border:1px solid #f0bfd2!important;border-radius:14px!important;box-shadow:0 10px 30px rgba(136,14,79,.25)!important;font-family:'Segoe UI',system-ui,-apple-system,Roboto,'Helvetica Neue',sans-serif!important;overflow:hidden;z-index:99999!important}
+.flatpickr-calendar:before,.flatpickr-calendar:after{display:none!important}
+.flatpickr-months{background:#c2185b!important}
+.flatpickr-months .flatpickr-month,.flatpickr-current-month{background:transparent!important;color:#fff!important;fill:#fff!important}
+.flatpickr-months .flatpickr-prev-month,.flatpickr-months .flatpickr-next-month{color:#fff!important;fill:#fff!important}
+.flatpickr-months .flatpickr-prev-month svg,.flatpickr-months .flatpickr-next-month svg{fill:#fff!important}
+.flatpickr-months .flatpickr-prev-month:hover svg,.flatpickr-months .flatpickr-next-month:hover svg{fill:#ffd0e3!important}
+.flatpickr-current-month .flatpickr-monthDropdown-months,.flatpickr-current-month input.cur-year{background:transparent!important;color:#fff!important;border:none!important;box-shadow:none!important;font-weight:700!important;padding:0 4px!important;width:auto!important}
+.flatpickr-current-month .flatpickr-monthDropdown-months option{background:#fff!important;color:#111!important}
+.numInputWrapper span.arrowUp:after{border-bottom-color:#fff!important}
+.numInputWrapper span.arrowDown:after{border-top-color:#fff!important}
+.flatpickr-weekdays,span.flatpickr-weekday{background:#fff0f5!important;color:#c2185b!important;font-weight:700!important}
+.flatpickr-day{color:#111!important;border-radius:50%!important}
+.flatpickr-day:hover{background:#fde0ec!important;border-color:#fde0ec!important}
+.flatpickr-day.today{border-color:#c2185b!important}
+.flatpickr-day.selected,.flatpickr-day.selected:hover{background:#c2185b!important;border-color:#c2185b!important;color:#fff!important}
+.flatpickr-day.prevMonthDay,.flatpickr-day.nextMonthDay{color:#bfa5b2!important}
+</style>
 </head>
 <body>
 
@@ -126,9 +262,9 @@
 <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
 
 <div class="sidebar" id="sidebar">
-    <div class="sidebar-brand"><i class="ti ti-camera"></i> DREAM GALLERY</div>
-    <a th:href="@{/dashboard}"><i class="ti ti-home"></i> Dashboard</a>
+    <div class="sidebar-brand"><i class="ti ti-camera"></i> SAARA PHOTOGRAPHY</div>
     <a th:href="@{/clients}" class="active"><i class="ti ti-users"></i> Clients</a>
+    <a href="/owner/home-photos"><i class="ti ti-photo-star"></i> Work Photos</a>
     <a th:href="@{/owner/packages}"><i class="ti ti-package"></i> Packages</a>
     <a th:href="@{/owner/profile}"><i class="ti ti-user"></i> Profile</a>
     <div class="sidebar-logout">
@@ -151,15 +287,7 @@
                 <label>Couple Name</label>
                 <div class="input-wrap">
                     <i class="ti ti-heart"></i>
-                    <input type="text" name="coupleName" th:value="${client.coupleName}" placeholder="e.g. Rahul & Priya" required>
-                </div>
-            </div>
-
-            <div class="field">
-                <label>Email</label>
-                <div class="input-wrap">
-                    <i class="ti ti-mail"></i>
-                    <input type="email" name="email" th:value="${client.email}" placeholder="email@example.com">
+                    <input type="text" name="coupleName" th:value="${client.coupleName}" placeholder="e.g. Rahul & Priya" required minlength="2" pattern=".*\S.*" title="Couple name is required">
                 </div>
             </div>
 
@@ -167,7 +295,7 @@
                 <label>Phone</label>
                 <div class="input-wrap">
                     <i class="ti ti-phone"></i>
-                    <input type="text" name="phone" th:value="${client.phone}" placeholder="+91 98765 43210">
+                    <input name="phone" th:value="${client.phone}" placeholder="+91 97867 11698" type="tel" inputmode="tel" maxlength="16" required pattern="\+?[0-9][0-9\s\-]{8,14}[0-9]" title="Enter a valid phone number (10 digits)" oninput="this.value=this.value.replace(/[^0-9+\s-]/g,'')">
                 </div>
             </div>
 
@@ -175,7 +303,7 @@
                 <label>Wedding Date</label>
                 <div class="input-wrap">
                     <i class="ti ti-calendar"></i>
-                    <input type="date" name="weddingDate" th:value="${client.weddingDate}">
+                    <input type="text" name="weddingDate" th:value="${client.weddingDate}" placeholder="Select wedding date">
                 </div>
             </div>
 
@@ -224,6 +352,42 @@
         document.getElementById('overlay').classList.toggle('open');
     }
 </script>
+
+<nav class="bottom-nav">
+    <ul>
+        <li><a href="/"><i class="ti ti-home"></i><span>Home</span></a></li>
+        <li><a href="/work"><i class="ti ti-video"></i><span>Work</span></a></li>
+        <li><a href="/select"><i class="ti ti-photo"></i><span>Select</span></a></li>
+        <li><a href="/packages-page"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
+        <li><a href="/contact"><i class="ti ti-phone"></i><span>Contact</span></a></li>
+    </ul>
+</nav>
+
 <script src="/js/constants.js"></script>
+
+<!-- Floating Instagram -->
+<style>
+body .floating-social { position: fixed; right: 18px; bottom: 90px; display: flex; flex-direction: column; gap: 12px; z-index: 999; }
+body .floating-social a { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,.25); transition: transform .25s ease, box-shadow .25s ease; }
+body .floating-social a:hover { transform: scale(1.1); box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+body .floating-social .whatsapp-btn { background: #000000; }
+body .floating-social .instagram-btn { background: #e91e63; }
+@media (min-width: 768px) { body .floating-social { bottom: 100px; right: 30px; } }
+</style>
+<div class="floating-social">
+    <a href="https://www.instagram.com/saaraphotography05" target="_blank" rel="noopener" class="instagram-btn" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+<script>
+    // Pink & white calendar (value still saved as yyyy-MM-dd)
+    flatpickr('input[name="weddingDate"]', {
+        altInput: true,
+        altFormat: 'd M Y',
+        dateFormat: 'Y-m-d',
+        disableMobile: true
+    });
+</script>
 </body>
 </html>

@@ -48,7 +48,7 @@ public class ClientController {
         Owner owner = ownerService.getLoggedInOwner(auth.getName());
         client.setOwner(owner);
         Client saved = clientService.createClient(client);
-        return "redirect:/photos/upload/" + saved.getId();
+        return "redirect:/clients";
     }
 
     // ─── View Client ────────────────────────────────
@@ -118,9 +118,13 @@ public class ClientController {
 
     // ─── Send Link Page ─────────────────────────────
     @GetMapping("/{id}/send-link")
-    public String sendLinkPage(@PathVariable("id") int id, Model model) {
+    public String sendLinkPage(@PathVariable("id") int id, Model model,
+            jakarta.servlet.http.HttpServletRequest request) {
         clientService.getById(id).ifPresent(client -> {
-            String link = "http://localhost:8765/gallery/" + client.getAccessToken();
+            String baseUrl = request.getScheme() + "://" + request.getServerName()
+                + (request.getServerPort() == 80 || request.getServerPort() == 443
+                    ? "" : ":" + request.getServerPort());
+            String link = baseUrl + "/gallery/" + client.getAccessToken();
             model.addAttribute("link", link);
             model.addAttribute("client", client);
 

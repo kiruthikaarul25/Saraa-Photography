@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Saara Photography</title>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Calibri', 'Carlito', 'Segoe UI', sans-serif;
+      font-weight: 700;
+      background: #ffffff;
+      color: #000000;
+      overflow-x: hidden;
+    }
+
+    /* ── FIXED SOCIAL ── */
+    .fixed-social {
+      position: fixed; bottom: 90px; right: 18px;
+      display: flex; flex-direction: column; gap: 10px; z-index: 200;
+    }
+    .fixed-social a {
+      width: 46px; height: 46px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 22px; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,.25);
+      transition: transform .25s;
+    }
+    .fixed-social a:hover { transform: scale(1.1); }
+    .fixed-social .wa { background: #000000; }
+    .fixed-social .ig { background: #d4146a; }
+
+    /* ── HERO ── */
+    .hero { text-align: center; padding: 56px 24px 40px; }
+    .hero img {
+      width: 110px; height: 110px; border-radius: 50%;
+      border: 3px solid #d4146a; box-shadow: 0 6px 24px rgba(212,20,106,.5);
+      margin-bottom: 18px;
+    }
+    .hero-tag {
+      display: block; font-size: 11px; letter-spacing: 6px;
+      color: #d4146a; text-transform: uppercase; margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 7vw, 4rem); line-height: 1.15;
+      letter-spacing: 2px; margin-bottom: 16px; color: #000;
+    }
+    .hero h1 span { color: #d4146a; }
+    .line { width: 56px; height: 3px; background: #d4146a; margin: 0 auto 16px; }
+    .hero p { font-size: 12px; letter-spacing: 4px; text-transform: uppercase; }
+
+    /* ── CARDS ── */
+    .grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+      padding: 0 16px 48px; max-width: 900px; margin: 0 auto;
+    }
+    @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+
+    .card {
+      background: #ffffff; border: 2px solid #000000; border-radius: 16px;
+      padding: 26px 22px; position: relative;
+      transition: transform .3s, border-color .3s, box-shadow .3s;
+    }
+    .card:hover {
+      transform: translateY(-4px); border-color: #d4146a;
+      box-shadow: 0 10px 26px rgba(212,20,106,.25);
+    }
+    .icon {
+      width: 46px; height: 46px; border-radius: 12px; background: #d4146a;
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 14px;
+    }
+    .label {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: #d4146a; margin-bottom: 8px;
+    }
+    .value { font-size: 1.05rem; line-height: 1.6; color: #000; }
+    .value a { color: #000; text-decoration: none; }
+    .value a:hover { color: #d4146a; }
+    .value small { display: block; font-size: .85rem; color: #000; }
+
+    .btn {
+      display: inline-block; margin-top: 12px; padding: 10px 22px;
+      background: #d4146a; color: #fff !important; border-radius: 999px;
+      font-size: .85rem; text-decoration: none; transition: background .25s;
+    }
+    .btn:hover { background: #000; }
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,.96); backdrop-filter: blur(20px);
+      border-top: 2px solid #d4146a;
+      padding: 10px 0 max(10px, env(safe-area-inset-bottom));
+    }
+    .bottom-nav ul {
+      display: flex; justify-content: space-around; list-style: none;
+      max-width: 500px; margin: 0 auto;
+    }
+    .bottom-nav a {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      text-decoration: none; color: #000; font-size: 9px;
+      letter-spacing: 2px; text-transform: uppercase; padding: 4px 8px;
+      transition: color .3s;
+    }
+    .bottom-nav a i { font-size: 20px; }
+    .bottom-nav a:hover, .bottom-nav a.active { color: #d4146a; }
+
+    .spacer { height: 80px; }
+
+    .animate-in { opacity: 0; transform: translateY(20px); transition: opacity .65s, transform .65s; }
+    .animate-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<div class="fixed-social">
+  <a class="ig" href="https://www.instagram.com/saaraphotography05" target="_blank" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+  <a class="wa" href="https://wa.me/919786711698?text=Hi!%20I'm%20interested%20in%20your%20photography%20services." target="_blank" aria-label="WhatsApp"><i class="ti ti-brand-whatsapp"></i></a>
+</div>
+
+<div class="hero animate-in">
+  <img src="/images/logo.png" alt="Saara Photography logo">
+  <span class="hero-tag">Saara Photography</span>
+  <h1>Let's capture<br>your <span>story</span></h1>
+  <div class="line"></div>
+  <p>Destination Photographer &nbsp;·&nbsp; Service wide</p>
+</div>
+
+<div class="grid">
+  <div class="card animate-in">
+    <div class="icon"><i class="ti ti-phone"></i></div>
+    <div class="label">Bookings</div>
+    <div class="value">
+      <a href="tel:+919786711698">+91 97867 11698</a>
+      <br><a class="btn" href="tel:+919786711698">Call now</a>
+    </div>
+  </div>
+
+  <div class="card animate-in">
+    <div class="icon"><i class="ti ti-brand-whatsapp"></i></div>
+    <div class="label">WhatsApp</div>
+    <div class="value">
+      Message us anytime
+      <br><a class="btn" href="https://wa.me/919786711698?text=Hi!%20I'm%20interested%20in%20your%20photography%20services." target="_blank">Chat now</a>
+    </div>
+  </div>
+
+  <div class="card animate-in">
+    <div class="icon"><i class="ti ti-brand-instagram"></i></div>
+    <div class="label">Instagram</div>
+    <div class="value">
+      <a href="https://www.instagram.com/saaraphotography05" target="_blank">@saaraphotography05</a>
+    </div>
+  </div>
+
+  <div class="card animate-in">
+    <div class="icon"><i class="ti ti-brand-youtube"></i></div>
+    <div class="label">YouTube</div>
+    <div class="value">
+      <a href="https://www.youtube.com/@saaraphotography" target="_blank">@saaraphotography</a>
+    </div>
+  </div>
+
+  <div class="card animate-in">
+    <div class="icon"><i class="ti ti-map-pin"></i></div>
+    <div class="label">Service</div>
+    <div class="value">
+      Destination Photographer
+      <small>All kind of events · Service wide</small>
+    </div>
+  </div>
+
+  <div class="card animate-in">
+    <div class="icon"><i class="ti ti-clock"></i></div>
+    <div class="label">Availability</div>
+    <div class="value">
+      Bookings open all days
+      <small>Call to book your date</small>
+    </div>
+  </div>
+</div>
+
+<div class="spacer"></div>
+
+<nav class="bottom-nav">
+  <ul>
+    <li><a href="/"><i class="ti ti-home"></i><span>Home</span></a></li>
+    <li><a href="/work"><i class="ti ti-video"></i><span>Work</span></a></li>
+    <li><a href="/select"><i class="ti ti-photo"></i><span>Select</span></a></li>
+    <li><a href="/packages-page"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
+    <li><a href="/contact" class="active"><i class="ti ti-phone"></i><span>Contact</span></a></li>
+  </ul>
+</nav>
+
+<script>
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

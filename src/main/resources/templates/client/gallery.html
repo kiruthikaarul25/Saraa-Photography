@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Gallery — Dream Gallery Photography</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Your Gallery — Saara Photography</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
+:root{color-scheme:dark}
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Raleway', sans-serif;
-            background: #080808;
-            color: #fff;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
+            background:#c2185b;
+            color:#ffffff;
             padding-bottom: 90px;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -43,15 +46,15 @@
                 -45deg,
                 transparent,
                 transparent 80px,
-                rgba(212,175,55,0.04) 80px,
-                rgba(212,175,55,0.04) 81px
+                rgba(233,30,99,0.04) 80px,
+                rgba(233,30,99,0.04) 81px
             );
         }
         #wm-overlay::before {
             content: '';
             position: absolute;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='180'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia%2Cserif' font-size='13' fill='rgba(212%2C175%2C55%2C0.13)' transform='rotate(-30 150 90)'%3E%C2%A9 Dream Gallery Photography%3C%2Ftext%3E%3C%2Fsvg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='180'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia%2Cserif' font-size='13' fill='rgba(224%2C53%2C122%2C0.13)' transform='rotate(-30 150 90)'%3E%C2%A9 Saara Photography%3C%2Ftext%3E%3C%2Fsvg%3E");
             background-repeat: repeat;
         }
 
@@ -67,14 +70,14 @@
             position: relative;
         }
         .photo-card::after {
-            content: '© Dream Gallery Photography';
+            content: '© Saara Photography';
             position: absolute;
             bottom: 40px;
             left: 0; right: 0;
             text-align: center;
-            font-family: 'Cinzel', serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
             font-size: 0.6rem;
-            color: rgba(212,175,55,0.35);
+            color: rgba(233,30,99,0.35);
             letter-spacing: 1px;
             pointer-events: none;
             z-index: 2;
@@ -85,35 +88,35 @@
         /* ── TOP BAR ── */
         .top-bar {
             position: sticky; top: 0; z-index: 100;
-            background: rgba(8,8,8,0.95);
+            background: rgba(17,17,17,.95);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(212,175,55,0.15);
+            border-bottom: 1px solid rgba(233,30,99,0.15);
             padding: 14px 20px;
             display: flex; justify-content: space-between; align-items: center;
             gap: 12px;
         }
         .top-bar-left h5 {
-            font-family: 'Cinzel', serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
             font-size: clamp(0.85rem, 2.5vw, 1.1rem);
-            font-weight: 400; color: #D4AF37; letter-spacing: 2px;
+            font-weight:700; color: #e91e63; letter-spacing: 2px;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
             max-width: 55vw;
         }
         .top-bar-left small {
-            font-size: 0.7rem; color: #555;
+            font-size: 0.7rem; color:#ffffff;
             letter-spacing: 1.5px; text-transform: uppercase;
         }
         .selection-pill {
             display: flex; align-items: center; gap: 7px;
-            background: rgba(212,175,55,0.08);
-            border: 1px solid rgba(212,175,55,0.25);
+            background: rgba(233,30,99,0.08);
+            border: 1px solid rgba(233,30,99,0.25);
             border-radius: 40px; padding: 6px 14px;
             white-space: nowrap; flex-shrink: 0;
         }
-        .selection-pill i { color: #D4AF37; font-size: 1rem; }
+        .selection-pill i { color: #e91e63; font-size: 1rem; }
         .selection-pill span {
-            font-family: 'Cinzel', serif;
-            font-size: 0.78rem; color: #D4AF37; letter-spacing: 1px;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
+            font-size: 0.78rem; color: #e91e63; letter-spacing: 1px;
         }
 
         /* ── ALBUM TITLE ── */
@@ -121,17 +124,17 @@
             padding: 28px 20px 10px;
             display: flex; align-items: center; gap: 10px;
         }
-        .album-header i { color: #D4AF37; font-size: 1.2rem; }
+        .album-header i { color: #e91e63; font-size: 1.2rem; }
         .album-header h6 {
-            font-family: 'Cinzel', serif;
-            font-size: 0.82rem; font-weight: 400;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
+            font-size: 0.82rem; font-weight:700;
             letter-spacing: 3px; text-transform: uppercase;
         }
         .album-header.selected-header h6 { color: #4caf50; }
-        .album-header.unselected-header h6 { color: #D4AF37; }
+        .album-header.unselected-header h6 { color: #e91e63; }
         .album-divider {
             height: 1px; margin: 0 20px;
-            background: linear-gradient(to right, rgba(212,175,55,0.3), transparent);
+            background: linear-gradient(to right, rgba(233,30,99,0.3), transparent);
         }
 
         /* ── PHOTO GRID ── */
@@ -145,12 +148,12 @@
         }
 
         .photo-card {
-            background: #0e0e0e;
+            background:#111111;
             border-radius: 14px; overflow: hidden;
-            border: 1px solid rgba(212,175,55,0.1);
+            border: 1px solid rgba(233,30,99,0.1);
             transition: transform 0.3s, border-color 0.3s;
         }
-        .photo-card:hover { transform: translateY(-4px); border-color: rgba(212,175,55,0.35); }
+        .photo-card:hover { transform: translateY(-4px); border-color: rgba(233,30,99,0.35); }
         .photo-card.selected-card { border-color: #4caf50 !important; }
 
         .photo-card img {
@@ -176,7 +179,7 @@
             display: none; align-items: center; justify-content: center;
             z-index: 3;
         }
-        .selected-tick i { color: #fff; font-size: 0.85rem; }
+        .selected-tick i { color:#ffffff; font-size: 0.85rem; }
         .selected-card .selected-tick { display: flex; }
 
         .card-footer {
@@ -185,42 +188,42 @@
         }
         .select-btn {
             border: none; cursor: pointer;
-            font-family: 'Raleway', sans-serif;
-            font-size: 0.72rem; font-weight: 500;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
+            font-size: 0.72rem; font-weight:700;
             letter-spacing: 1px; text-transform: uppercase;
             padding: 5px 14px; border-radius: 30px;
             transition: all 0.25s;
         }
         .btn-select {
-            background: rgba(212,175,55,0.1);
-            color: #D4AF37; border: 1px solid rgba(212,175,55,0.3);
+            background: rgba(233,30,99,0.1);
+            color: #e91e63; border: 1px solid rgba(233,30,99,0.3);
         }
-        .btn-select:hover { background: #D4AF37; color: #000; }
+        .btn-select:hover { background: #e91e63; color:#fff; }
         .btn-deselect {
             background: rgba(76,175,80,0.12);
             color: #4caf50; border: 1px solid rgba(76,175,80,0.3);
         }
-        .btn-deselect:hover { background: #4caf50; color: #000; }
+        .btn-deselect:hover { background: #4caf50; color:#fff; }
 
         /* ── SUBMIT BAR ── */
         .submit-bar {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-            background: rgba(8,8,8,0.95); backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(212,175,55,0.15);
+            background: rgba(17,17,17,.95); backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(233,30,99,0.15);
             padding: 12px 20px;
             display: flex; justify-content: space-between; align-items: center; gap: 12px;
         }
         .submit-info {
-            font-size: 0.78rem; color: #555;
+            font-size: 0.78rem; color:#ffffff;
             letter-spacing: 1px;
         }
-        .submit-info strong { color: #D4AF37; font-family: 'Cinzel', serif; }
+        .submit-info strong { color: #e91e63; font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif; }
         .submit-btn {
             padding: 10px 28px;
-            background: #D4AF37; color: #000; border: none;
+            background: #e91e63; color:#fff; border: none;
             border-radius: 30px; cursor: pointer;
-            font-family: 'Cinzel', serif; font-size: 0.75rem;
-            font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif; font-size: 0.75rem;
+            font-weight:700; letter-spacing: 2px; text-transform: uppercase;
             transition: all 0.3s; white-space: nowrap; flex-shrink: 0;
         }
         .submit-btn:hover { background: #c49e2f; transform: scale(1.03); }
@@ -246,25 +249,25 @@
         }
         .lb-close {
             position: absolute; top: 16px; right: 20px;
-            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(233,30,99,0.08); border: 1px solid rgba(233,30,99,0.15);
             border-radius: 50%; width: 40px; height: 40px;
             display: flex; align-items: center; justify-content: center;
-            color: #fff; font-size: 1.1rem; cursor: pointer; transition: all 0.25s;
+            color:#ffffff; font-size: 1.1rem; cursor: pointer; transition: all 0.25s;
         }
-        .lb-close:hover { background: rgba(212,175,55,0.2); color: #D4AF37; }
+        .lb-close:hover { background: rgba(233,30,99,0.2); color: #e91e63; }
         .lb-nav {
             position: absolute; top: 50%; transform: translateY(-50%);
-            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(233,30,99,0.06); border: 1px solid rgba(233,30,99,0.12);
             border-radius: 50%; width: 46px; height: 46px;
             display: flex; align-items: center; justify-content: center;
-            color: #fff; font-size: 1.3rem; cursor: pointer; transition: all 0.25s;
+            color:#ffffff; font-size: 1.3rem; cursor: pointer; transition: all 0.25s;
         }
-        .lb-nav:hover { background: rgba(212,175,55,0.18); color: #D4AF37; }
+        .lb-nav:hover { background: rgba(233,30,99,0.18); color: #e91e63; }
         .lb-prev { left: 16px; }
         .lb-next { right: 16px; }
         .lb-counter {
-            margin-top: 14px; color: #555;
-            font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 2px;
+            margin-top: 14px; color:#ffffff;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif; font-size: 0.72rem; letter-spacing: 2px;
         }
 
         /* ── LIGHTBOX WATERMARK ── */
@@ -272,9 +275,9 @@
             position: absolute;
             bottom: 80px;
             left: 50%; transform: translateX(-50%);
-            font-family: 'Cinzel', serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
             font-size: 0.65rem;
-            color: rgba(212,175,55,0.3);
+            color: rgba(233,30,99,0.3);
             letter-spacing: 2px;
             white-space: nowrap;
             pointer-events: none;
@@ -284,10 +287,10 @@
         /* ── EMPTY STATE ── */
         .empty-state {
             text-align: center; padding: 60px 20px;
-            color: #333; font-family: 'Cinzel', serif;
+            color:#f2b8d2; font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
             font-size: 0.8rem; letter-spacing: 2px;
         }
-        .empty-state i { font-size: 2.5rem; color: rgba(212,175,55,0.2); margin-bottom: 12px; display: block; }
+        .empty-state i { font-size: 2.5rem; color: rgba(233,30,99,0.2); margin-bottom: 12px; display: block; }
 
         /* ── PRINT: hide everything ── */
         @media print {
@@ -298,10 +301,129 @@
                 font-size: 1.2rem;
                 text-align: center;
                 margin-top: 40%;
-                color: #000;
+                color:#ffffff;
             }
         }
+
+        /* ── SMALL PHONES ── */
+        @media (max-width: 380px) {
+            .top-bar { padding: 12px 14px; flex-wrap: wrap; }
+            .top-bar-left h5 { max-width: 70vw; }
+            .album-header { padding: 22px 14px 8px; }
+            .album-divider { margin: 0 14px; }
+            .submit-bar { padding: 10px 14px; }
+            .submit-btn { padding: 9px 20px; font-size: 0.7rem; }
+            .lb-close { width: 34px; height: 34px; top: 10px; right: 10px; font-size: 1rem; }
+            .lb-nav { width: 38px; height: 38px; font-size: 1.1rem; }
+            .lb-prev { left: 6px; }
+            .lb-next { right: 6px; }
+            .lb-watermark { bottom: 60px; font-size: 0.58rem; }
+        }
     </style>
+<link rel="stylesheet" href="/css/site-nav.css">
+<style id="saara-theme">body{font-weight: 400}button,input,select,textarea{font-family:inherit;font-weight:700}.bottom-nav{background:rgba(17,17,17,.95)!important;border-top:1px solid rgba(233,30,99,.25)!important}.bottom-nav ul li a{color:#ffffff!important;font-family:inherit!important;font-weight:700}.bottom-nav ul li a:hover,.bottom-nav ul li a.active{color:#e91e63!important}</style>
+
+<style id="pink-theme">
+/* ===== Medium dark pink + white + black theme ===== */
+:root{--pink-main:#e91e63;--pink-dark:#ad1457;--pink-deep:#c2185b;--black:#111111}
+html,body{font-family:"Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif !important}
+button,input,select,textarea{font-family:inherit !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card,.mob-client-card,.insta-item,.photo-item,.preview-item,.album-header,.drop-zone,.item{box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.sidebar{box-shadow:4px 0 18px rgba(0,0,0,.35)}
+.bottom-nav{box-shadow:0 -4px 16px rgba(0,0,0,.3)}
+button,.btn-save,.btn-add,.btn-copy,.btn-back,.back-btn,.submit,.logout-btn,.sidebar-logout{box-shadow:0 4px 12px rgba(0,0,0,.3)}
+input,select,textarea{box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.btn-back,.back-btn{background:var(--black) !important;color:#fff !important;border:1px solid var(--black) !important}
+.btn-back:hover,.back-btn:hover{background:var(--pink-main) !important;border-color:var(--pink-main) !important}
+.section-sep{border-color:var(--black) !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card{border-top:4px solid var(--black)}
+
+/* dark pages: pink background, black cards, white headings */
+.main h1,.main h1 span,.page-title,.page-title span,.main>.section-label,.main>.page-top *,.page-header *,.main>h2,.main>p{color:#fff !important}
+.main .section-label,.main .section-title{color:#fff !important}
+.sidebar{background:#111111 !important;border-right:3px solid var(--pink-main)}
+.album-header{background:#111111 !important}
+.album-header *{color:#fff !important}
+.album-header .badge,.album-header [class*=count]{color:#fff !important}
+</style>
+
+<style id="pink-white-theme-overrides">
+:root { color-scheme: light !important; --theme-pink:#d95791; --theme-pink-dark:#c94480; --theme-pink-light:#f7dce8; --theme-white:#ffffff; --theme-black:#171317; --theme-muted:#6f6269; --theme-border:#efd0dd; }
+html { color-scheme: light !important; }
+body { background:#fff !important; color:var(--theme-black) !important; }
+body::before { opacity:.025 !important; }
+header, nav, aside, .sidebar, .topbar, .navbar, .header, .side-nav, .mobile-nav {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+}
+main, .main, .content, .main-content, .page-content, .workspace, .container, .wrap {
+  color:var(--theme-black);
+}
+.card, .box, .panel, .modal, .form-card, .stat-card, .table-wrap, .content-card,
+.package-card, .client-card, .upload-card, .success-card, .login-card {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+  box-shadow:0 5px 18px rgba(190,75,125,.10) !important;
+  transition:box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+}
+.card:hover, .box:hover, .panel:hover, .stat-card:hover, .package-card:hover, .client-card:hover {
+  box-shadow:0 8px 22px rgba(190,75,125,.15) !important;
+  border-color:#e7a9c4 !important;
+}
+h1,h2,h3,h4,h5,h6,p,label,small,span,td,th,li,div { }
+h1,h2,h3,h4,h5,h6,p,label,td,th { color:inherit; }
+.brand, .tag, .sidebar-brand h2, .section-title, .page-title, .logo-text,
+a:not(.btn):not([class*="button"]) { color:var(--theme-pink-dark) !important; }
+button, .btn, input[type="submit"], input[type="button"], .button, a.btn {
+  background:var(--theme-pink) !important; color:#fff !important;
+  border-color:var(--theme-pink) !important;
+  box-shadow:0 3px 10px rgba(217,87,145,.16) !important;
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+button:hover, .btn:hover, input[type="submit"]:hover, input[type="button"]:hover, .button:hover {
+  background:var(--theme-pink-dark) !important; transform:translateY(-1px);
+  box-shadow:0 5px 13px rgba(217,87,145,.22) !important;
+}
+input, select, textarea {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:#e8c5d5 !important;
+}
+input::placeholder, textarea::placeholder { color:#a99aa1 !important; }
+table th { background:var(--theme-pink-light) !important; color:#39232e !important; }
+table td { color:var(--theme-black) !important; border-color:#f0dce5 !important; }
+hr, .divider { border-color:var(--theme-border) !important; }
+.badge, .pill, .status { border-color:#edc4d6 !important; }
+@keyframes softFadeUp { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+.card, .box, .panel, .stat-card, .package-card, .client-card { animation:softFadeUp .45s ease both; }
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } }
+</style>
+<style id="dark-pink-white-theme">
+:root{--bg:#ffffff!important;--surface:#ffffff!important;--soft:#fff3f7!important;--text:#171317!important;--muted:#765b68!important;--pink:#c2185b!important;--pink-main:#c2185b!important;--pink-dark:#880e4f!important;--pink-deep:#ad1457!important;--theme-pink:#c2185b!important;--theme-pink-dark:#880e4f!important;--theme-pink-light:#fff0f5!important;--theme-white:#fff!important;--theme-black:#171317!important;--theme-muted:#765b68!important;--theme-border:#f0bfd2!important}
+html,body{background:#fff!important;color:#171317!important;color-scheme:light!important}
+body{font-weight:400!important}
+/* White surfaces; dark pink is the only strong theme colour. */
+.sidebar,.main,.card,.table-card,.table-wrapper,.ph,.ph-body,.panel,.form-card,.content-card,.modal-content,.stat-card,.dashboard-card,.section-card,.album-header,.row,.client-card,.package-card,.profile-card,.upload-card,.gallery-card,.auth-card,.login-card,.form-container,.page-card{background:#fff!important;color:#171317!important;border-color:#f0bfd2!important;box-shadow:0 5px 18px rgba(136,14,79,.08)!important}
+.sidebar{border-right:1px solid #f0bfd2!important}
+.sidebar-brand,.sidebar-footer{border-color:#f0bfd2!important}
+.sidebar-brand h2,.page-top h4 span,.card-label,.nav-section,.section-title,.section-label,.ph-body label,.cat-label{color:#c2185b!important}
+.nav-item,.logout-btn,.sidebar-nav a{color:#171317!important}
+.nav-item:hover,.nav-item.active,.logout-btn:hover,.sidebar-nav a:hover{background:#fff0f5!important;color:#171317!important;border-color:#c2185b!important}
+input,select,textarea,.sel,.ph-body input[type=text],.ph-body select{background:#fff!important;color:#171317!important;border:1px solid #e8b2c8!important}
+input::placeholder,textarea::placeholder{color:#987b88!important}
+button,.btn,.btn-primary,.btn-add,.save-btn,.action-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important;transition:all .22s ease!important}
+button:hover,.btn:hover,.btn-primary:hover,.btn-add:hover,.save-btn:hover,.action-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important;transform:translateY(-1px)}
+.btn.del,.btn-delete,.delete-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important}
+.btn.del:hover,.btn-delete:hover,.delete-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.file-pick{background:#fff5f8!important;color:#c2185b!important;border-color:#c2185b!important}
+.file-pick:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.tag,.badge,.status-badge{background:#c2185b!important;color:#fff!important}
+hr{border-color:#f0bfd2!important}
+.card,.ph,.table-card{border-radius:16px!important}
+.ph{overflow:hidden!important}
+.ph-body{color:#171317!important}
+/* Keep status colours legible while preventing dark panels. */
+.msg{background:#f0fff4!important;color:#236b3b!important}
+</style>
 </head>
 <body>
 
@@ -404,7 +526,7 @@
     <img id="lightbox-img" src="" alt="">
     <button class="lb-nav lb-next" onclick="changePhoto(1)"><i class="ti ti-chevron-right"></i></button>
     <div class="lb-counter" id="lightbox-counter"></div>
-    <div class="lb-watermark">© Dream Gallery Photography — Personal Use Only</div>
+    <div class="lb-watermark">© Saara Photography — Personal Use Only</div>
 </div>
 
 <script>
@@ -548,6 +670,32 @@ function closeLightboxOutside(e) {
     }
 })();
 </script>
+
+
+<nav class="bottom-nav">
+    <ul>
+        <li><a href="/"><i class="ti ti-home"></i><span>Home</span></a></li>
+        <li><a href="/work"><i class="ti ti-video"></i><span>Work</span></a></li>
+        <li><a href="/select"><i class="ti ti-photo"></i><span>Select</span></a></li>
+        <li><a href="/packages-page"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
+        <li><a href="/contact"><i class="ti ti-phone"></i><span>Contact</span></a></li>
+    </ul>
+</nav>
+
 <script src="/js/constants.js"></script>
+
+<!-- Floating Instagram -->
+<style>
+body .floating-social { position: fixed; right: 18px; bottom: 90px; display: flex; flex-direction: column; gap: 12px; z-index: 999; }
+body .floating-social a { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,.25); transition: transform .25s ease, box-shadow .25s ease; }
+body .floating-social a:hover { transform: scale(1.1); box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+body .floating-social .whatsapp-btn { background: #000000; }
+body .floating-social .instagram-btn { background: #e91e63; }
+@media (min-width: 768px) { body .floating-social { bottom: 100px; right: 30px; } }
+</style>
+<div class="floating-social">
+    <a href="https://www.instagram.com/saaraphotography05" target="_blank" rel="noopener" class="instagram-btn" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+</div>
+
 </body>
 </html>

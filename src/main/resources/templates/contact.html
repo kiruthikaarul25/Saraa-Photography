@@ -1,305 +1,660 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact — Dream Gallery Photography</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Saara Photography</title>
+	<link rel="shortcut icon" href="/favicon.ico">
+	<link rel="icon" type="image/png" href="/images/logo.png">
+	
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
-    body {
-      font-family: 'Raleway', sans-serif;
-      background: #080808;
-      color: #fff;
-      overflow-x: hidden;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* ── FIXED SOCIAL CORNER ── */
-    .fixed-social {
-      position: fixed;
-      bottom: 90px;
-      right: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 200;
-    }
-    .fixed-social a {
-      width: 46px; height: 46px;
-      border: 1px solid rgba(212,175,55,0.35);
-      background: rgba(8,8,8,0.85);
-      backdrop-filter: blur(12px);
-      display: flex; align-items: center; justify-content: center;
-      color: #D4AF37;
-      font-size: 20px;
-      text-decoration: none;
-      transition: border-color 0.3s, background 0.3s, transform 0.3s;
-    }
-    .fixed-social a:hover {
-      border-color: #D4AF37;
-      background: rgba(212,175,55,0.12);
-      transform: scale(1.1);
-    }
+        :root {
+            --pink: #c2185b;
+            --pink-dark: #880e4f;
+            --pink-light: #fff0f5;
+            --black: #171317;
+            --white: #ffffff;
+            --border: #f0bfd2;
+        }
 
-    /* ── HERO ── */
-    .dg-hero {
-      text-align: center;
-      padding: 72px 24px 52px;
-      position: relative;
-      overflow: hidden;
-    }
-    .dg-hero::before {
-      content: '';
-      position: absolute;
-      top: -80px; left: 50%; transform: translateX(-50%);
-      width: 500px; height: 500px;
-      border-radius: 50%;
-      background: rgba(212,175,55,0.05);
-      pointer-events: none;
-    }
-    .dg-hero-tag {
-      font-family: 'Cinzel', serif;
-      font-size: 10px;
-      letter-spacing: 6px;
-      color: #D4AF37;
-      text-transform: uppercase;
-      display: block;
-      margin-bottom: 20px;
-    }
-    .dg-hero h1 {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(2.2rem, 7vw, 4.5rem);
-      font-weight: 300;
-      line-height: 1.15;
-      letter-spacing: 3px;
-      margin-bottom: 20px;
-    }
-    .dg-hero h1 span { color: #D4AF37; }
-    .dg-gold-line {
-      width: 56px; height: 1px;
-      background: #D4AF37;
-      margin: 0 auto 18px;
-      opacity: 0.5;
-    }
-    .dg-hero p {
-      color: #555;
-      font-size: 11px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      font-family: 'Raleway', sans-serif;
-    }
+        body {
+            font-family: "Segoe UI", system-ui, -apple-system, Roboto,
+                         "Helvetica Neue", sans-serif;
+            background: #ffffff;
+            color: var(--black);
+            padding-bottom: 90px;
+            overflow-x: hidden;
+        }
 
-    /* ── INFO CARDS ── */
-    .dg-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2px;
-      padding: 0 16px 48px;
-      max-width: 860px;
-      margin: 0 auto;
-    }
-    @media(max-width: 480px) {
-      .dg-grid { grid-template-columns: 1fr; padding: 0 12px 36px; }
-    }
+        .hero {
+            text-align: center;
+            padding: 75px 20px 55px;
+            background: linear-gradient(180deg, #ffe3ef, #ffffff);
+            border-bottom: 3px solid var(--pink);
+        }
 
-    .dg-card {
-      background: #0f0f0f;
-      border: 1px solid rgba(212,175,55,0.12);
-      padding: 28px 22px;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.35s, background 0.35s, transform 0.35s;
-    }
-    .dg-card::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: rgba(212,175,55,0.03);
-      opacity: 0;
-      transition: opacity 0.35s;
-    }
-    .dg-card:hover {
-      border-color: rgba(212,175,55,0.4);
-      background: #111;
-      transform: translateY(-4px);
-    }
-    .dg-card:hover::before { opacity: 1; }
+        .hero-tag {
+            color: var(--pink);
+            font-size: 10px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 15px;
+        }
 
-    .dg-card-corner {
-      position: absolute; top: 0; right: 0;
-      width: 36px; height: 36px;
-      border-top: 1px solid rgba(212,175,55,0.3);
-      border-right: 1px solid rgba(212,175,55,0.3);
-      transition: width 0.35s, height 0.35s, border-color 0.35s;
-    }
-    .dg-card:hover .dg-card-corner { width: 56px; height: 56px; border-color: #D4AF37; }
+        .hero h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            letter-spacing: 3px;
+            font-weight: 700;
+        }
 
-    .dg-card-icon {
-      width: 42px; height: 42px;
-      border: 1px solid rgba(212,175,55,0.25);
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 16px;
-      font-size: 18px;
-      color: #D4AF37;
-      transition: border-color 0.3s, background 0.3s;
-    }
-    .dg-card:hover .dg-card-icon { border-color: #D4AF37; background: rgba(212,175,55,0.08); }
+        .hero h1 span {
+            color: var(--pink);
+        }
 
-    .dg-card-label {
-      font-family: 'Cinzel', serif;
-      font-size: 9px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: #D4AF37;
-      margin-bottom: 10px;
-      opacity: 0.8;
-    }
-    .dg-card-value {
-      font-family: 'Raleway', sans-serif;
-      font-size: 0.95rem;
-      color: #d0d0d0;
-      line-height: 1.8;
-      font-weight: 300;
-    }
-    .dg-card-value a {
-      color: #d0d0d0;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-    .dg-card-value a:hover { color: #D4AF37; }
+        .hero p {
+            margin-top: 14px;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
 
-    /* ── BOTTOM NAV ── */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: rgba(8,8,8,0.95);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(212,175,55,0.15);
-      padding: 10px 0 max(10px, env(safe-area-inset-bottom));
-      z-index: 100;
-    }
-    .bottom-nav ul {
-      display: flex;
-      justify-content: space-around;
-      list-style: none;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-    .bottom-nav ul li a {
-      display: flex; flex-direction: column;
-      align-items: center; gap: 4px;
-      text-decoration: none;
-      color: #444;
-      font-family: 'Cinzel', serif;
-      font-size: 8px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      transition: color 0.3s;
-      padding: 4px 8px;
-    }
-    .bottom-nav ul li a i { font-size: 20px; }
-    .bottom-nav ul li a:hover,
-    .bottom-nav ul li a.active { color: #D4AF37; }
+        .container {
+            max-width: 1050px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
 
-    .spacer { height: 80px; }
+        .section-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-    /* ── ANIMATE IN ── */
-    .animate-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
-    }
-    .animate-in.visible { opacity: 1; transform: translateY(0); }
-  </style>
+        .section-heading small {
+            color: var(--pink);
+            letter-spacing: 4px;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        .section-heading h2 {
+            font-size: 27px;
+            margin-top: 9px;
+            color: var(--pink-dark);
+            letter-spacing: 1px;
+        }
+
+        .section-heading p {
+            color: #765b68;
+            margin-top: 9px;
+            font-size: 14px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin-bottom: 55px;
+        }
+
+        .profile-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-top: 4px solid var(--black);
+            border-radius: 15px;
+            padding: 23px;
+            box-shadow: 0 5px 18px rgba(136,14,79,.08);
+            transition: .3s;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 22px rgba(136,14,79,.15);
+        }
+
+        .profile-card .icon {
+            width: 43px;
+            height: 43px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--pink-light);
+            color: var(--pink);
+            border-radius: 50%;
+            font-size: 21px;
+            margin-bottom: 14px;
+        }
+
+        .profile-card small {
+            color: #765b68;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .profile-card h3 {
+            font-size: 16px;
+            margin-top: 7px;
+            overflow-wrap: anywhere;
+        }
+
+        .profile-card a {
+            color: var(--pink-dark);
+            text-decoration: none;
+        }
+
+        .booking-card {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            box-shadow: 0 6px 22px rgba(136,14,79,.10);
+        }
+
+        .booking-info {
+            background: var(--pink);
+            color: white;
+            padding: 40px 30px;
+        }
+
+        .booking-info h2 {
+            font-size: 27px;
+            margin-bottom: 15px;
+        }
+
+        .booking-info p {
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .info-line {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 18px 0;
+            font-size: 14px;
+        }
+
+        .info-line i {
+            font-size: 21px;
+        }
+
+        .booking-form {
+            padding: 35px;
+            background: white;
+        }
+
+        .booking-form h2 {
+            font-size: 23px;
+            color: var(--pink-dark);
+            margin-bottom: 8px;
+        }
+
+        .booking-form .subtitle {
+            font-size: 13px;
+            color: #765b68;
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 17px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #e8b2c8;
+            border-radius: 8px;
+            background: white;
+            color: var(--black);
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--pink);
+            box-shadow: 0 0 0 3px rgba(194,24,91,.08);
+        }
+
+        .form-group textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 22px;
+            padding: 14px;
+            background: var(--pink);
+            color: white;
+            border: 1px solid var(--pink);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .submit-btn:hover {
+            background: var(--black);
+            border-color: var(--black);
+            transform: translateY(-2px);
+        }
+
+        .message {
+            padding: 13px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 13px;
+        }
+
+        .success {
+            background: #eaf8ef;
+            color: #236b3b;
+        }
+
+        .error {
+            background: #fff0f0;
+            color: #a51d1d;
+        }
+
+        /* Same bottom navigation as index page */
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            background: rgba(255,255,255,.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(212,20,106,.15);
+            padding: 10px 0 max(10px, env(safe-area-inset-bottom));
+            box-shadow: 0 -4px 16px rgba(0,0,0,.15);
+        }
+
+        .bottom-nav ul {
+            display: flex;
+            justify-content: space-around;
+            list-style: none;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .bottom-nav ul li a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: #000000;
+            font-size: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            transition: color .3s;
+        }
+
+        .bottom-nav ul li a i {
+            font-size: 20px;
+            transition: transform .3s;
+        }
+
+        .bottom-nav ul li a:hover i {
+            transform: translateY(-3px);
+        }
+
+        .bottom-nav ul li a:hover,
+        .bottom-nav ul li a.active {
+            color: #e91e63;
+        }
+
+        .spacer {
+            height: 15px;
+        }
+
+        @media(max-width: 700px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-card {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-form {
+                padding: 25px 18px;
+            }
+
+            .booking-info {
+                padding: 30px 22px;
+            }
+        }
+
+        @media(max-width: 450px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .container {
+                padding: 0 14px;
+            }
+        }
+    
+/* ===== Floating WhatsApp & Instagram Icons ===== */
+.floating-social { position: fixed; right: 18px; bottom: 90px; display: flex; flex-direction: column; gap: 12px; z-index: 999; }
+.floating-social a { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,.25); transition: transform .25s ease, box-shadow .25s ease; }
+.floating-social a:hover { transform: scale(1.1); box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+.floating-social .whatsapp-btn { background-color: #000000; }
+.floating-social .instagram-btn { background: #e91e63; }
+@media (min-width: 768px) { .floating-social { bottom: 100px; right: 30px; } }
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css">
+<style id="pink-calendar">
+/* ===== White + pink calendar ===== */
+.flatpickr-calendar{background:#fff!important;border:1px solid #f0bfd2!important;border-radius:14px!important;box-shadow:0 10px 30px rgba(136,14,79,.25)!important;font-family:'Segoe UI',system-ui,-apple-system,Roboto,'Helvetica Neue',sans-serif!important;overflow:hidden;z-index:99999!important}
+.flatpickr-calendar:before,.flatpickr-calendar:after{display:none!important}
+.flatpickr-months{background:#c2185b!important}
+.flatpickr-months .flatpickr-month,.flatpickr-current-month{background:transparent!important;color:#fff!important;fill:#fff!important}
+.flatpickr-months .flatpickr-prev-month,.flatpickr-months .flatpickr-next-month{color:#fff!important;fill:#fff!important}
+.flatpickr-months .flatpickr-prev-month svg,.flatpickr-months .flatpickr-next-month svg{fill:#fff!important}
+.flatpickr-months .flatpickr-prev-month:hover svg,.flatpickr-months .flatpickr-next-month:hover svg{fill:#ffd0e3!important}
+.flatpickr-current-month .flatpickr-monthDropdown-months,.flatpickr-current-month input.cur-year{background:transparent!important;color:#fff!important;border:none!important;box-shadow:none!important;font-weight:700!important;padding:0 4px!important;width:auto!important}
+.flatpickr-current-month .flatpickr-monthDropdown-months option{background:#fff!important;color:#111!important}
+.numInputWrapper span.arrowUp:after{border-bottom-color:#fff!important}
+.numInputWrapper span.arrowDown:after{border-top-color:#fff!important}
+.flatpickr-weekdays,span.flatpickr-weekday{background:#fff0f5!important;color:#c2185b!important;font-weight:700!important}
+.flatpickr-day{color:#111!important;border-radius:50%!important}
+.flatpickr-day:hover{background:#fde0ec!important;border-color:#fde0ec!important}
+.flatpickr-day.today{border-color:#c2185b!important}
+.flatpickr-day.selected,.flatpickr-day.selected:hover{background:#c2185b!important;border-color:#c2185b!important;color:#fff!important}
+.flatpickr-day.prevMonthDay,.flatpickr-day.nextMonthDay,.flatpickr-day.flatpickr-disabled,.flatpickr-day.flatpickr-disabled:hover{color:#cdb8c3!important;background:transparent!important}
+</style>
 </head>
+
 <body>
 
-<!-- Fixed Social Icons — bottom-right corner, always visible -->
-<div class="fixed-social">
-  <a href="https://instagram.com/dreamgalleryphoto" target="_blank" aria-label="Instagram">
-    <i class="ti ti-brand-instagram"></i>
-  </a>
-  <a href="https://wa.me/919876543210?text=Hi! I'm interested in your photography services." target="_blank" aria-label="WhatsApp">
-    <i class="ti ti-brand-whatsapp"></i>
-  </a>
-</div>
+<section class="hero">
+    <span class="hero-tag">Saara Photography</span>
+    <h1>Contact <span>Us</span></h1>
+    <p>Let's make your moments unforgettable</p>
+</section>
 
-<div class="dg-hero animate-in">
-  <span class="dg-hero-tag">Dream Gallery Photography</span>
-  <h1>Let's capture<br>your <span>story</span></h1>
-  <div class="dg-gold-line"></div>
-  <p id="dg-location">Chennai &nbsp;·&nbsp; Tamil Nadu</p>
-</div>
+<main class="container">
 
-<div class="dg-grid">
-  <div class="dg-card animate-in" style="transition-delay:.1s">
-    <div class="dg-card-corner"></div>
-    <div class="dg-card-icon"><i class="ti ti-phone"></i></div>
-    <div class="dg-card-label">Call us</div>
-    <div class="dg-card-value">
-      <a id="dg-phone-1" href="tel:+919876543210">+91 98765 43210</a><br>
-      <a id="dg-phone-2" href="tel:+919876543211">+91 98765 43211</a>
-    </div>
-  </div>
+    <!-- ADMIN PROFILE DETAILS (owner profile data; falls back to contact info) -->
+    <section th:with="phone=${owner != null and owner.phone != null ? owner.phone : (contact != null ? contact.phone : null)},
+                      email=${owner != null and owner.email != null ? owner.email : (contact != null ? contact.email : null)}">
+        <div class="section-heading">
+            <small>Get In Touch</small>
+            <h2>Studio Information</h2>
+            <p>Contact our photography studio for bookings and enquiries.</p>
+        </div>
 
-  <div class="dg-card animate-in" style="transition-delay:.2s">
-    <div class="dg-card-corner"></div>
-    <div class="dg-card-icon"><i class="ti ti-mail"></i></div>
-    <div class="dg-card-label">Write to us</div>
-    <div class="dg-card-value">
-      <a id="dg-email" href="mailto:hello@dreamgallery.in">hello@dreamgallery.in</a>
-    </div>
-  </div>
+        <div class="profile-grid">
 
-  <div class="dg-card animate-in" style="transition-delay:.3s">
-    <div class="dg-card-corner"></div>
-    <div class="dg-card-icon"><i class="ti ti-map-pin"></i></div>
-    <div class="dg-card-label">Studio</div>
-    <div class="dg-card-value">
-      <span id="dg-address">123, Anna Nagar Main Road, Chennai — 600040</span>
-    </div>
-  </div>
+            <div class="profile-card">
+                <div class="icon"><i class="ti ti-user"></i></div>
+                <small>Studio Owner</small>
+                <h3 th:text="${owner != null and owner.name != null ? owner.name : (contact != null and contact.ownerName != null ? contact.ownerName : 'Saara Photography')}">
+                    Owner Name
+                </h3>
+            </div>
 
-  <div class="dg-card animate-in" style="transition-delay:.4s">
-    <div class="dg-card-corner"></div>
-    <div class="dg-card-icon"><i class="ti ti-clock"></i></div>
-    <div class="dg-card-label">Hours</div>
-    <div class="dg-card-value">
-      <span id="dg-hours">Mon – Sat &nbsp;10 AM – 7 PM</span><br>
-      <span id="dg-hours-note" style="color:#555;font-size:.88rem">Sunday by appointment</span>
-    </div>
-  </div>
-</div>
+            <div class="profile-card">
+                <div class="icon"><i class="ti ti-camera"></i></div>
+                <small>Studio Name</small>
+                <h3 th:text="${owner != null && owner.studioName != null ? owner.studioName : 'Saara Photography'}">
+                    Saara Photography
+                </h3>
+            </div>
+
+            <div class="profile-card">
+                <div class="icon"><i class="ti ti-phone"></i></div>
+                <small>Contact Number</small>
+                <h3>
+                    <a th:if="${phone != null and !#strings.isEmpty(phone)}"
+                       th:href="'tel:' + ${phone}"
+                       th:text="${phone}">Phone</a>
+                    <span th:if="${phone == null or #strings.isEmpty(phone)}">
+                        Contact number not updated
+                    </span>
+                </h3>
+            </div>
+
+            <div class="profile-card">
+                <div class="icon"><i class="ti ti-mail"></i></div>
+                <small>Email Address</small>
+                <h3>
+                    <a th:if="${email != null and !#strings.isEmpty(email)}"
+                       th:href="'mailto:' + ${email}"
+                       th:text="${email}">Email</a>
+                    <span th:if="${email == null or #strings.isEmpty(email)}">
+                        Email not updated
+                    </span>
+                </h3>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CLIENT BOOKING FORM -->
+    <section>
+        <div class="section-heading">
+            <small>Start Your Journey</small>
+            <h2>Book Your Photography</h2>
+            <p>Share your event details. Our team will contact you.</p>
+        </div>
+
+        <div class="booking-card">
+
+            <div class="booking-info">
+                <h2>Let's Capture Your Story</h2>
+                <p>
+                    Every special moment deserves to be remembered.
+                    Tell us about your event and booking requirements.
+                </p>
+
+                <div class="info-line">
+                    <i class="ti ti-camera"></i>
+                    <span>Professional Photography</span>
+                </div>
+
+                <div class="info-line">
+                    <i class="ti ti-calendar-event"></i>
+                    <span>Event Photography Bookings</span>
+                </div>
+
+                <div class="info-line">
+                    <i class="ti ti-heart"></i>
+                    <span>Memories That Last Forever</span>
+                </div>
+            </div>
+
+            <div class="booking-form">
+
+                <h2>Booking Enquiry</h2>
+                <p class="subtitle">Enter your personal details below.</p>
+
+                <div th:if="${successMessage}"
+                     class="message success"
+                     th:text="${successMessage}"></div>
+
+                <div th:if="${errorMessage}"
+                     class="message error"
+                     th:text="${errorMessage}"></div>
+
+                <form th:action="@{/contact}" method="post">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="name">Your Full Name *</label>
+                            <input type="text" id="name" name="name"
+                                   placeholder="Enter your name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Your Phone Number *</label>
+                            <input type="tel" id="phone" name="phone"
+                                   placeholder="Enter phone number"
+                                   pattern="[0-9+ -]{7,20}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Your Email *</label>
+                            <input type="email" id="email" name="email"
+                                   placeholder="Enter your email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="eventType">Event Type *</label>
+                            <select id="eventType" name="eventType" required>
+                                <option value="">Select event</option>
+                                <option value="Wedding">Wedding</option>
+                                <option value="Pre Wedding">Pre Wedding</option>
+                                <option value="Engagement">Engagement</option>
+                                <option value="Birthday">Birthday</option>
+                                <option value="Baby Shower">Baby Shower</option>
+                                <option value="Maternity">Maternity</option>
+                                <option value="Portrait">Portrait</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="bookingDate">Event Date *</label>
+                            <input type="text" id="bookingDate" name="bookingDate" placeholder="Select event date" required>
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject"
+                                   placeholder="Enter subject">
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="message">Your Message *</label>
+                            <textarea id="message" name="message"
+                                      placeholder="Tell us about your event and requirements..."
+                                      required></textarea>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="ti ti-send"></i>
+                        Send Booking Enquiry
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    </section>
+
+</main>
 
 <div class="spacer"></div>
 
+<!-- SAME BOTTOM NAVIGATION AS INDEX -->
 <nav class="bottom-nav">
-  <ul>
-    <li><a href="/work"><i class="ti ti-video"></i><span>Work</span></a></li>
-    <li><a href="/select"><i class="ti ti-photo"></i><span>Select</span></a></li>
-    <li><a href="/packages-page"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
-    <li><a href="/contact" class="active"><i class="ti ti-phone"></i><span>Contact</span></a></li>
-  </ul>
+    <ul>
+        <li>
+            <a href="/">
+                <i class="ti ti-home"></i>
+                <span>Home</span>
+            </a>
+        </li>
+        <li>
+            <a href="/work">
+                <i class="ti ti-video"></i>
+                <span>Work</span>
+            </a>
+        </li>
+        <li>
+            <a href="/select">
+                <i class="ti ti-photo"></i>
+                <span>Select</span>
+            </a>
+        </li>
+        <li>
+            <a href="/packages-page">
+                <i class="ti ti-diamond"></i>
+                <span>Packages</span>
+            </a>
+        </li>
+        <li>
+            <a href="/contact" class="active">
+                <i class="ti ti-phone"></i>
+                <span>Contact</span>
+            </a>
+        </li>
+    </ul>
 </nav>
 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
 <script>
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
-
-document.querySelectorAll('.dg-card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const r = card.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    card.style.transform = `translateY(-5px) rotateX(${-y*6}deg) rotateY(${x*6}deg)`;
-  });
-  card.addEventListener('mouseleave', () => { card.style.transform = ''; });
-});
+    // Pink & white calendar, past dates disabled (value sent as yyyy-MM-dd)
+    flatpickr('#bookingDate', {
+        altInput: true,
+        altFormat: 'd M Y',
+        dateFormat: 'Y-m-d',
+        minDate: 'today',
+        disableMobile: true,
+        onReady: function (selectedDates, dateStr, instance) {
+            instance.altInput.required = true;
+        }
+    });
 </script>
-<script src="/js/constants.js"></script>
+
+
+<!-- Floating Instagram -->
+<div class="floating-social">
+    <a href="https://www.instagram.com/saaraphotography05" target="_blank" rel="noopener" class="instagram-btn" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+</div>
+
 </body>
 </html>

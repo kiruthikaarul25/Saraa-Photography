@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submitted — Saara Photography</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Calibri','Carlito','Segoe UI',sans-serif;
+            background: #ffffff;
+            color:#3a1d2a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background: url('https://images.pexels.com/photos/31580612/pexels-photo-31580612.jpeg?auto=compress&cs=tinysrgb&w=1200') center/cover no-repeat;
+            opacity: 0.04;
+            pointer-events: none;
+        }
+
+        .wrap {
+            width: 100%; max-width: 480px;
+            position: relative; z-index: 1;
+            text-align: center;
+        }
+
+        /* SUCCESS ICON */
+        .success-ring {
+            width: 80px; height: 80px; border-radius: 50%;
+            border: 1px solid rgba(224,53,122,0.3);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 28px;
+            background: rgba(224,53,122,0.06);
+            animation: ringPulse 2.5s ease-in-out infinite;
+        }
+        @keyframes ringPulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(224,53,122,0.15); }
+            50%      { box-shadow: 0 0 0 14px rgba(224,53,122,0); }
+        }
+        .success-ring i { color: #e0357a; font-size: 2.2rem; }
+
+        /* BRAND */
+        .eyebrow {
+            font-size: 0.65rem; letter-spacing: 5px;
+            text-transform: uppercase; color: #e0357a; margin-bottom: 10px;
+        }
+        .title {
+            font-family: 'Calibri','Carlito','Segoe UI',sans-serif;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight:700; letter-spacing: 4px;
+            color:#3a1d2a; margin-bottom: 12px;
+        }
+        .title span { color: #e0357a; }
+        .gold-line {
+            width: 50px; height: 1px;
+            background: linear-gradient(to right, transparent, #e0357a, transparent);
+            margin: 0 auto 20px;
+        }
+        .subtitle {
+            color:#3a1d2a; font-size: 0.85rem;
+            font-weight:700; line-height: 1.8; margin-bottom: 32px;
+        }
+        .subtitle strong { color: #e0357a; font-family: 'Calibri','Carlito','Segoe UI',sans-serif; }
+
+        /* CARD */
+        .card {
+            background: #fff5f8;
+            border: 1px solid rgba(224,53,122,0.15);
+            border-radius: 20px; padding: 32px 28px;
+            margin-bottom: 24px; position: relative; overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute; top: 0; left: 20%; right: 20%; height: 1px;
+            background: linear-gradient(to right, transparent, #e0357a, transparent);
+        }
+        @media(max-width:480px) { .card { padding: 24px 18px; } }
+
+        .card-label {
+            font-size: 0.65rem; letter-spacing: 3px;
+            text-transform: uppercase; color:#3a1d2a; margin-bottom: 16px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .card-label::before, .card-label::after {
+            content: ''; flex: 1; height: 1px;
+            background: rgba(224,53,122,0.1);
+        }
+
+        /* PHOTO LIST */
+        .photo-list {
+            display: flex; flex-direction: column; gap: 8px;
+            max-height: 240px; overflow-y: auto;
+        }
+        .photo-list::-webkit-scrollbar { width: 3px; }
+        .photo-list::-webkit-scrollbar-track { background: transparent; }
+        .photo-list::-webkit-scrollbar-thumb { background: rgba(224,53,122,0.2); border-radius: 2px; }
+
+        .photo-row {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 12px; border-radius: 10px;
+            background: #fff5f8; border: 1px solid rgba(224,53,122,0.06);
+            text-align: left;
+        }
+        .photo-row i { color: #e0357a; font-size: 0.95rem; flex-shrink: 0; }
+        .photo-row span {
+            font-size: 0.78rem; color:#3a1d2a;
+            font-weight:700; white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis;
+        }
+
+        /* BACK BTN */
+        .btn-back {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 13px 36px;
+            background: transparent;
+            border: 1px solid rgba(224,53,122,0.4);
+            color: #e0357a; border-radius: 40px;
+            font-family: 'Calibri','Carlito','Segoe UI',sans-serif;
+            font-size: 0.75rem; letter-spacing: 2px;
+            text-transform: uppercase; text-decoration: none;
+            transition: all 0.35s;
+        }
+        .btn-back:hover { background: #e0357a; color:#fff; border-color: #e0357a; }
+        .btn-back i { font-size: 1rem; }
+
+        /* Short / landscape phones, or many selected photos: allow scrolling */
+        @media (max-height: 600px) {
+            body { align-items: flex-start; padding-top: 28px; overflow: auto; }
+        }
+
+        @media (max-width: 360px) {
+            .card { padding: 20px 16px; }
+            .success-ring { width: 64px; height: 64px; margin-bottom: 20px; }
+            .success-ring i { font-size: 1.8rem; }
+        }
+    </style>
+<link rel="stylesheet" href="/css/site-nav.css">
+<style id="saara-theme">body{font-weight:700}button,input,select,textarea{font-family:inherit;font-weight:700}.bottom-nav{background:rgba(255,255,255,.95)!important;border-top:1px solid rgba(224,53,122,.25)!important}.bottom-nav ul li a{color:#3a1d2a!important;font-family:inherit!important;font-weight:700}.bottom-nav ul li a:hover,.bottom-nav ul li a.active{color:#e0357a!important}</style>
+</head>
+<body>
+
+<div class="wrap">
+
+    <!-- ICON -->
+    <div class="success-ring">
+        <i class="ti ti-heart"></i>
+    </div>
+
+    <!-- HEADING -->
+    <p class="eyebrow">Saara Photography</p>
+    <h1 class="title">Selection <span>Submitted!</span></h1>
+    <div class="gold-line"></div>
+    <p class="subtitle">
+        You selected <strong th:text="${count}">0</strong> beautiful photos.<br>
+        We will contact you soon!
+    </p>
+
+    <!-- PHOTO LIST -->
+    <div class="card" th:if="${!selections.isEmpty()}">
+        <p class="card-label">Your Selected Photos</p>
+        <div class="photo-list">
+            <div class="photo-row" th:each="sel : ${selections}">
+                <i class="ti ti-photo"></i>
+                <span th:text="${sel.photo.filename}">photo.jpg</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- BACK BUTTON -->
+    <a th:href="@{/gallery/view}" class="btn-back">
+        <i class="ti ti-arrow-left"></i> Back to Gallery
+    </a>
+
+</div>
+
+<script>
+    // Replace this page in history so the POST /gallery/submit is never
+    // in the browser stack. Back button goes cleanly to /gallery/view.
+    if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', '/gallery/submitted');
+    }
+</script>
+
+
+
+<nav class="bottom-nav">
+    <ul>
+        <li><a href="/"><i class="ti ti-home"></i><span>Home</span></a></li>
+        <li><a href="/work"><i class="ti ti-video"></i><span>Work</span></a></li>
+        <li><a href="/select"><i class="ti ti-photo"></i><span>Select</span></a></li>
+        <li><a href="/packages-page"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
+        <li><a href="/contact"><i class="ti ti-phone"></i><span>Contact</span></a></li>
+    </ul>
+</nav>
+
+<script src="/js/constants.js"></script>
+</body>
+</html>

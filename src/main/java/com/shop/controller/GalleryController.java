@@ -3,11 +3,21 @@ package com.shop.controller;
 import com.shop.model.*;
 import com.shop.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,6 +29,7 @@ public class GalleryController {
     @Autowired private AlbumService albumService;
     @Autowired private PhotoSelectionService selectionService;
     @Autowired private PackageService packageService;
+    @Autowired private WatermarkService watermarkService;
 
     @GetMapping("/client/login")
     public String clientLoginPage(Model model) {
@@ -151,6 +162,32 @@ public class GalleryController {
         return ResponseEntity.ok(res);
     }
 
+    // ─── Serve Watermarked Photo to Client ────────
+    @GetMapping("/gallery/photo/{photoId}")
+    public ResponseEntity<Resource> serveWatermarkedPhoto(
+            @PathVariable("photoId") int photoId,
+            @RequestParam(value = "size", required = false) String size,
+            HttpSession session) throws IOException {
+
+        Integer clientId = (Integer) session.getAttribute("clientId");
+        if (clientId == null)
+            return ResponseEntity.status(401).build();
+
+        Photo photo = photoService.getById(photoId).orElseThrow();
+
+        String fullPath = System.getProperty("user.dir") + File.separator + photo.getFilePath();
+
+        boolean thumb = "thumb".equals(size);
+        Path preview = watermarkService.getPreviewPath(fullPath, thumb);
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + photo.getFilename() + "\"")
+            .header("X-Content-Type-Options", "nosniff")
+            .cacheControl(CacheControl.maxAge(Duration.ofDays(30)).cachePrivate())
+            .contentType(MediaType.IMAGE_JPEG)
+            .body(new FileSystemResource(preview));
+    }
+
     // ✅ AJAX — no page reload
     @PostMapping("/gallery/deselect/{photoId}")
     @ResponseBody
@@ -171,11 +208,20 @@ public class GalleryController {
     }
 
     @PostMapping("/gallery/submit")
-    public String submitSelections(HttpSession session, Model model) {
+    public String submitSelections(HttpSession session) {
         Integer clientId = (Integer) session.getAttribute("clientId");
         if (clientId == null) return "redirect:/client/login";
 
         clientService.updateStatus(clientId, "selecting");
+        // PRG Pattern: redirect after POST so Back button works cleanly
+        return "redirect:/gallery/submitted";
+    }
+
+    @GetMapping("/gallery/submitted")
+    public String submittedPage(HttpSession session, Model model) {
+        Integer clientId = (Integer) session.getAttribute("clientId");
+        if (clientId == null) return "redirect:/client/login";
+
         var selections = selectionService.getSelectionsByClient(clientId);
         model.addAttribute("selections", selections);
         model.addAttribute("count", selections.size());

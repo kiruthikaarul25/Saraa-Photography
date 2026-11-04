@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Enquiries | Saara Photography</title>
+    
+	<link rel="icon" type="image/png" href="/images/logo.png">
+	<link rel="shortcut icon" href="/favicon.ico"><link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --pink: #c2185b; --pink-dark: #880e4f; --pink-light: #fff0f5; --black: #171317; --border: #f0bfd2; }
+        body { font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; background: #fff; color: var(--black); }
+        .top { background: linear-gradient(180deg, #ffe3ef, #fff); border-bottom: 3px solid var(--pink); padding: 40px 20px 30px; text-align: center; }
+        .top small { color: var(--pink); font-size: 10px; letter-spacing: 5px; text-transform: uppercase; }
+        .top h1 { font-size: clamp(1.6rem, 5vw, 2.6rem); letter-spacing: 2px; margin-top: 10px; }
+        .top h1 span { color: var(--pink); }
+        .top .count { margin-top: 10px; font-size: 13px; color: #765b68; }
+        .wrap { max-width: 900px; margin: 30px auto; padding: 0 16px 60px; }
+        .back { display: inline-flex; align-items: center; gap: 6px; color: var(--pink-dark); text-decoration: none; font-size: 13px; margin-bottom: 18px; }
+        .card { background: #fff; border: 1px solid var(--border); border-top: 4px solid var(--black); border-radius: 14px; padding: 20px; margin-bottom: 16px; box-shadow: 0 5px 18px rgba(136,14,79,.08); }
+        .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+        .card h3 { font-size: 17px; color: var(--pink-dark); }
+        .date { font-size: 11px; color: #765b68; letter-spacing: 1px; }
+        .subject { margin-top: 6px; font-size: 13px; font-weight: 600; }
+        .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 10px; font-size: 13px; }
+        .meta a { color: var(--pink-dark); text-decoration: none; display: inline-flex; align-items: center; gap: 5px; overflow-wrap: anywhere; }
+        .msg { margin-top: 12px; padding: 12px; background: var(--pink-light); border-radius: 8px; font-size: 14px; line-height: 1.6; white-space: pre-line; overflow-wrap: anywhere; }
+        .actions { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; cursor: pointer; font-family: inherit; border: 1px solid var(--pink); background: var(--pink); color: #fff; }
+        .btn.wa { background: #000; border-color: #000; }
+        .btn.del { background: #fff; color: #a51d1d; border-color: #e8b2b2; }
+        .empty { text-align: center; padding: 60px 20px; color: #765b68; border: 1px dashed var(--border); border-radius: 14px; }
+    </style>
+</head>
+<body>
+
+<section class="top">
+    <small>Admin Panel</small>
+    <h1>Booking <span>Enquiries</span></h1>
+    <p class="count">Total enquiries: <strong th:text="${totalContacts}">0</strong></p>
+</section>
+
+<main class="wrap">
+    <a href="/clients" class="back"><i class="ti ti-arrow-left"></i> Back to Clients</a>
+
+    <div class="empty" th:if="${contacts == null or contacts.isEmpty()}">
+        <i class="ti ti-inbox" style="font-size:34px"></i>
+        <p style="margin-top:10px">No enquiries yet.</p>
+    </div>
+
+    <div class="card" th:each="c : ${contacts}">
+        <div class="card-head">
+            <h3 th:text="${c.name}">Name</h3>
+            <span class="date" th:text="${#temporals.format(c.createdAt, 'dd MMM yyyy, hh:mm a')}">Date</span>
+        </div>
+
+        <div class="subject" th:if="${c.subject != null and !#strings.isEmpty(c.subject)}" th:text="${c.subject}">Subject</div>
+
+        <div class="meta">
+            <a th:href="'tel:' + ${c.phone}"><i class="ti ti-phone"></i><span th:text="${c.phone}">Phone</span></a>
+            <a th:href="'mailto:' + ${c.email}"><i class="ti ti-mail"></i><span th:text="${c.email}">Email</span></a>
+        </div>
+
+        <div class="msg" th:text="${c.message}">Message</div>
+
+        <div class="actions">
+            <a class="btn wa" target="_blank" rel="noopener"
+               th:href="'https://wa.me/' + ${#strings.replace(#strings.replace(#strings.replace(c.phone, '+', ''), ' ', ''), '-', '')}">
+                <i class="ti ti-brand-whatsapp"></i> WhatsApp
+            </a>
+            <a class="btn" th:href="'tel:' + ${c.phone}"><i class="ti ti-phone-call"></i> Call</a>
+            <form th:action="@{/admin/contact-enquiries/delete/{id}(id=${c.id})}" method="post"
+                  onsubmit="return confirm('Delete this enquiry?');">
+                <button type="submit" class="btn del"><i class="ti ti-trash"></i> Delete</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

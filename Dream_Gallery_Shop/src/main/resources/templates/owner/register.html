@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Sign Up — Saara Photography</title>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Calibri','Carlito','Segoe UI',sans-serif; font-weight: 700; background: #fff; color: #000; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    input, button { font-family: inherit; font-weight: 700; }
+    .box { width: 100%; max-width: 400px; border: 2px solid #000; border-top: 8px solid #d4146a; border-radius: 20px; padding: 32px 26px; }
+    .logo { display: block; width: 90px; height: 90px; border-radius: 50%; border: 3px solid #d4146a; box-shadow: 0 6px 20px rgba(212,20,106,.4); margin: 0 auto 14px; }
+    .tag { display: block; text-align: center; font-size: 11px; letter-spacing: 5px; color: #d4146a; text-transform: uppercase; }
+    h1 { text-align: center; font-size: 1.9rem; margin: 6px 0 20px; }
+    label { display: block; font-size: .78rem; letter-spacing: 2px; text-transform: uppercase; margin: 14px 0 6px; }
+    .field { position: relative; }
+    .field input { width: 100%; padding: 13px 14px; border: 2px solid #000; border-radius: 12px; font-size: 1rem; background: #fff; color: #000; }
+    .field input:focus { outline: none; border-color: #d4146a; }
+    .field input.pw { padding-right: 46px; }
+    .eye { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: 0; font-size: 20px; cursor: pointer; color: #000; }
+    .row { display: flex; gap: 8px; }
+    .row .field { flex: 1; }
+    .mini { padding: 0 14px; border: 2px solid #d4146a; background: #fff; color: #d4146a; border-radius: 12px; cursor: pointer; white-space: nowrap; font-size: .85rem; }
+    .mini:hover:not(:disabled) { background: #d4146a; color: #fff; }
+    .mini:disabled { opacity: .5; cursor: not-allowed; }
+    .submit { width: 100%; margin-top: 22px; padding: 14px; border: 0; border-radius: 999px; background: #d4146a; color: #fff; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: background .25s; }
+    .submit:hover { background: #000; }
+    .msg { margin-top: 14px; padding: 10px 12px; border-radius: 10px; font-size: .9rem; display: none; }
+    .msg.err { display: block; background: #000; color: #fff; }
+    .msg.ok { display: block; background: #d4146a; color: #fff; }
+    .links { text-align: center; margin-top: 20px; font-size: .92rem; line-height: 2; }
+    .links a { color: #d4146a; text-decoration: none; }
+    .links a:hover { color: #000; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <img class="logo" src="/images/logo.png" alt="Saara Photography logo">
+    <span class="tag">Saara Photography</span>
+    <h1>Admin Sign Up</h1>
+
+    <form id="form" autocomplete="on">
+      <label for="name">Name</label>
+      <div class="field"><input type="text" id="name" placeholder="Your name" autocomplete="name" required></div>
+
+      <label for="email">Gmail</label>
+      <div class="row">
+        <div class="field"><input type="email" id="email" placeholder="yourname@gmail.com" autocomplete="username" required></div>
+        <button type="button" class="mini" id="otpBtn" onclick="sendOtp()">Send OTP</button>
+      </div>
+
+      <label for="otp">Email OTP</label>
+      <div class="field"><input type="text" id="otp" placeholder="6-digit OTP" inputmode="numeric" maxlength="6" autocomplete="one-time-code" required></div>
+
+      <label for="pw">Password</label>
+      <div class="field">
+        <input class="pw" type="password" id="pw" placeholder="Min 6 characters" autocomplete="new-password" minlength="6" required>
+        <button type="button" class="eye" onclick="toggle()" aria-label="Show password"><i class="ti ti-eye" id="eyeIcon"></i></button>
+      </div>
+
+      <label for="pw2">Confirm Password</label>
+      <div class="field"><input class="pw" type="password" id="pw2" placeholder="Re-enter password" autocomplete="new-password" required></div>
+
+      <button class="submit" type="submit">Create Account</button>
+      <div class="msg" id="msg"></div>
+    </form>
+
+    <div class="links">
+      Already have an account? <a href="/login">Admin Login</a><br>
+      <a href="/"><i class="ti ti-arrow-left"></i> Back to website</a>
+    </div>
+  </div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  function toggle() {
+    const show = $('pw').type === 'password';
+    $('pw').type = $('pw2').type = show ? 'text' : 'password';
+    $('eyeIcon').className = 'ti ' + (show ? 'ti-eye-off' : 'ti-eye');
+  }
+  function say(t, ok) { const m = $('msg'); m.textContent = t; m.className = 'msg ' + (ok ? 'ok' : 'err'); }
+
+  async function sendOtp() {
+    const email = $('email').value.trim();
+    if (!$('email').checkValidity() || !email) { say('Valid Gmail kudunga.', false); return; }
+    const btn = $('otpBtn'); btn.disabled = true;
+    try {
+      const r = await fetch('/register/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ email })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (r.ok && d.ok) {
+        say('OTP anuppitten. Gmail inbox / spam paarunga.', true);
+        let s = 30;
+        const t = setInterval(() => {
+          btn.textContent = 'Resend ' + s--;
+          if (s < 0) { clearInterval(t); btn.textContent = 'Resend OTP'; btn.disabled = false; }
+        }, 1000);
+      } else { say(d.error || 'OTP anuppa mudiyala.', false); btn.disabled = false; }
+    } catch (err) { say('Server not reachable.', false); btn.disabled = false; }
+  }
+
+  $('form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const pw = $('pw').value;
+    if (pw.length < 6) { say('Password must be at least 6 characters.', false); return; }
+    if (pw !== $('pw2').value) { say('Passwords do not match.', false); return; }
+    try {
+      const r = await fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          name: $('name').value.trim(),
+          email: $('email').value.trim(),
+          password: pw,
+          confirmPassword: $('pw2').value,
+          otp: $('otp').value.trim()
+        })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (r.ok && d.ok) {
+        say('Account created ✓ Redirecting to login…', true);
+        setTimeout(() => { location.href = '/login'; }, 900);
+      } else { say(d.error || 'Could not create account.', false); }
+    } catch (err) { say('Server not reachable.', false); }
+  });
+</script>
+</body>
+</html>

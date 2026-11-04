@@ -6,9 +6,11 @@ plugins {
 
 group = 'com.shop'
 version = '0.0.1-SNAPSHOT'
+
 springBoot {
     mainClass = 'com.shop.DreamGalleryShopApplication'
 }
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -24,7 +26,6 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -38,6 +39,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // ⚠️ devtools Railway-ல் வேண்டாம் — production-ல் remove பண்ணுவோம்
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -50,6 +52,8 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+
 compileJava {
     options.compilerArgs << '-parameters'
 }

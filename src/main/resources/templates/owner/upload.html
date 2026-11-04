@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Photos — Dream Gallery Photography</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Upload Photos — Saara Photography</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <style>
+:root{color-scheme:dark}
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --gold: #c9a84c;
-            --gold-light: #e2c97e;
-            --gold-dim: rgba(201,168,76,0.12);
-            --gold-border: rgba(201,168,76,0.25);
-            --bg: #080808;
-            --surface: #0e0e0e;
-            --surface2: #141414;
-            --surface3: #1c1c1c;
-            --border: rgba(201,168,76,0.2);
-            --text: #e8e0d0;
-            --text-muted: #6a6050;
-            --text-sub: #9a9080;
+            --gold: #e91e63;
+            --gold-light: #f78fb3;
+            --gold-dim: rgba(233,30,99,0.12);
+            --gold-border: rgba(233,30,99,0.25);
+            --bg:#c2185b;
+            --surface:#111111;
+            --surface2: #d81b60;
+            --surface3: #333333;
+            --border: rgba(233,30,99,0.2);
+            --text:#ffffff;
+            --text-muted:#f2b8d2;
+            --text-sub:#f7cfe1;
             --red: #c0392b;
             --green: #1a7a4a;
         }
@@ -29,7 +32,7 @@
         body {
             background: var(--bg);
             color: var(--text);
-            font-family: 'Raleway', sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
             min-height: 100vh;
         }
 
@@ -49,9 +52,9 @@
         }
 
         .sidebar-brand {
-            font-family: 'Cinzel', serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
             font-size: 15px;
-            font-weight: 700;
+            font-weight:700;
             color: var(--gold);
             letter-spacing: 0.12em;
             padding: 0 8px 28px;
@@ -71,7 +74,7 @@
             color: var(--text-muted);
             text-decoration: none;
             font-size: 13px;
-            font-weight: 500;
+            font-weight:700;
             letter-spacing: 0.04em;
             margin-bottom: 2px;
             transition: all 0.2s;
@@ -129,7 +132,7 @@
             border: 1px solid var(--border);
             background: transparent;
             color: var(--text-muted);
-            font-family: 'Raleway', sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
             font-size: 13px;
             text-decoration: none;
             transition: all 0.2s;
@@ -138,9 +141,9 @@
         .btn-back:hover { border-color: var(--gold); color: var(--gold); }
 
         .page-title {
-            font-family: 'Cinzel', serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
             font-size: 20px;
-            font-weight: 600;
+            font-weight:700;
             color: var(--gold);
             letter-spacing: 0.08em;
         }
@@ -186,7 +189,7 @@
         }
 
         .client-name {
-            font-family: 'Cinzel', serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
             font-size: 15px;
             color: var(--gold-light);
         }
@@ -202,7 +205,7 @@
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 11px;
-            font-weight: 600;
+            font-weight:700;
             text-transform: capitalize;
             letter-spacing: 0.08em;
             background: var(--gold-dim);
@@ -231,7 +234,7 @@
             align-items: center;
             gap: 8px;
             font-size: 11px;
-            font-weight: 600;
+            font-weight:700;
             letter-spacing: 0.14em;
             text-transform: uppercase;
             color: var(--text-muted);
@@ -261,7 +264,7 @@
             border: 1px solid var(--border);
             border-radius: 10px;
             padding: 12px 14px 12px 42px;
-            font-family: 'Raleway', sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
             font-size: 14px;
             color: var(--text);
             outline: none;
@@ -271,7 +274,7 @@
         .form-input::placeholder { color: var(--text-muted); }
         .form-input:focus {
             border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
+            box-shadow: 0 0 0 3px rgba(233,30,99,0.08);
         }
 
         /* ── DIVIDER ── */
@@ -314,7 +317,7 @@
         }
 
         .drop-title {
-            font-family: 'Cinzel', serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
             font-size: 14px;
             color: var(--gold-light);
             margin-bottom: 8px;
@@ -340,7 +343,7 @@
 
         .count-text {
             font-size: 13px;
-            font-weight: 600;
+            font-weight:700;
             color: var(--gold);
             display: flex;
             align-items: center;
@@ -353,7 +356,7 @@
             background: none;
             border: none;
             cursor: pointer;
-            font-family: 'Raleway', sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
             display: flex;
             align-items: center;
             gap: 4px;
@@ -389,7 +392,7 @@
             position: absolute;
             top: 5px; right: 5px;
             background: rgba(0,0,0,0.75);
-            color: #fff;
+            color:#fff;
             border: none;
             border-radius: 50%;
             width: 22px; height: 22px;
@@ -454,9 +457,9 @@
             border: 1px solid var(--gold);
             color: var(--gold);
             border-radius: 10px;
-            font-family: 'Cinzel', serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', sans-serif;
             font-size: 13px;
-            font-weight: 600;
+            font-weight:700;
             letter-spacing: 0.1em;
             cursor: pointer;
             display: flex;
@@ -468,7 +471,7 @@
 
         .btn-upload:hover:not(:disabled) {
             background: var(--gold);
-            color: #000;
+            color:#fff;
         }
 
         .btn-upload:disabled {
@@ -485,7 +488,120 @@
             .hamburger { display: flex; }
             .main { margin-left: 0; padding: 72px 18px 32px; }
         }
+
+        @media (max-width: 480px) {
+            .client-card { flex-wrap: wrap; }
+            .status-badge { margin-left: 0; }
+            .drop-zone { padding: 32px 16px; }
+            .card-body { padding: 18px 14px; }
+            .preview-grid { grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 8px; }
+            .preview-item img { height: 70px; }
+        }
     </style>
+<link rel="stylesheet" href="/css/site-nav.css">
+<style id="saara-theme">body{font-weight: 400}button,input,select,textarea{font-family:inherit;font-weight:700}.bottom-nav{background:rgba(17,17,17,.95)!important;border-top:1px solid rgba(233,30,99,.25)!important}.bottom-nav ul li a{color:#ffffff!important;font-family:inherit!important;font-weight:700}.bottom-nav ul li a:hover,.bottom-nav ul li a.active{color:#e91e63!important}</style>
+
+<style id="pink-theme">
+/* ===== Medium dark pink + white + black theme ===== */
+:root{--pink-main:#e91e63;--pink-dark:#ad1457;--pink-deep:#c2185b;--black:#111111}
+html,body{font-family:"Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif !important}
+button,input,select,textarea{font-family:inherit !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card,.mob-client-card,.insta-item,.photo-item,.preview-item,.album-header,.drop-zone,.item{box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.sidebar{box-shadow:4px 0 18px rgba(0,0,0,.35)}
+.bottom-nav{box-shadow:0 -4px 16px rgba(0,0,0,.3)}
+button,.btn-save,.btn-add,.btn-copy,.btn-back,.back-btn,.submit,.logout-btn,.sidebar-logout{box-shadow:0 4px 12px rgba(0,0,0,.3)}
+input,select,textarea{box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.btn-back,.back-btn{background:var(--black) !important;color:#fff !important;border:1px solid var(--black) !important}
+.btn-back:hover,.back-btn:hover{background:var(--pink-main) !important;border-color:var(--pink-main) !important}
+.section-sep{border-color:var(--black) !important}
+.card,.form-card,.pkg-card,.photo-card,.action-card{border-top:4px solid var(--black)}
+
+/* dark pages: pink background, black cards, white headings */
+.main h1,.main h1 span,.page-title,.page-title span,.main>.section-label,.main>.page-top *,.page-header *,.main>h2,.main>p{color:#fff !important}
+.main .section-label,.main .section-title{color:#fff !important}
+.sidebar{background:#111111 !important;border-right:3px solid var(--pink-main)}
+.album-header{background:#111111 !important}
+.album-header *{color:#fff !important}
+.album-header .badge,.album-header [class*=count]{color:#fff !important}
+</style>
+
+<style id="pink-white-theme-overrides">
+:root { color-scheme: light !important; --theme-pink:#d95791; --theme-pink-dark:#c94480; --theme-pink-light:#f7dce8; --theme-white:#ffffff; --theme-black:#171317; --theme-muted:#6f6269; --theme-border:#efd0dd; }
+html { color-scheme: light !important; }
+body { background:#fff !important; color:var(--theme-black) !important; }
+body::before { opacity:.025 !important; }
+header, nav, aside, .sidebar, .topbar, .navbar, .header, .side-nav, .mobile-nav {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+}
+main, .main, .content, .main-content, .page-content, .workspace, .container, .wrap {
+  color:var(--theme-black);
+}
+.card, .box, .panel, .modal, .form-card, .stat-card, .table-wrap, .content-card,
+.package-card, .client-card, .upload-card, .success-card, .login-card {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:var(--theme-border) !important;
+  box-shadow:0 5px 18px rgba(190,75,125,.10) !important;
+  transition:box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+}
+.card:hover, .box:hover, .panel:hover, .stat-card:hover, .package-card:hover, .client-card:hover {
+  box-shadow:0 8px 22px rgba(190,75,125,.15) !important;
+  border-color:#e7a9c4 !important;
+}
+h1,h2,h3,h4,h5,h6,p,label,small,span,td,th,li,div { }
+h1,h2,h3,h4,h5,h6,p,label,td,th { color:inherit; }
+.brand, .tag, .sidebar-brand h2, .section-title, .page-title, .logo-text,
+a:not(.btn):not([class*="button"]) { color:var(--theme-pink-dark) !important; }
+button, .btn, input[type="submit"], input[type="button"], .button, a.btn {
+  background:var(--theme-pink) !important; color:#fff !important;
+  border-color:var(--theme-pink) !important;
+  box-shadow:0 3px 10px rgba(217,87,145,.16) !important;
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+button:hover, .btn:hover, input[type="submit"]:hover, input[type="button"]:hover, .button:hover {
+  background:var(--theme-pink-dark) !important; transform:translateY(-1px);
+  box-shadow:0 5px 13px rgba(217,87,145,.22) !important;
+}
+input, select, textarea {
+  background:#fff !important; color:var(--theme-black) !important;
+  border-color:#e8c5d5 !important;
+}
+input::placeholder, textarea::placeholder { color:#a99aa1 !important; }
+table th { background:var(--theme-pink-light) !important; color:#39232e !important; }
+table td { color:var(--theme-black) !important; border-color:#f0dce5 !important; }
+hr, .divider { border-color:var(--theme-border) !important; }
+.badge, .pill, .status { border-color:#edc4d6 !important; }
+@keyframes softFadeUp { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+.card, .box, .panel, .stat-card, .package-card, .client-card { animation:softFadeUp .45s ease both; }
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } }
+</style>
+<style id="dark-pink-white-theme">
+:root{--bg:#ffffff!important;--surface:#ffffff!important;--soft:#fff3f7!important;--text:#171317!important;--muted:#765b68!important;--pink:#c2185b!important;--pink-main:#c2185b!important;--pink-dark:#880e4f!important;--pink-deep:#ad1457!important;--theme-pink:#c2185b!important;--theme-pink-dark:#880e4f!important;--theme-pink-light:#fff0f5!important;--theme-white:#fff!important;--theme-black:#171317!important;--theme-muted:#765b68!important;--theme-border:#f0bfd2!important}
+html,body{background:#fff!important;color:#171317!important;color-scheme:light!important}
+body{font-weight:400!important}
+/* White surfaces; dark pink is the only strong theme colour. */
+.sidebar,.main,.card,.table-card,.table-wrapper,.ph,.ph-body,.panel,.form-card,.content-card,.modal-content,.stat-card,.dashboard-card,.section-card,.album-header,.row,.client-card,.package-card,.profile-card,.upload-card,.gallery-card,.auth-card,.login-card,.form-container,.page-card{background:#fff!important;color:#171317!important;border-color:#f0bfd2!important;box-shadow:0 5px 18px rgba(136,14,79,.08)!important}
+.sidebar{border-right:1px solid #f0bfd2!important}
+.sidebar-brand,.sidebar-footer{border-color:#f0bfd2!important}
+.sidebar-brand h2,.page-top h4 span,.card-label,.nav-section,.section-title,.section-label,.ph-body label,.cat-label{color:#c2185b!important}
+.nav-item,.logout-btn,.sidebar-nav a{color:#171317!important}
+.nav-item:hover,.nav-item.active,.logout-btn:hover,.sidebar-nav a:hover{background:#fff0f5!important;color:#171317!important;border-color:#c2185b!important}
+input,select,textarea,.sel,.ph-body input[type=text],.ph-body select{background:#fff!important;color:#171317!important;border:1px solid #e8b2c8!important}
+input::placeholder,textarea::placeholder{color:#987b88!important}
+button,.btn,.btn-primary,.btn-add,.save-btn,.action-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important;transition:all .22s ease!important}
+button:hover,.btn:hover,.btn-primary:hover,.btn-add:hover,.save-btn:hover,.action-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important;transform:translateY(-1px)}
+.btn.del,.btn-delete,.delete-btn{background:#c2185b!important;color:#fff!important;border-color:#c2185b!important}
+.btn.del:hover,.btn-delete:hover,.delete-btn:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.file-pick{background:#fff5f8!important;color:#c2185b!important;border-color:#c2185b!important}
+.file-pick:hover{background:#171317!important;color:#fff!important;border-color:#171317!important}
+.tag,.badge,.status-badge{background:#c2185b!important;color:#fff!important}
+hr{border-color:#f0bfd2!important}
+.card,.ph,.table-card{border-radius:16px!important}
+.ph{overflow:hidden!important}
+.ph-body{color:#171317!important}
+/* Keep status colours legible while preventing dark panels. */
+.msg{background:#f0fff4!important;color:#236b3b!important}
+</style>
 </head>
 <body>
 
@@ -498,9 +614,8 @@
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-        <i class="ti ti-camera"></i> DREAM GALLERY
+        <i class="ti ti-camera"></i> SAARA PHOTOGRAPHY
     </div>
-    <a th:href="@{/dashboard}" href="#"><i class="ti ti-home"></i> Dashboard</a>
     <a th:href="@{/clients}" href="#" class="active"><i class="ti ti-users"></i> Clients</a>
     <a th:href="@{/owner/orders}" href="#"><i class="ti ti-currency-rupee"></i> Orders</a>
     <a th:href="@{/owner/profile}" href="#"><i class="ti ti-user"></i> Profile</a>
@@ -589,9 +704,9 @@
                 <!-- Progress -->
                 <div class="progress-wrap" id="progressWrap">
                     <div class="progress-track">
-                        <div class="progress-bar"></div>
+                        <div class="progress-bar" id="progressBar" style="width:0%;animation:none"></div>
                     </div>
-                    <div class="progress-text">Uploading photos, please wait…</div>
+                    <div class="progress-text" id="progressText">Uploading photos, please wait…</div>
                 </div>
 
                 <!-- Submit -->
@@ -629,30 +744,41 @@
     clearBtn.addEventListener('click', () => { selectedFiles = []; renderPreviews(); syncFileInput(); });
 
     function handleFiles(files) {
+        // fast duplicate check (works for 20,000+ photos)
+        const seen = new Set(selectedFiles.map(x => x.name + '|' + x.size));
         files.forEach(f => {
-            if (!selectedFiles.find(x => x.name === f.name && x.size === f.size)) selectedFiles.push(f);
+            const key = f.name + '|' + f.size;
+            if (!seen.has(key)) { seen.add(key); selectedFiles.push(f); }
         });
         renderPreviews();
         syncFileInput();
     }
 
+    const MAX_PREVIEWS = 60;   // only show first 60 thumbnails (browser stays fast with 1000s of photos)
+    let previewUrls = [];
+
     function renderPreviews() {
+        previewUrls.forEach(u => URL.revokeObjectURL(u));
+        previewUrls = [];
         previewGrid.innerHTML = '';
-        selectedFiles.forEach((file, idx) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const item = document.createElement('div');
-                item.className = 'preview-item';
-                item.innerHTML = `<img src="${e.target.result}" alt="${file.name}">
-                    <button type="button" class="remove-btn" data-idx="${idx}">✕</button>
-                    <div class="file-name">${file.name}</div>`;
-                previewGrid.appendChild(item);
-            };
-            reader.readAsDataURL(file);
+        selectedFiles.slice(0, MAX_PREVIEWS).forEach((file, idx) => {
+            const url = URL.createObjectURL(file);
+            previewUrls.push(url);
+            const item = document.createElement('div');
+            item.className = 'preview-item';
+            item.innerHTML = `<img src="${url}" alt="">
+                <button type="button" class="remove-btn" data-idx="${idx}">✕</button>
+                <div class="file-name"></div>`;
+            item.querySelector('img').alt = file.name;
+            item.querySelector('.file-name').textContent = file.name;
+            previewGrid.appendChild(item);
         });
         const count = selectedFiles.length;
         previewBar.style.display = count > 0 ? 'flex' : 'none';
-        if (count > 0) countText.textContent = `${count} photo${count > 1 ? 's' : ''} selected`;
+        if (count > 0) {
+            countText.textContent = `${count} photo${count > 1 ? 's' : ''} selected`
+                + (count > MAX_PREVIEWS ? ` (showing first ${MAX_PREVIEWS})` : '');
+        }
         submitBtn.disabled = count === 0;
     }
 
@@ -664,14 +790,78 @@
     });
 
     function syncFileInput() {
-        const dt = new DataTransfer();
-        selectedFiles.forEach(f => dt.items.add(f));
-        fileInput.files = dt.files;
+        // Upload is done in batches with fetch(), so the file input does not need to hold
+        // the files. Just reset it (keeps the page fast with thousands of photos).
+        fileInput.value = '';
     }
 
-    uploadForm.addEventListener('submit', () => {
+    // ── Upload in small batches (15 photos / 60 MB at a time) so 1000s of photos work ──
+    const BATCH_FILES = 15;
+    const BATCH_BYTES = 60 * 1024 * 1024;
+
+    uploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!selectedFiles.length) return;
+
+        const bar  = document.getElementById('progressBar');
+        const txt  = document.getElementById('progressText');
+        const clientId   = uploadForm.querySelector('[name=clientId]').value;
+        const albumTitle = document.getElementById('albumTitle').value;
+        const csrfEl     = uploadForm.querySelector('input[type=hidden]:not([name=clientId])');
+
         submitBtn.disabled = true;
+        clearBtn.disabled  = true;
         progressWrap.style.display = 'block';
+        bar.style.width = '0%';
+
+        // split into batches
+        const batches = [];
+        let cur = [], curBytes = 0;
+        for (const f of selectedFiles) {
+            if (cur.length && (cur.length >= BATCH_FILES || curBytes + f.size > BATCH_BYTES)) {
+                batches.push(cur); cur = []; curBytes = 0;
+            }
+            cur.push(f); curBytes += f.size;
+        }
+        if (cur.length) batches.push(cur);
+
+        const total = selectedFiles.length;
+        let done = 0;
+        const failed = [];
+
+        for (const batch of batches) {
+            let ok = false;
+            for (let attempt = 1; attempt <= 3 && !ok; attempt++) {
+                try {
+                    const fd = new FormData();
+                    fd.append('clientId', clientId);
+                    fd.append('albumTitle', albumTitle);
+                    if (csrfEl && csrfEl.name) fd.append(csrfEl.name, csrfEl.value);
+                    batch.forEach(f => fd.append('files', f));
+                    // redirect:'manual' -> do not download the big client page after every batch
+                    const res = await fetch(uploadForm.action, {
+                        method: 'POST', body: fd, credentials: 'same-origin', redirect: 'manual'
+                    });
+                    ok = res.type === 'opaqueredirect' || res.ok;
+                } catch (err) { ok = false; }
+                if (!ok) await new Promise(r => setTimeout(r, 1500));
+            }
+            if (ok) done += batch.length; else failed.push(...batch);
+            bar.style.width = Math.round(((done + failed.length) / total) * 100) + '%';
+            txt.textContent = `Uploaded ${done} of ${total} photos…` +
+                (failed.length ? ` (${failed.length} failed)` : '');
+        }
+
+        if (!failed.length) {
+            txt.textContent = `All ${total} photos uploaded. Opening client…`;
+            window.location.href = '/clients/' + clientId;
+        } else {
+            selectedFiles = failed;
+            renderPreviews(); syncFileInput();
+            txt.textContent = `${done} uploaded. ${failed.length} failed - click "Upload Photos" to retry only the failed ones.`;
+            submitBtn.disabled = false;
+            clearBtn.disabled  = false;
+        }
     });
 
     function toggleSidebar() {
@@ -679,6 +869,32 @@
         document.getElementById('overlay').classList.toggle('open');
     }
 </script>
+
+
+<nav class="bottom-nav">
+    <ul>
+        <li><a href="/"><i class="ti ti-home"></i><span>Home</span></a></li>
+        <li><a href="/work"><i class="ti ti-video"></i><span>Work</span></a></li>
+        <li><a href="/select"><i class="ti ti-photo"></i><span>Select</span></a></li>
+        <li><a href="/packages-page"><i class="ti ti-diamond"></i><span>Packages</span></a></li>
+        <li><a href="/contact"><i class="ti ti-phone"></i><span>Contact</span></a></li>
+    </ul>
+</nav>
+
 <script src="/js/constants.js"></script>
+
+<!-- Floating Instagram -->
+<style>
+body .floating-social { position: fixed; right: 18px; bottom: 90px; display: flex; flex-direction: column; gap: 12px; z-index: 999; }
+body .floating-social a { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,.25); transition: transform .25s ease, box-shadow .25s ease; }
+body .floating-social a:hover { transform: scale(1.1); box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+body .floating-social .whatsapp-btn { background: #000000; }
+body .floating-social .instagram-btn { background: #e91e63; }
+@media (min-width: 768px) { body .floating-social { bottom: 100px; right: 30px; } }
+</style>
+<div class="floating-social">
+    <a href="https://www.instagram.com/saaraphotography05" target="_blank" rel="noopener" class="instagram-btn" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
+</div>
+
 </body>
 </html>
