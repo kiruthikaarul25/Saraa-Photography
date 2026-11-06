@@ -1,0 +1,28 @@
+Saara Photography - Owner Approval Changes
+
+Copy the files under Dream_Gallery_Shop/ into the matching paths in your existing project, replacing those files. This ZIP contains only changed/new files.
+
+Features:
+- Signup creates a pending approval request; Owner account is created only after approval.
+- Profile page includes password change request; the old password remains active until approval.
+- Owner Gmail: kiruthikaarul25@gmail.com
+- Approval links expire after 30 minutes and are single-use. The email link opens a review page; Approve or Reject requires a button press.
+- Passwords are BCrypt-hashed before being stored in the pending approval table; raw passwords are not emailed or stored.
+
+Eclipse Run Configuration > Environment variables:
+MAIL_USERNAME=your-sending-gmail@gmail.com
+MAIL_APP_PASSWORD=your-16-character-Google-App-Password
+APP_BASE_URL=http://localhost:8765
+
+MAIL_USERNAME must be the Gmail account used to send mail. MAIL_APP_PASSWORD must be a Google App Password, not the normal Gmail password. Never share it.
+
+For a deployed website, change APP_BASE_URL to the public HTTPS website URL (for example https://your-domain.com), otherwise approval links in Gmail will point to localhost.
+
+After copying files:
+1. Gradle > Refresh Gradle Project.
+2. Run the application. Hibernate ddl-auto=update creates the pending_approvals table.
+3. Test signup. Confirm that no Owner row is created before approval.
+4. Approve/reject from the Gmail link.
+5. Test password change from Owner Profile.
+
+Note: This environment did not have Gradle installed, so a local compile/test could not be run here. Run `gradlew.bat clean build` in Eclipse/Windows after copying, and share any remaining error log if one appears.

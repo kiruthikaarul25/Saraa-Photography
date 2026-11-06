@@ -594,11 +594,11 @@ html body{animation:gtPage 1.2s ease both}
 
             <form th:action="@{/login}" method="post" autocomplete="on">
                 <div class="field">
-                    <label for="username">Email / Username</label>
+                    <label for="username">Username</label>
                     <div class="input-wrap">
                         <i class="ti ti-mail"></i>
                         <input type="text" id="username" name="username"
-                               placeholder="Enter admin email" autocomplete="username" required>
+                               placeholder="Enter username" autocomplete="username" required>
                     </div>
                 </div>
 
@@ -620,6 +620,10 @@ html body{animation:gtPage 1.2s ease both}
             </form>
 
             <div class="back-link">
+                <a href="/register"><i class="ti ti-user-plus"></i> New admin? </a>
+            </div>
+
+            <div class="back-link" style="margin-top:10px">
                 <a href="/"><i class="ti ti-arrow-left"></i> Back to Website</a>
             </div>
         </div>

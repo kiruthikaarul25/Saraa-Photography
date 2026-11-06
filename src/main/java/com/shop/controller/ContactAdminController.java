@@ -1,4 +1,3 @@
-
 package com.shop.controller;
 
 import com.shop.repository.ContactMessageRepository;
@@ -28,7 +27,7 @@ public class ContactAdminController {
     }
 
     @PostMapping("/contact-enquiries/delete/{id}")
-    public String deleteContact(@PathVariable Long id) {
+    public String deleteContact(@PathVariable("id") Long id) {
         if (repository.existsById(id)) {
             repository.deleteById(id);
         }
