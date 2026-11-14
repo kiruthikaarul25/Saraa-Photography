@@ -194,6 +194,30 @@ html body .ss-nav::before{content:"";position:absolute;inset:0;z-index:-1;pointe
  border-bottom:1px solid rgba(255,255,255,.07);transition:background .3s}
 html[data-theme="light"] body .ss-nav::before{background:rgba(255,255,255,.34);border-bottom:1px solid rgba(255,61,139,.12)}
 </style>
+<style id="qt-anim">
+/* ===== 3rd section: blurred photo background + extra animation ===== */
+.qt-bg{position:absolute;inset:-6%;z-index:0;pointer-events:none;will-change:transform}
+.qt-bg i{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;
+ -webkit-filter:blur(16px) saturate(1.15);filter:blur(16px) saturate(1.15);animation:qtFade 21s ease-in-out infinite}
+.qt-bg i:nth-child(1){background-image:url(/images/saara-03.jpg)}
+.qt-bg i:nth-child(2){background-image:url(/images/saara-09.jpg);animation-delay:7s}
+.qt-bg i:nth-child(3){background-image:url(/images/saara-14.jpg);animation-delay:14s}
+@keyframes qtFade{0%{opacity:0;transform:scale(1)}12%{opacity:1}33%{opacity:1}45%{opacity:0;transform:scale(1.12)}100%{opacity:0;transform:scale(1.12)}}
+.qt-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,4,10,.78),rgba(7,4,10,.58) 50%,rgba(7,4,10,.80))}
+html[data-theme="light"] .qt-bg::after{background:linear-gradient(180deg,rgba(255,244,249,.80),rgba(255,244,249,.60) 50%,rgba(255,244,249,.82))}
+.qt-orb{position:absolute;z-index:1;border-radius:50%;pointer-events:none;filter:blur(46px);opacity:.55;will-change:transform}
+.qt-orb.a{width:34vmax;height:34vmax;left:-8%;top:-10%;background:rgba(255,79,154,.30);animation:qtDrift1 16s ease-in-out infinite alternate}
+.qt-orb.b{width:28vmax;height:28vmax;right:-6%;bottom:-8%;background:rgba(255,140,190,.26);animation:qtDrift2 19s ease-in-out infinite alternate}
+.qt-orb.c{width:18vmax;height:18vmax;left:42%;top:52%;background:rgba(190,60,140,.24);animation:qtDrift1 13s ease-in-out infinite alternate-reverse}
+@keyframes qtDrift1{to{transform:translate3d(9vw,7vh,0) scale(1.18)}}
+@keyframes qtDrift2{to{transform:translate3d(-8vw,-9vh,0) scale(1.22)}}
+.qt-dot{position:absolute;z-index:1;bottom:-12px;width:4px;height:4px;border-radius:50%;background:rgba(255,160,205,.85);box-shadow:0 0 10px 2px rgba(255,100,170,.55);pointer-events:none;opacity:0;animation:qtUp linear infinite}
+@keyframes qtUp{0%{transform:translate3d(0,0,0) scale(.6);opacity:0}12%{opacity:.9}100%{transform:translate3d(var(--dx,20px),-105vh,0) scale(1.2);opacity:0}}
+.qt-w:not(.lit) .ln.p{animation:qtGlowP 4.5s ease-in-out infinite}
+@keyframes qtGlowP{0%,100%{text-shadow:0 0 0 rgba(255,79,154,0)}50%{text-shadow:0 0 30px rgba(255,79,154,.55)}}
+.qt-w .lt>span{display:inline-block;will-change:transform,filter,opacity}
+@media(prefers-reduced-motion:reduce){.qt-bg i,.qt-orb,.qt-dot,.qt-w .ln.p{animation:none!important}.qt-bg i:first-child{opacity:1}}
+</style>
 
 </head><body>
 
@@ -234,6 +258,8 @@ html[data-theme="light"] body .ss-nav::before{background:rgba(255,255,255,.34);b
 
 <section class="qt" id="qt" aria-label="Saara Photography">
  <div class="qt-st" id="qtSt">
+  <div class="qt-bg" id="qtBg" aria-hidden="true"><i></i><i></i><i></i></div>
+  <span class="qt-orb a" aria-hidden="true"></span><span class="qt-orb b" aria-hidden="true"></span><span class="qt-orb c" aria-hidden="true"></span>
   <div class="qt-glow" id="qtGlow"></div>
   <div class="qt-wrap" id="qtWrap">
    <h2 class="qt-w" id="qtW" aria-label="Saara Photography"><span class="ln" data-t="Saara"></span><span class="ln p" data-t="Photography"></span></h2>
@@ -339,8 +365,9 @@ let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(Mat
 </script>
 <script>
 (function(){
- const sec=document.getElementById('qt'),st=document.getElementById('qtSt'),wrap=document.getElementById('qtWrap'),lit=document.getElementById('qtL'),glow=document.getElementById('qtGlow');
+ const sec=document.getElementById('qt'),st=document.getElementById('qtSt'),wrap=document.getElementById('qtWrap'),lit=document.getElementById('qtL'),glow=document.getElementById('qtGlow'),bg=document.getElementById('qtBg');
  const A=[];
+ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){for(let d=0;d<16;d++){const s=document.createElement('span');s.className='qt-dot';s.style.left=(Math.random()*100)+'%';s.style.setProperty('--dx',((Math.random()-.5)*90)+'px');s.style.animationDuration=(9+Math.random()*10)+'s';s.style.animationDelay=(-Math.random()*16)+'s';s.style.transform='scale('+(.6+Math.random())+')';st.appendChild(s)}}
  [document.getElementById('qtW'),lit].forEach(root=>{root.querySelectorAll('.ln').forEach(l=>{[...l.dataset.t].forEach(ch=>{const o=document.createElement('span');o.className='lt';const i=document.createElement('span');i.textContent=ch;o.appendChild(i);l.appendChild(o);A.push(i)})})});
  const per=A.length/2;
  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -351,7 +378,8 @@ let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(Mat
   requestAnimationFrame(tick);
   cur+=(p()-cur)*(reduce?1:.12);
   const n=per;
-  A.forEach((el,k)=>{const i=k%n;const a=Math.min(Math.max((cur-i/n*.5)/.28,0),1);el.style.transform='translateY('+(115*(1-ease(a)))+'%)'});
+  A.forEach((el,k)=>{const i=k%n;const a=Math.min(Math.max((cur-i/n*.5)/.28,0),1),e=ease(a);const w=reduce?0:Math.sin(now*.0022+k*.55)*3.5*e;el.style.transform='translateY('+(115*(1-e))+'%) translateY('+w.toFixed(2)+'px)';const b=(1-e)*12;el.style.filter=b>.1?'blur('+b.toFixed(1)+'px)':'none';el.style.opacity=(.15+.85*e).toFixed(3)});
+  bg.style.transform='translate3d(0,'+((.5-cur)*70).toFixed(1)+'px,0) scale('+(1.08+cur*.1).toFixed(3)+')';
   const wr=wrap.getBoundingClientRect(),on=Math.min(1,Math.max(0,(cur-.35)/.3));
   if(!reduce&&now-last>2500){tx=innerWidth*(.5+.36*Math.sin(now*.0006));ty=wr.top+wr.height*(.5+.3*Math.sin(now*.0009+1))}
   if(reduce){tx=innerWidth/2;ty=wr.top+wr.height/2}

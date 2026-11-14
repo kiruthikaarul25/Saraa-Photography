@@ -44,7 +44,15 @@ public class IndexController {
     }
 
     @GetMapping("/select")
-    public String select() {
+    public String select(Model model, jakarta.servlet.http.HttpServletRequest request) {
+        org.springframework.security.core.Authentication a =
+            org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        boolean adminIn = a != null && a.isAuthenticated()
+            && !(a instanceof org.springframework.security.authentication.AnonymousAuthenticationToken);
+        jakarta.servlet.http.HttpSession hs = request.getSession(false);
+        boolean clientIn = hs != null && hs.getAttribute("clientId") != null;
+        model.addAttribute("adminIn", adminIn);
+        model.addAttribute("clientIn", clientIn);
         return "select";
     }
 
