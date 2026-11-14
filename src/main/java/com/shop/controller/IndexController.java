@@ -33,18 +33,14 @@ public class IndexController {
 
     @GetMapping("/work")
     public String work(Model model) {
-        model.addAttribute("preWedding",
-                homePhotoService.findByCategory("PRE_WEDDING"));
-
-        model.addAttribute("wedding",
-                homePhotoService.findByCategory("WEDDING"));
-
+        java.util.List<com.shop.model.TopicSection> sections = new java.util.ArrayList<>();
+        for (com.shop.model.HomeCategory c : homePhotoService.categories()) {
+            java.util.List<com.shop.model.PhotoGroup> groups = homePhotoService.findGroups(c.getCode());
+            if (groups.isEmpty()) continue;          // photos illatha topic public page-la kaatta vendaam
+            sections.add(new com.shop.model.TopicSection(c.getCode(), c.getLabel(), groups));
+        }
+        model.addAttribute("sections", sections);
         return "work";
-    }
-
-    @GetMapping("/packages-page")
-    public String packages() {
-        return "packages-public";
     }
 
     @GetMapping("/select")
@@ -55,26 +51,21 @@ public class IndexController {
     // Contact Page - Admin Profile Details
     @GetMapping("/contact")
     public String contact(Model model) {
-
-        Owner owner = ownerService.getAll()
-                .stream()
-                .findFirst()
-                .orElse(null);
-
-        model.addAttribute("owner", owner);
-
+        model.addAttribute("owner", latestOwner());
+        model.addAttribute("categories", homePhotoService.categories());
         return "contact";
     }
 
     // Booking enquiry form submit
+    // email + message are optional: the booking form only sends name, phone, eventType, bookingDate
     @PostMapping("/contact")
     public String submitContact(@RequestParam(name = "name") String name,
                                 @RequestParam(name = "phone") String phone,
-                                @RequestParam(name = "email") String email,
+                                @RequestParam(name = "email", required = false, defaultValue = "") String email,
                                 @RequestParam(name = "eventType") String eventType,
                                 @RequestParam(name = "bookingDate") String bookingDate,
                                 @RequestParam(name = "subject", required = false) String subject,
-                                @RequestParam(name = "message") String message,
+                                @RequestParam(name = "message", required = false, defaultValue = "") String message,
                                 Model model) {
         try {
             ContactMessage m = new ContactMessage();
@@ -82,19 +73,25 @@ public class IndexController {
             m.setPhone(phone);
             m.setEmail(email);
             m.setSubject((subject == null || subject.isBlank()) ? eventType : subject);
-            m.setMessage("Event: " + eventType + "\nDate: " + bookingDate + "\n\n" + message);
+            m.setMessage("Event: " + eventType + "\nDate: " + bookingDate
+                    + (message.isBlank() ? "" : "\n\n" + message));
             contactMessageRepository.save(m);
             model.addAttribute("successMessage", "Thank you! We will contact you soon.");
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Something went wrong. Please try again.");
         }
 
-        Owner owner = ownerService.getAll()
-                .stream()
-                .findFirst()
-                .orElse(null);
-        model.addAttribute("owner", owner);
-
+        model.addAttribute("owner", latestOwner());
+        model.addAttribute("categories", homePhotoService.categories());
         return "contact";
+    }
+
+    // show the owner whose Profile was saved most recently (falls back to the first owner)
+    private Owner latestOwner() {
+        java.util.List<Owner> owners = ownerService.getAll();
+        return owners.stream()
+                .filter(o -> o.getUpdatedAt() != null)
+                .max(java.util.Comparator.comparing(Owner::getUpdatedAt))
+                .orElse(owners.isEmpty() ? null : owners.get(0));
     }
 }

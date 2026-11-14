@@ -9,4 +9,5 @@ public interface PackageRepository
 
     List<Package> findByOwnerIdAndIsActiveTrue(int ownerId);
     List<Package> findByOwnerId(int ownerId);
+    List<Package> findByIsActiveTrueOrderByIdAsc();
 }

@@ -50,9 +50,9 @@ public class PackageApiController {
 
     @GetMapping
     public List<Map<String, Object>> list() {
+        // every active package, whichever admin added it
         List<Map<String, Object>> out = new ArrayList<>();
-        ownerService.getAll().stream().findFirst().ifPresent(o ->
-            packageService.getPackagesByOwner(o.getId()).forEach(p -> out.add(toMap(p))));
+        packageService.getAllActive().forEach(p -> out.add(toMap(p)));
         return out;
     }
 

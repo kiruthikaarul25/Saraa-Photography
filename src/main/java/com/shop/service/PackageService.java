@@ -31,6 +31,11 @@ public class PackageService {
             .findByOwnerIdAndIsActiveTrue(ownerId);
     }
 
+    // ─── All active packages (public page) ──────────
+    public List<Package> getAllActive() {
+        return packageRepository.findByIsActiveTrueOrderByIdAsc();
+    }
+
     // ─── All Packages (including inactive) ──────────
     public List<Package> getAllByOwner(int ownerId) {
         return packageRepository.findByOwnerId(ownerId);

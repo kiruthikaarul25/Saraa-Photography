@@ -31,80 +31,62 @@ public class GalleryController {
     @Autowired private PackageService packageService;
     @Autowired private WatermarkService watermarkService;
 
+    // Old URL -> same Select page (client side)
     @GetMapping("/client/login")
-    public String clientLoginPage(Model model) {
-        return "client/login";
+    public String clientLoginPage() {
+        return "redirect:/select#client";
     }
 
+    // Client login from the Select page (fetch) -> JSON
     @PostMapping("/client/login")
-    public String clientLoginSubmit(
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> clientLoginSubmit(
             @RequestParam("username") String username,
             @RequestParam("password") String password,
-            HttpSession session,
-            Model model) {
+            HttpSession session) {
 
-        return clientService.findByToken(username)
-            .map(client -> {
-                if (client.getAccessPassword() != null
-                        && client.getAccessPassword().equals(password)) {
-                    session.setAttribute("clientId", client.getId());
-                    clientService.updateStatus(client.getId(), "active");
-                    return "redirect:/gallery/view";
-                } else {
-                    model.addAttribute("error", "Invalid username or password!");
-                    return "client/login";
-                }
-            })
-            .orElseGet(() -> {
-                model.addAttribute("error", "Invalid username or password!");
-                return "client/login";
-            });
+        Map<String, Object> res = new LinkedHashMap<>();
+        String loginName = username.trim();
+
+        // admin usernames (niki / admin) must never open a client gallery
+        if (loginName.equalsIgnoreCase("niki") || loginName.equalsIgnoreCase("admin")) {
+            res.put("success", false);
+            res.put("message", "Invalid username or password!");
+            return ResponseEntity.status(401).body(res);
+        }
+
+        Optional<Client> found = clientService.findByToken(loginName);
+
+        if (found.isPresent()
+                && found.get().getAccessPassword() != null
+                && found.get().getAccessPassword().equals(password)) {
+            Client client = found.get();
+            session.setAttribute("clientId", client.getId());
+            clientService.updateStatus(client.getId(), "active");
+            res.put("success", true);
+            res.put("redirect", "/gallery/view");
+            return ResponseEntity.ok(res);
+        }
+
+        res.put("success", false);
+        res.put("message", "Invalid username or password!");
+        return ResponseEntity.status(401).body(res);
     }
 
+    // Personal link sent to the client (WhatsApp) -> Select page with username filled in
     @GetMapping("/gallery/{token}")
-    public String clientTokenLogin(
-            @PathVariable("token") String token,
-            HttpSession session,
-            Model model) {
+    public String clientTokenLogin(@PathVariable("token") String token) {
         return clientService.findByToken(token)
-            .map(client -> {
-                model.addAttribute("token", token);
-                model.addAttribute("coupleName", client.getCoupleName());
-                return "client/login";
-            })
-            .orElseGet(() -> "error/invalid-link");
-    }
-
-    @PostMapping("/gallery/login")
-    public String galleryLoginSubmit(
-            @RequestParam("token") String token,
-            @RequestParam("username") String username,
-            @RequestParam("password") String password,
-            HttpSession session,
-            Model model) {
-
-        return clientService.findByToken(token)
-            .map(client -> {
-                if (client.getAccessToken().equals(username)
-                        && client.getAccessPassword() != null
-                        && client.getAccessPassword().equals(password)) {
-                    session.setAttribute("clientId", client.getId());
-                    clientService.updateStatus(client.getId(), "active");
-                    return "redirect:/gallery/view";
-                } else {
-                    model.addAttribute("token", token);
-                    model.addAttribute("coupleName", client.getCoupleName());
-                    model.addAttribute("error", "Invalid username or password!");
-                    return "client/login";
-                }
-            })
-            .orElseGet(() -> "error/invalid-link");
+            .map(client -> "redirect:/select?u="
+                + java.net.URLEncoder.encode(token, java.nio.charset.StandardCharsets.UTF_8)
+                + "#client")
+            .orElse("error/invalid-link");
     }
 
     @GetMapping("/gallery/view")
     public String viewGallery(HttpSession session, Model model) {
         Integer clientId = (Integer) session.getAttribute("clientId");
-        if (clientId == null) return "redirect:/client/login";
+        if (clientId == null) return "redirect:/select#client";
 
         Client client = clientService.getById(clientId).orElseThrow();
         List<Album> albums = albumService.getAlbumsByClient(clientId);
@@ -210,7 +192,7 @@ public class GalleryController {
     @PostMapping("/gallery/submit")
     public String submitSelections(HttpSession session) {
         Integer clientId = (Integer) session.getAttribute("clientId");
-        if (clientId == null) return "redirect:/client/login";
+        if (clientId == null) return "redirect:/select#client";
 
         clientService.updateStatus(clientId, "selecting");
         // PRG Pattern: redirect after POST so Back button works cleanly
@@ -220,7 +202,7 @@ public class GalleryController {
     @GetMapping("/gallery/submitted")
     public String submittedPage(HttpSession session, Model model) {
         Integer clientId = (Integer) session.getAttribute("clientId");
-        if (clientId == null) return "redirect:/client/login";
+        if (clientId == null) return "redirect:/select#client";
 
         var selections = selectionService.getSelectionsByClient(clientId);
         model.addAttribute("selections", selections);

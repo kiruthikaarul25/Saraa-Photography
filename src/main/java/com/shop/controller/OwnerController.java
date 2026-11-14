@@ -29,12 +29,6 @@ public class OwnerController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // Dashboard
-    @GetMapping("/dashboard")
-    public String dashboard() {
-        return "redirect:/clients";
-    }
-
     // Profile Page
     @GetMapping("/owner/profile")
     public String profilePage(Authentication auth, Model model) {
@@ -57,6 +51,10 @@ public class OwnerController {
 
         owner.setId(existing.getId());
         owner.setPasswordHash(existing.getPasswordHash());
+        owner.setEmail(existing.getEmail());            // email is read-only on the form
+        owner.setLogoUrl(existing.getLogoUrl());        // not in the form - don't wipe it
+        owner.setCreatedAt(existing.getCreatedAt());    // not in the form - don't reset it
+        owner.setUpdatedAt(java.time.LocalDateTime.now());
 
         ownerService.update(owner);
 

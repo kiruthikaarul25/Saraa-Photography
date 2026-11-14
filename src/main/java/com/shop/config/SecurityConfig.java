@@ -1,5 +1,7 @@
-
 package com.shop.config;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,12 +19,28 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
+
+    /** The select page sends this header with every fetch() call. */
+    private static boolean isAjax(HttpServletRequest request) {
+        return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+    }
+
+    private static void writeJson(HttpServletResponse response, int status, String json)
+            throws IOException {
+        response.setStatus(status);
+        response.setContentType("application/json");
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        response.getWriter().write(json);
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)
@@ -48,6 +66,7 @@ public class SecurityConfig {
                     "/packages-page",
                     "/login",
                     "/register",
+                    "/forgot",              // admin "new password" request (needs owner approval by mail)
                     "/client/login",
                     "/gallery/**",
                     "/css/**",
@@ -68,21 +87,47 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
 
-            // Login Configuration
+            // Not logged in -> go to the Select page, Admin side
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint((request, response, authException) -> {
+                    if (isAjax(request)) {
+                        writeJson(response, 401,
+                            "{\"success\":false,\"message\":\"Please login again.\"}");
+                    } else {
+                        response.sendRedirect("/select#admin");
+                    }
+                })
+            )
+
+            // Login Configuration (form is on /select, answered with JSON for fetch())
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/clients", true)
-                .failureUrl("/login?error=true")
+                .successHandler((request, response, authentication) -> {
+                    if (isAjax(request)) {
+                        writeJson(response, 200,
+                            "{\"success\":true,\"redirect\":\"/clients\"}");
+                    } else {
+                        response.sendRedirect("/clients");
+                    }
+                })
+                .failureHandler((request, response, exception) -> {
+                    if (isAjax(request)) {
+                        writeJson(response, 401,
+                            "{\"success\":false,\"message\":\"Invalid username or password!\"}");
+                    } else {
+                        response.sendRedirect("/select#admin");
+                    }
+                })
                 .permitAll()
             )
 
             // Logout Configuration
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
+                .logoutSuccessUrl("/select#admin")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .permitAll()

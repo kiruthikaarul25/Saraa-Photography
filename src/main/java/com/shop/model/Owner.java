@@ -32,6 +32,10 @@ public class Owner {
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    // set every time the owner saves the Profile page (Contact page shows the latest one)
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     // ─── Constructors ───────────────────────────────
     public Owner() {}
 
@@ -57,6 +61,7 @@ public class Owner {
     public String getPhone()            { return phone; }
     public String getLogoUrl()          { return logoUrl; }
     public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
 
     // ─── Setters ────────────────────────────────────
     public void setId(int id)                        { this.id = id; }
@@ -67,6 +72,7 @@ public class Owner {
     public void setPhone(String phone)               { this.phone = phone; }
     public void setLogoUrl(String logoUrl)           { this.logoUrl = logoUrl; }
     public void setCreatedAt(LocalDateTime createdAt){ this.createdAt = createdAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt){ this.updatedAt = updatedAt; }
 
     // ─── Builder ────────────────────────────────────
     public static Builder builder() { return new Builder(); }
