@@ -538,5 +538,26 @@ document.addEventListener('contextmenu',function(e){
 })();
 </script>
 <script src="/js/saara-nav.js"></script>
+<script>
+/* Auto-close mobile menu / admin sidebar when the page is scrolled or tapped outside */
+(function(){
+  var links=document.getElementById('ssLinks'),burger=document.getElementById('ssBurger'),
+      side=document.getElementById('sidebar'),ov=document.getElementById('overlay');
+  function isOpen(){return (links&&links.classList.contains('open'))||(side&&side.classList.contains('open'));}
+  function closeAll(){
+    if(links&&links.classList.contains('open')){links.classList.remove('open');if(burger)burger.setAttribute('aria-expanded','false');}
+    if(side&&side.classList.contains('open')){side.classList.remove('open');if(ov)ov.classList.remove('show');}
+  }
+  function inside(t){return t&&t.closest&&(t.closest('#ssLinks')||t.closest('#ssBurger')||t.closest('#sidebar')||t.closest('.hamburger'));}
+  var y0=0;
+  function onScroll(e){if(isOpen()&&!inside(e.target)){var y=window.pageYOffset||0;if(Math.abs(y-y0)>4||e.target!==document)closeAll();}}
+  window.addEventListener('scroll',onScroll,true);
+  window.addEventListener('wheel',function(e){if(isOpen()&&!inside(e.target))closeAll();},{passive:true});
+  window.addEventListener('touchstart',function(e){y0=window.pageYOffset||0;if(isOpen()&&!inside(e.target)&&!(ov&&e.target===ov))closeAll();},{passive:true});
+  window.addEventListener('touchmove',function(e){if(isOpen()&&!inside(e.target))closeAll();},{passive:true});
+  document.addEventListener('click',function(e){if(isOpen()&&!inside(e.target))closeAll();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAll();});
+})();
+</script>
 </body>
 </html>

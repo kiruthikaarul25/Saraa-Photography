@@ -449,6 +449,12 @@ html body .ss-nav::before{content:"";position:absolute;inset:0;z-index:-1;pointe
 html[data-theme="light"] body .ss-nav::before{background:rgba(255,255,255,.34);border-bottom:1px solid rgba(255,61,139,.12)}
 </style>
 
+<style id="sb-hb-fix">
+/* mobile: keep the SAARA brand/icon below the ☰ button so it is not hidden */
+@media (max-width: 768px) {
+  html body .sidebar { padding-top: 64px; }
+}
+</style>
 </head>
 <body>
 
@@ -587,7 +593,6 @@ function toggleSidebar() {
     var p = location.pathname.replace(/\/+$/, '') || '/';
     if (l) l.querySelectorAll('a').forEach(function (a) { if (a.getAttribute('href') === p) a.classList.add('on'); });
 
-    });
     document.addEventListener('keydown', function (e) {
         var sb = document.getElementById('sidebar');
         if (e.key === 'Escape' && sb && sb.classList.contains('open')) toggleSidebar();
@@ -647,5 +652,28 @@ function toggleSidebar() {
     }
 </script>
 <script src="/js/saara-nav.js"></script>
+<script>
+/* Auto-close mobile menu / admin sidebar when the page is scrolled or tapped outside */
+(function(){
+  var links=document.getElementById('ssLinks'),burger=document.getElementById('ssBurger'),
+      side=document.getElementById('sidebar'),ov=document.getElementById('overlay');
+  var openedAt=0,openY=0,wasOpen=false;
+  function isOpen(){return (links&&links.classList.contains('open'))||(side&&side.classList.contains('open'));}
+  function closeAll(){
+    if(links&&links.classList.contains('open')){links.classList.remove('open');if(burger)burger.setAttribute('aria-expanded','false');}
+    if(side&&side.classList.contains('open')){side.classList.remove('open');if(ov)ov.classList.remove('show');}
+  }
+  function inside(t){var el=t&&(t.nodeType===1?t:t.parentElement);return !!(el&&el.closest&&el.closest('#ssLinks,#ssBurger,#sidebar,.hamburger'));}
+  function sync(){var o=isOpen();if(o&&!wasOpen){openedAt=Date.now();openY=window.pageYOffset||0;}wasOpen=o;}
+  if(window.MutationObserver){var mo=new MutationObserver(sync);[links,side].forEach(function(n){if(n)mo.observe(n,{attributes:true,attributeFilter:['class']});});}
+  /* ignore everything for 600ms after opening so the opening tap can never close it */
+  function settled(){return isOpen()&&Date.now()-openedAt>600;}
+  window.addEventListener('scroll',function(e){if(e.target!==document)return;if(settled()&&Math.abs((window.pageYOffset||0)-openY)>12)closeAll();},true);
+  window.addEventListener('wheel',function(e){if(settled()&&!inside(e.target))closeAll();},{passive:true});
+  window.addEventListener('touchmove',function(e){if(settled()&&!inside(e.target))closeAll();},{passive:true});
+  document.addEventListener('click',function(e){if(settled()&&!inside(e.target))closeAll();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAll();});
+})();
+</script>
 </body>
 </html>
