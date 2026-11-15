@@ -166,6 +166,14 @@ body{font-family:'Poppins','DM Sans',system-ui,sans-serif;color:var(--k-text);mi
 .msg{min-height:18px;margin:-6px 0 12px;font-size:12px;line-height:1.5;color:#ff5b7f}
 .msg.ok{color:#1fb36b}
 
+.who{display:flex;align-items:center;gap:12px;padding:14px 16px;margin-bottom:20px;border-radius:var(--k-r);background:var(--k-field);box-shadow:var(--k-in)}
+.who i{font-size:22px;color:var(--k-pink)}
+.who small{display:block;font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--k-sub)}
+.who b{display:block;font-size:14px;font-weight:600;color:var(--k-text);word-break:break-all}
+.go.ghost{margin-top:14px;color:var(--k-pink);background:var(--k-card);box-shadow:var(--k-outsm)}
+.go.ghost:hover{filter:none}
+.hint{margin-top:16px;font-size:12px;line-height:1.6;color:var(--k-sub)}
+
 /* MOBILE: blade slides top <-> bottom */
 @media(max-width:720px){
  .auth{height:820px;display:block}
@@ -223,6 +231,22 @@ html[data-theme="light"] body .ss-nav::before{background:rgba(255,255,255,.34);b
 <a class="ss-ig" href="https://www.instagram.com/saaraphotography05" target="_blank" rel="noopener" aria-label="Instagram">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/></svg>
 </a>
+<style id="ss-wa-css">
+/* floating WhatsApp button (sits under the Instagram button) */
+html body a.ss-wa{position:fixed!important;right:20px;bottom:calc(22px + env(safe-area-inset-bottom,0px));width:52px;height:52px;border-radius:20px;display:flex!important;align-items:center;justify-content:center;z-index:2147482000;text-decoration:none;color:#fff!important;background:linear-gradient(145deg,var(--k-pink2,#ff7ab3),var(--k-deep,#d92a76))!important;box-shadow:var(--k-btn,8px 8px 20px rgba(255,77,148,.32),inset -4px -4px 10px rgba(180,20,90,.55),inset 4px 4px 10px rgba(255,160,205,.55));transition:transform .2s;border:0!important;opacity:1!important}
+html body a.ss-wa svg{width:27px;height:27px}
+html body a.ss-wa:hover{transform:translateY(-3px)}
+html body a.ss-wa:active{transform:scale(.95)}
+html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
+@media(max-width:480px){html body a.ss-wa{right:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:48px;height:48px;border-radius:18px}html body a.ss-ig{bottom:calc(78px + env(safe-area-inset-bottom,0px))!important}}
+</style>
+<a class="ss-wa" href="https://wa.me/919786711698" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+
+
+<!-- who is already logged in on the server (filled by Thymeleaf) -->
+<div id="sessInfo" hidden
+     th:attr="data-admin=${adminIn},data-admin-name=${adminName},data-client=${clientIn},data-client-name=${clientName}"
+     data-admin="false" data-admin-name="" data-client="false" data-client-name=""></div>
 
 <div class="hero">
  <img src="/images/logo.png" alt="Saara Photography logo" onerror="this.remove()">
@@ -253,6 +277,14 @@ html[data-theme="light"] body .ss-nav::before{background:rgba(255,255,255,.34);b
 
  <!-- ADMIN : login / register -->
  <div class="pane admin" data-for="admin">
+
+  <div class="view view-continue" hidden>
+   <h3>Welcome back</h3>
+   <div class="who"><i class="ti ti-user-check"></i><div><small>Logged in as</small><b class="who-name"></b></div></div>
+   <button type="button" class="go" data-continue="/clients"><i class="ti ti-arrow-right"></i>Continue</button>
+   <button type="button" class="go ghost" data-newlogin="admin"><i class="ti ti-user-plus"></i>New login</button>
+   <p class="hint">Continue opens your admin panel with this same account. New login lets you sign in with a different username and password.</p>
+  </div>
 
   <form class="view view-login" action="/login" method="post">
    <h3>Admin login</h3>
@@ -297,6 +329,14 @@ html[data-theme="light"] body .ss-nav::before{background:rgba(255,255,255,.34);b
 
  <!-- CLIENT : login -->
  <div class="pane client" data-for="client">
+  <div class="view view-continue" hidden>
+   <h3>Welcome back</h3>
+   <div class="who"><i class="ti ti-heart"></i><div><small>Logged in as</small><b class="who-name"></b></div></div>
+   <button type="button" class="go" data-continue="/gallery/view"><i class="ti ti-arrow-right"></i>Continue</button>
+   <button type="button" class="go ghost" data-newlogin="client"><i class="ti ti-user-plus"></i>New login</button>
+   <p class="hint">Continue opens your gallery with this same login. New login lets you sign in with a different username and password.</p>
+  </div>
+
   <form class="view view-login" action="/client/login" method="post" autocomplete="off">
    <h3>Client login</h3>
    <div class="fld">
@@ -318,26 +358,52 @@ html[data-theme="light"] body .ss-nav::before{background:rgba(255,255,255,.34);b
 </div>
 
 
+<script src="/js/saara-nav.js"></script>
 <script>
 (function(){
 var $=function(i){return document.getElementById(i)};
+
+/* new visit (whole site was closed)? saara-nav.js is already clearing the old logins and reloading this page */
+if(window.SaaraVisit&&window.SaaraVisit.fresh)return;
+
+/* who is logged in right now (server) */
+var info=$('sessInfo').dataset,
+    state={admin:info.admin==='true',client:info.client==='true'},
+    names={admin:info.adminName||'',client:info.clientName||''};
+function defView(m){return state[m]?'continue':'login'}
+
 
 /* admin <-> client blade + views (login / register) */
 var auth=$('auth'),panes=[].slice.call(auth.querySelectorAll('.pane'));
 function clearMsgs(pane){pane.querySelectorAll('.msg').forEach(function(m){m.textContent='';m.className='msg'})}
 function showView(pane,v){
+ if(v==='continue'){var w=pane.querySelector('.who-name');if(w)w.textContent=names[pane.dataset.for]}
  pane.querySelectorAll('.view').forEach(function(f){f.hidden=!f.classList.contains('view-'+v)});
  clearMsgs(pane);
 }
-function setHash(m,v){try{history.replaceState(null,'',(m==='client')?'#client':(v&&v!=='login'?'#'+v:'#admin'))}catch(e){}}
+function setHash(m,v){try{history.replaceState(null,'',(m==='client')?'#client':(v&&v!=='login'&&v!=='continue'?'#'+v:'#admin'))}catch(e){}}
 function setMode(m,focus,view){
  auth.dataset.mode=m;
  panes.forEach(function(f){f.inert=(f.dataset.for!==m)});
- showView(auth.querySelector('.pane[data-for="'+m+'"]'),view||'login');
+ showView(auth.querySelector('.pane[data-for="'+m+'"]'),view||defView(m));
  setHash(m,view);
  if(focus)setTimeout(function(){var i=auth.querySelector('.pane[data-for="'+m+'"] .view:not([hidden]) input');if(i)i.focus({preventScroll:true})},1000);
 }
 auth.querySelectorAll('[data-go]').forEach(function(b){b.addEventListener('click',function(){setMode(b.dataset.go,true)})});
+auth.querySelectorAll('[data-continue]').forEach(function(b){b.addEventListener('click',function(){location.href=b.dataset.continue})});
+auth.querySelectorAll('[data-newlogin]').forEach(function(b){b.addEventListener('click',function(){
+ var role=b.dataset.newlogin,pane=b.closest('.pane');b.disabled=true;
+ fetch('/select/new-login',{method:'POST',credentials:'same-origin',
+  headers:{'Content-Type':'application/x-www-form-urlencoded','X-Requested-With':'XMLHttpRequest'},
+  body:'role='+encodeURIComponent(role)})
+ .catch(function(){})
+ .then(function(){
+  state[role]=false;b.disabled=false;
+  pane.querySelectorAll('form.view').forEach(function(f){f.reset()});
+  showView(pane,'login');setHash(role,'login');
+  var i=pane.querySelector('.view-login input');if(i)i.focus({preventScroll:true});
+ });
+})});
 auth.querySelectorAll('[data-view]').forEach(function(a){a.addEventListener('click',function(e){
  e.preventDefault();
  var pane=a.closest('.pane');showView(pane,a.dataset.view);setHash(pane.dataset.for,a.dataset.view);
@@ -348,12 +414,15 @@ auth.querySelectorAll('[data-view]').forEach(function(a){a.addEventListener('cli
 var h=location.hash.replace('#',''),qs=new URLSearchParams(location.search),cu=qs.get('u');
 if(h==='register'){setMode('admin',false,h)}
 else if(h==='admin'){setMode('admin',false)}
+else if(h==='client'){setMode('client',false)}
+else if(state.admin){setMode('admin',false)}      /* came back to Select while admin is logged in -> Continue / New login */
+else if(state.client){setMode('client',false)}    /* same for a logged-in client */
 else{setMode('client',false)}
 /* browsers may autofill the saved admin login (niki) into the client form: wipe it unless the person is typing */
 if(!cu){[300,1200].forEach(function(ms){setTimeout(function(){
  ['cUser','cPass'].forEach(function(id){var el=$(id);if(el&&document.activeElement!==el)el.value=''});
 },ms)})}
-if(cu){var cUser=$('cUser');cUser.value=cu;setMode('client',false);setTimeout(function(){$('cPass').focus({preventScroll:true})},400)}
+if(cu){var cUser=$('cUser');cUser.value=cu;setMode('client',false,'login');setTimeout(function(){$('cPass').focus({preventScroll:true})},400)}
 
 /* 3D tilt following the pointer */
 if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
@@ -441,6 +510,5 @@ addEventListener('pageshow', function (e) {
   if (e.persisted) location.reload();
 });
 </script>
-<script src="/js/saara-nav.js"></script>
 </body>
 </html>

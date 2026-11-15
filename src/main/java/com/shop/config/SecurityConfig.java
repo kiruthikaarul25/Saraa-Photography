@@ -63,6 +63,7 @@ public class SecurityConfig {
                     "/work",
                     "/contact",
                     "/select",
+                    "/select/**",           // new-login / reset buttons of the Select page
                     "/packages-page",
                     "/login",
                     "/register",
