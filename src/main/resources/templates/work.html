@@ -99,21 +99,23 @@ body.lock{overflow:hidden}
 .hero small{display:block;font-size:11px;font-weight:600;letter-spacing:7px;text-transform:uppercase;color:var(--k-pink);margin-bottom:10px}
 .hero p{color:var(--k-sub);font-size:13px;margin-top:10px;letter-spacing:.5px}
 
-/* ROPE LIGHTING + HANGING PHOTO STACKS */
-.pond{position:relative;width:100%;margin:10px auto 0;min-height:380px;overflow:visible;isolation:isolate}
-.strings{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;z-index:1}
-.glowline{fill:none;stroke:var(--k-pink);stroke-width:9;stroke-linecap:round;opacity:.2;filter:blur(7px)}
-.cord-base{fill:none;stroke:var(--k-pink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
-.cord-twist{fill:none;stroke:rgba(255,255,255,.75);stroke-width:.7;stroke-linecap:round}
-.bulb{display:none}
-
-.hang{position:absolute;z-index:2;transform-origin:50% 0;animation:drop 1.5s cubic-bezier(.34,1.35,.5,1) var(--in) both,swing var(--sw) ease-in-out var(--dl) infinite alternate}
-.hang.still{animation:swing var(--sw) ease-in-out var(--dl) infinite alternate}
-@keyframes drop{from{translate:0 -170px;opacity:0}to{translate:0 0;opacity:1}}
-@keyframes swing{from{rotate:calc(var(--amp)*-1)}to{rotate:var(--amp)}}
-.cord{position:absolute;left:50%;top:0;margin-left:-18px;overflow:visible}
-.eye{position:absolute;left:50%;top:calc(var(--len) - 7px);width:16px;height:16px;margin-left:-8px;border:3px solid var(--k-pink);border-radius:50%;z-index:3;background:var(--k-card);box-shadow:var(--k-outsm)}
-.item{position:absolute;left:0;top:var(--len);width:var(--d);height:var(--d);padding:0;border:0;background:none;border-radius:18px;cursor:pointer;font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
+/* FLOATING 3D PHOTO REEL (no rope) */
+.pond{position:relative;width:100%;margin:6px auto 0;overflow:visible}
+.reel{--d:clamp(150px,24vw,240px);display:flex;align-items:flex-start;gap:clamp(22px,4vw,46px);overflow-x:auto;overflow-y:visible;
+ padding:34px calc(50% - var(--d)/2) 84px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;cursor:grab;
+ -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16%,#000 84%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 16%,#000 84%,transparent 100%)}
+.reel::-webkit-scrollbar{display:none}
+.reel.drag{scroll-snap-type:none;cursor:grabbing;user-select:none}
+.hang{position:relative;flex:0 0 var(--d);width:var(--d);height:var(--d);scroll-snap-align:center;
+ transform:perspective(1000px) rotateY(var(--ry,0deg)) scale(var(--sc,1));opacity:var(--op,1);transition:transform .2s ease-out,opacity .2s;
+ animation:bob var(--sw,4s) ease-in-out var(--dl,0s) infinite alternate}
+@keyframes bob{from{translate:0 -7px}to{translate:0 7px}}
+.item{position:absolute;left:0;top:0;width:100%;height:100%;padding:0;border:0;background:none;border-radius:18px;cursor:pointer;font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
+.rnav{position:absolute;top:calc(34px + clamp(150px,24vw,240px)/2 - 21px);z-index:6;width:42px;height:42px;border:0;border-radius:15px;cursor:pointer;display:grid;place-items:center;font-size:18px;color:#fff;
+ background:linear-gradient(145deg,var(--k-pink2),var(--k-deep));box-shadow:var(--k-btn)}
+.rnav.l{left:12px}.rnav.r{right:12px}
+.rnav:active{transform:scale(.94)}
+@media(max-width:600px){.rnav{display:none}}
 
 /* SQUARE MULTI-PHOTO STACK (front photo + two photos behind it) */
 .medal{position:absolute;inset:0;z-index:2;border-radius:18px;overflow:hidden;border:4px solid var(--k-card);background:var(--k-field) var(--cover) center/cover no-repeat;
@@ -197,10 +199,10 @@ body.lock{overflow:hidden}
 .viewer .vn{top:50%;transform:translateY(-50%)}
 .viewer .vn.p{left:12px}.viewer .vn.n{right:12px}
 
-@media(min-width:1200px){.pond{min-height:430px}.slides{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:1200px){.slides{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(min-width:769px) and (max-width:1199px){.slides{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:768px){.pond{min-height:350px}.slides{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:96%}.panel-card{padding:8px 12px 25px}}
-@media(max-width:480px){.slides{grid-template-columns:1fr}.hero img{width:74px;height:74px}.pond{min-height:320px}.panel-head{margin-bottom:14px}}
+@media(max-width:768px){.slides{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:96%}.panel-card{padding:8px 12px 25px}}
+@media(max-width:480px){.slides{grid-template-columns:1fr}.hero img{width:74px;height:74px}.panel-head{margin-bottom:14px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important;transition-delay:0s!important}}
 </style>
 <link rel="stylesheet" href="/css/saara-nav.css?v=1">
@@ -254,7 +256,7 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
 <div class="hero">
  <img src="/images/logo.png" alt="Saara Photography logo" onerror="this.remove()">
  <small>Saara Photography</small>
- <p>Tap a glowing rope to explore our photographs</p>
+ <p>Swipe &amp; tap a photo stack to explore our photographs</p>
 </div>
 
 <!-- ROPE LIGHTING AND PHOTO STACKS -->
@@ -379,7 +381,7 @@ function startAuto(t){
 function setActive(i){[].slice.call(pond.querySelectorAll('.hang')).forEach(function(h,k){h.classList.toggle('active',k===i)})}
 
 /* OPEN TOPIC ON SAME PAGE */
-function openTopic(i,medal){
+function openTopic(i,medal,noScroll){
  if(curT===i){closePanel();return}
  var t=topics[i],wasOpen=curT>=0;
  var r=medal.getBoundingClientRect(),pr=panel.getBoundingClientRect();
@@ -396,7 +398,7 @@ function openTopic(i,medal){
  }else{
   put();panel.classList.add('open');panel.setAttribute('aria-hidden','false');
  }
- setTimeout(function(){panel.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})},wasOpen?360:260);
+ if(!noScroll)setTimeout(function(){panel.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})},wasOpen?360:260);
 }
 
 /* CLOSE PANEL */
@@ -416,68 +418,78 @@ addEventListener('keydown',function(e){
  else if(viewerOpen){if(e.key==='ArrowLeft')vStep(-1);else if(e.key==='ArrowRight')vStep(1)}
 });
 
-/* CURVED ROPE POINTS */
-function cordPoints(len,amp,ph){
- var pts=[],N=24;
- for(var i=0;i<=N;i++){
-  var y=len*i/N,x=18+amp*Math.sin(i/N*Math.PI*2.6+ph)*Math.sin(Math.PI*i/N);
-  pts.push([x,y]);
- }
- return pts;
-}
-
 /* PHOTO URL -> CSS background value */
 function cv(s){return s?'url("'+s.replace(/"/g,'%22')+'")':'none'}
 
-/* RESPONSIVE ROPE LAYOUT */
-function layout(first){
- pond.innerHTML='';
- var W=pond.clientWidth,n=topics.length;
- if(!n)return;
- var perRow=Math.max(2,Math.min(n,Math.floor(W/118)));
- var rows=Math.ceil(n/perRow);
- var d=Math.max(76,Math.min(128,W/perRow-34));
- var minLen=44,maxLen=88;
- var sag=Math.max(10,Math.min(20,W/24));
- var rowH=d+maxLen+sag+70;
- var x0=8,x1=W-8;
- pond.style.height=(rows*rowH+10)+'px';
- var counts=topics.map(function(t){return t.querySelectorAll('.sl').length});
+/* 3D TILT BY DISTANCE FROM CENTER */
+var reel=null,tiltRaf=0;
+function tilt(){
+ if(!reel)return;
+ var rr=reel.getBoundingClientRect(),mid=rr.left+rr.width/2,half=rr.width/2;
+ [].slice.call(reel.children).forEach(function(h){
+  var r=h.getBoundingClientRect(),dx=((r.left+r.width/2)-mid)/half;
+  var a=Math.min(Math.abs(dx),1.2);
+  h.style.setProperty('--ry',(-dx*34).toFixed(1)+'deg');
+  h.style.setProperty('--sc',(1-Math.min(a,1)*.22).toFixed(3));
+  h.style.setProperty('--op',(1-Math.min(a,1)*.45).toFixed(3));
+ });
+}
+function queueTilt(){if(tiltRaf)return;tiltRaf=requestAnimationFrame(function(){tiltRaf=0;tilt()})}
 
- /* curved light strings */
- var svg='<svg class="strings" width="'+W+'" height="'+(rows*rowH)+'">';
- function by(r,x){var u=(x-x0)/(x1-x0);return r*rowH+12+4*sag*u*(1-u)}
- for(var r=0;r<rows;r++){
-  var y0=r*rowH+12;
-  var dd='M'+x0+' '+y0+' Q'+(W/2)+' '+(y0+2*sag)+' '+x1+' '+y0;
-  svg+='<path class="glowline" d="'+dd+'"/><path class="cord-base" d="'+dd+'"/><path class="cord-twist" d="'+dd+'"/>';
+/* TAP -> STACK MOVES DOWN TO THE PHOTO SECTION, THEN ALL PHOTOS COME */
+var flying=false;
+function fly(hang,i,it,md){
+ if(flying)return;flying=true;
+ var r=md.getBoundingClientRect(),sx=window.pageXOffset,sy=window.pageYOffset;
+ var f=document.createElement('div');
+ f.style.cssText='position:absolute;left:'+(r.left+sx)+'px;top:'+(r.top+sy)+'px;width:'+r.width+'px;height:'+r.height+'px;z-index:2147482500;pointer-events:none;will-change:transform,opacity';
+ f.style.setProperty('--cover',getComputedStyle(hang).getPropertyValue('--cover'));
+ [].slice.call(it.querySelectorAll('.stk,.medal')).forEach(function(c){f.appendChild(c.cloneNode(true))});
+ document.body.appendChild(f);
+ hang.style.visibility='hidden';
+ /* landing point = just under the rope row, centre of the page (document coords) */
+ var tx=sx+window.innerWidth/2,ty=pond.getBoundingClientRect().bottom+sy+25+Math.min(190,r.height*1.1);
+ var dx=tx-(r.left+sx+r.width/2),dy=ty-(r.top+sy+r.height/2);
+ var anim=f.animate([
+  {transform:'translate(0,0) rotate(0deg) scale(1)',opacity:1,offset:0},
+  {transform:'translate(0,-16px) rotate(-5deg) scale(1.06)',opacity:1,offset:.16},
+  {transform:'translate('+dx+'px,'+dy+'px) rotate(8deg) scale(1.15)',opacity:1,offset:.78},
+  {transform:'translate('+dx+'px,'+dy+'px) rotate(0deg) scale(1.6)',opacity:0,offset:1}
+ ],{duration:950,easing:'cubic-bezier(.5,0,.5,1)',fill:'forwards'});
+ /* photos panel starts opening while the stack is still travelling */
+ setTimeout(function(){openTopic(i,md,true)},480);
+ anim.onfinish=function(){
+  f.remove();hang.style.visibility='';flying=false;
+ };
+ /* page scrolls down together with the falling stack */
+ var y0=sy,y1=Math.max(0,pond.getBoundingClientRect().bottom+sy+25-84),D=1200,T0=null,stop=false;
+ function cancel(){stop=true}
+ window.addEventListener('wheel',cancel,{once:true,passive:true});
+ window.addEventListener('touchstart',cancel,{once:true,passive:true});
+ function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+ function stepScroll(ts){
+  if(stop)return;
+  if(T0===null)T0=ts;
+  var p=Math.min(1,(ts-T0)/D);
+  window.scrollTo({top:y0+(y1-y0)*ease(p),behavior:'instant'});
+  if(p<1)requestAnimationFrame(stepScroll);
  }
- pond.insertAdjacentHTML('beforeend',svg+'</svg>');
+ setTimeout(function(){requestAnimationFrame(stepScroll)},120);
+}
 
- /* hanging topic photo stacks */
+/* FLOATING PHOTO REEL LAYOUT */
+function layout(first){
+ var keep=reel?reel.scrollLeft:0;
+ pond.innerHTML='';
+ var n=topics.length;
+ if(!n)return;
+ reel=document.createElement('div');reel.className='reel';
  topics.forEach(function(t,i){
-  var r=Math.floor(i/perRow),c=i%perRow;
-  var inRow=(r===rows-1)?(n-r*perRow):perRow;
-  var sp=W/perRow,cx=(W-inRow*sp)/2+sp*(c+.5);
-  var len=minLen+((i*3+r)%4)/3*(maxLen-minLen);
-  var hang=document.createElement('div');
-  hang.className='hang'+(first?'':' still');
-  hang.style.left=(cx-d/2)+'px';
-  hang.style.top=(by(r,cx)+2)+'px';
-  hang.style.width=d+'px';
-  hang.style.setProperty('--d',d+'px');
-  hang.style.setProperty('--len',len+'px');
-  hang.style.setProperty('--amp',(2.5+(i%3)*1.2)+'deg');
-  hang.style.setProperty('--sw',(3.8+(i%4)*.7)+'s');
+  var hang=document.createElement('div');hang.className='hang';
+  hang.style.setProperty('--sw',(3.6+(i%4)*.7)+'s');
   hang.style.setProperty('--dl',(-(i*.9))+'s');
-  hang.style.setProperty('--in',(i*.16)+'s');
   var ims=[].slice.call(t.querySelectorAll('.sl img')).map(function(x){return x.getAttribute('src')});
   if(ims[0])hang.style.setProperty('--cover',cv(ims[0]));
-  var pts=cordPoints(len,5+(i%3)*2.5,i*1.3);
-  var dstr='M'+pts.map(function(q){return q[0].toFixed(1)+' '+q[1].toFixed(1)}).join(' L');
-  var cs='<svg class="cord" width="36" height="'+(len+6)+'" viewBox="0 0 36 '+(len+6)+'">'+
-   '<path class="glowline" d="'+dstr+'"/><path class="cord-base" d="'+dstr+'"/><path class="cord-twist" d="'+dstr+'"/></svg>';
-  hang.innerHTML=cs+'<i class="eye"></i>';
   var it=document.createElement('button');
   it.type='button';it.className='item';
   it.setAttribute('aria-label','Open '+(t.dataset.label||'photos'));
@@ -488,11 +500,45 @@ function layout(first){
   s2.style.setProperty('--c',cv(ims[2]||ims[0]));
   var tg=document.createElement('span');tg.className='tag';
   var nm=document.createElement('b');nm.textContent=t.dataset.label||'';
-    tg.appendChild(nm);
+  tg.appendChild(nm);
   it.appendChild(s1);it.appendChild(s2);it.appendChild(md);it.appendChild(tg);
-  hang.appendChild(it);pond.appendChild(hang);
-  it.addEventListener('click',function(){openTopic(i,md)});
+  hang.appendChild(it);reel.appendChild(hang);
+  it.addEventListener('click',function(){
+   if(flying)return;
+   if(curT===i||reduce){openTopic(i,md);return}
+   fly(hang,i,it,md);
+  });
  });
+ pond.appendChild(reel);
+
+ /* arrows (desktop) */
+ var L=document.createElement('button'),R=document.createElement('button');
+ L.type=R.type='button';L.className='rnav l';R.className='rnav r';
+ L.setAttribute('aria-label','Previous');R.setAttribute('aria-label','Next');
+ L.innerHTML='<i class="ti ti-chevron-left"></i>';R.innerHTML='<i class="ti ti-chevron-right"></i>';
+ function step(d){var w=reel.children[0].getBoundingClientRect().width+30;reel.scrollBy({left:d*w,behavior:reduce?'auto':'smooth'})}
+ L.addEventListener('click',function(){step(-1)});R.addEventListener('click',function(){step(1)});
+ pond.appendChild(L);pond.appendChild(R);
+
+ /* mouse drag to scroll (touch scrolls natively) */
+ var down=false,moved=false,sx=0,sl=0;
+ reel.addEventListener('pointerdown',function(e){
+  if(e.pointerType!=='mouse'||e.button)return;
+  down=true;moved=false;sx=e.clientX;sl=reel.scrollLeft;
+ });
+ reel.addEventListener('pointermove',function(e){
+  if(!down)return;
+  var dx=e.clientX-sx;
+  if(Math.abs(dx)>5){moved=true;reel.classList.add('drag')}
+  if(moved)reel.scrollLeft=sl-dx;
+ });
+ function up(){down=false;reel.classList.remove('drag')}
+ reel.addEventListener('pointerup',up);reel.addEventListener('pointerleave',up);
+ reel.addEventListener('click',function(e){if(moved){e.stopPropagation();e.preventDefault();moved=false}},true);
+
+ reel.addEventListener('scroll',queueTilt,{passive:true});
+ reel.scrollLeft=keep;
+ tilt();
  setActive(curT);
 }
 

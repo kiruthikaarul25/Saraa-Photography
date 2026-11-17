@@ -1407,6 +1407,49 @@ html body .form-group select#eventType.cs-native{position:absolute!important;lef
 .cs-list li.selected::after{content:"\2713";font-size:13px}
 .cs-list::-webkit-scrollbar{width:6px}.cs-list::-webkit-scrollbar-thumb{background:rgba(255,77,148,.5);border-radius:6px}
 </style>
+<style id="static-info-css">
+/* Contact info: plain cards, no animation */
+#studio .static-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;max-width:760px;margin:0 auto 100px}
+#studio .static-info .s-card{animation:none!important;transform:none!important;transition:none!important;min-height:0;padding:36px 20px}
+#studio .static-info .s-card::after{display:none!important}
+#studio .static-info .s-icon{animation:none!important;transform:none!important}
+#studio .static-info .s-icon::before,#studio .static-info .s-icon::after{display:none!important}
+#studio .static-info .s-card small,#studio .static-info .s-card h3{transform:none!important}
+/* sharp text: remove glow/blur from contact info */
+#studio .static-info .s-card,#studio .static-info .s-card *{filter:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;text-shadow:none!important;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+html[data-theme] body #studio .static-info .s-card h3{font-family:'Poppins','Segoe UI',sans-serif!important;font-size:17px;font-weight:600;letter-spacing:.2px;color:var(--k-text)!important;opacity:1!important}
+html[data-theme] body #studio .static-info .s-card h3 a{color:var(--k-pink)!important;font-weight:600;text-decoration:none;opacity:1!important}
+html[data-theme] body #studio .static-info .s-card h3 a:hover{text-decoration:underline}
+html[data-theme] body #studio .static-info .s-card small{color:var(--k-muted)!important;opacity:1!important}
+#studio .rv,#studio .section-heading{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+@media(max-width:600px){#studio .static-info{grid-template-columns:1fr;gap:16px;margin-bottom:70px}}
+/* booking form: always open, appears on scroll */
+.booking-wrap{margin-top:30px;padding-bottom:20px}
+
+/* contact top: details left, photos right */
+#studio .studio-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;margin-bottom:100px}
+#studio .studio-left .section-heading{text-align:left}
+#studio .studio-left .static-info{max-width:none;margin:0}
+#studio .studio-grid.no-photos{grid-template-columns:1fr}
+#studio .studio-grid.no-photos .studio-right{display:none}
+
+/* ===== PHOTOS: arch shape + small photo (first design), photos keep changing ===== */
+#studio .studio-photos{position:relative;width:min(100%,360px);aspect-ratio:3/4.2;margin:0 auto 24px}
+#studio .sp-main{position:absolute;inset:0;padding:10px;border-radius:999px 999px var(--k-r) var(--k-r);background:var(--k-field);box-shadow:var(--k-out)}
+#studio .sp-small{position:absolute;right:-8%;bottom:-6%;width:44%;aspect-ratio:1/1.2;padding:6px;border-radius:var(--k-r);background:var(--k-card);box-shadow:var(--k-out)}
+#studio .ph{position:relative;width:100%;height:100%;overflow:hidden}
+#studio .sp-main .ph{border-radius:999px 999px 14px 14px}
+#studio .sp-small .ph{border-radius:14px}
+#studio .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity 1.3s ease,transform 4s ease;transform:scale(1.06);-webkit-user-drag:none;user-select:none}
+#studio .ph img.on{opacity:1;transform:scale(1)}
+@media(max-width:860px){
+ #studio .studio-grid{grid-template-columns:1fr;gap:34px;margin-bottom:70px}
+ #studio .studio-right{order:-1}
+ #studio .studio-left .section-heading{text-align:center}
+ #studio .studio-photos{width:min(56%,225px);margin-top:10px;margin-bottom:44px}
+ #studio .sp-small{right:-14%}
+}
+</style>
 <link rel="stylesheet" href="/css/saara-nav.css?v=1">
 <style id="ss-nav-blur">
 /* top nav: slightly blurred + transparent glass (blur sits on a pseudo layer so the mobile menu keeps its own blur) */
@@ -1415,6 +1458,96 @@ html body .ss-nav::before{content:"";position:absolute;inset:0;z-index:-1;pointe
  -webkit-backdrop-filter:blur(8px) saturate(135%);backdrop-filter:blur(8px) saturate(135%);
  border-bottom:1px solid rgba(255,255,255,.07);transition:background .3s}
 html[data-theme="light"] body .ss-nav::before{background:rgba(255,255,255,.34);border-bottom:1px solid rgba(255,61,139,.12)}
+</style>
+<style id="split-layout">
+/* ===== DESKTOP: LEFT = details scroll, RIGHT = photo stack fixed ===== */
+@media(min-width:861px){
+ /* perspective on .container would break position:fixed, so remove it */
+ html body main.container{
+  perspective:none!important;
+  width:50%!important;max-width:none!important;
+  margin:40px 0 0!important;
+  padding:0 36px 0 clamp(24px,4vw,56px)!important;
+ }
+ #studio .studio-grid{display:block!important;margin-bottom:70px}
+ #studio .studio-left .static-info{max-width:none;margin:0}
+
+ /* booking card becomes 1 column (half-screen width) */
+ html body .booking-card{grid-template-columns:1fr!important}
+ html body .booking-info{padding:40px 30px}
+ html body .closing{margin:80px auto 60px}
+
+ /* right side: fixed, full height, centered frame */
+ #studio .studio-right{
+  position:fixed!important;top:84px;right:20px;bottom:36px;
+  width:calc(50vw - 36px);z-index:1;order:0;
+  display:flex;align-items:center;justify-content:center;
+ }
+ #studio .studio-photos{
+  width:min(84%,390px)!important;height:min(calc(100% - 56px),560px)!important;aspect-ratio:auto!important;margin:0!important;
+ }
+
+ /* no photos found: left goes full width */
+ html body:has(.studio-grid.no-photos) main.container{
+  width:auto!important;max-width:1100px!important;margin:40px auto 0!important;padding:0 24px!important;
+ }
+ html body:has(.studio-grid.no-photos) .booking-card{grid-template-columns:.85fr 1.15fr!important}
+}
+</style>
+
+<!-- ============ PHONE CARD: GLOW + ANIMATION (must stay BELOW static-info-css) ============ -->
+<style id="phone-glow">
+/* breathing glow around the card */
+html body #studio .static-info .s-card.phone-card{
+  position:relative;
+  animation:phoneGlow 3.2s ease-in-out infinite!important;
+}
+@keyframes phoneGlow{
+  0%,100%{box-shadow:var(--k-out),0 0 0 rgba(255,77,148,0)}
+  50%{box-shadow:var(--k-out),0 0 28px rgba(255,77,148,.38)}
+}
+
+/* icon: ring shake + pulse ring */
+html body #studio .static-info .s-card.phone-card .s-icon{
+  animation:phoneShake 3.2s ease-in-out infinite!important;
+  box-shadow:0 0 18px rgba(255,77,148,.55);
+}
+html body #studio .static-info .s-card.phone-card .s-icon::after{
+  display:block!important;
+  content:"";position:absolute;inset:-4px;border-radius:20px;
+  border:2px solid rgba(255,77,148,.7);
+  animation:phonePulse 2s ease-out infinite!important;
+  transform:none;box-shadow:none;
+}
+@keyframes phoneShake{
+  0%,60%,100%{rotate:0deg}
+  66%{rotate:-12deg}72%{rotate:12deg}78%{rotate:-9deg}84%{rotate:9deg}90%{rotate:-4deg}
+}
+@keyframes phonePulse{
+  from{transform:scale(1);opacity:.85}
+  to{transform:scale(1.6);opacity:0}
+}
+
+/* number: soft neon light */
+html body #studio .static-info .s-card.phone-card h3 a{
+  text-shadow:0 0 10px rgba(255,77,148,.65),0 0 22px rgba(255,77,148,.35)!important;
+  animation:phoneText 2.6s ease-in-out infinite!important;
+}
+@keyframes phoneText{
+  0%,100%{text-shadow:0 0 6px rgba(255,77,148,.35),0 0 12px rgba(255,77,148,.2)}
+  50%{text-shadow:0 0 12px rgba(255,77,148,.8),0 0 26px rgba(255,77,148,.45)}
+}
+
+/* light mode */
+html[data-theme="light"] body #studio .static-info .s-card.phone-card h3 a{
+  text-shadow:0 0 8px rgba(255,61,139,.3)!important;
+}
+
+@media (prefers-reduced-motion:reduce){
+  html body #studio .static-info .s-card.phone-card,
+  html body #studio .static-info .s-card.phone-card *,
+  html body #studio .static-info .s-card.phone-card .s-icon::after{animation:none!important}
+}
 </style>
 
 </head>
@@ -1464,60 +1597,50 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
 
 <main class="container">
 
-<!-- STUDIO INFORMATION : rope pull + slider -->
+<!-- STUDIO INFORMATION -->
 <section id="studio" th:with="phone=${owner != null and owner.phone != null ? owner.phone : (contact != null ? contact.phone : null)},
                 email=${owner != null and owner.email != null ? owner.email : (contact != null ? contact.email : null)}">
 
- <div class="section-heading reveal">
-  <small>GET TO KNOW US</small>
-  <h2>A Little About Our Studio</h2>
-  <p>Swipe or tap the arrows to meet us.</p>
+ <div class="studio-grid">
+  <div class="studio-left">
+ <div class="section-heading">
+  <small>GET IN TOUCH</small>
+  <h2>Contact Us</h2>
  </div>
 
- <div class="rope-wrap open" id="ropeWrap">
+ <div class="static-info">
+  <div class="s-card">
+   <div class="s-icon"><i class="ti ti-user"></i></div>
+   <small>Studio Owner</small>
+   <h3 th:text="${owner != null and owner.name != null ? owner.name : (contact != null and contact.ownerName != null ? contact.ownerName : 'Saara Photography')}">Owner Name</h3>
+  </div>
+
+  <div class="s-card">
+   <div class="s-icon"><i class="ti ti-camera"></i></div>
+   <small>Our Studio</small>
+   <h3 th:text="${owner != null && owner.studioName != null ? owner.studioName : 'Saara Photography'}">Saara Photography</h3>
+  </div>
+
+  <!-- PHONE CARD: phone-card class added for glow + animation -->
+  <div class="s-card phone-card">
+   <div class="s-icon"><i class="ti ti-phone"></i></div>
+   <small>Contact Number</small>
+   <h3>
+    <a th:if="${phone != null and !#strings.isEmpty(phone)}" th:href="'tel:' + ${phone}" th:text="${phone}">Phone</a>
+    <span th:if="${phone == null or #strings.isEmpty(phone)}">Contact number not updated</span>
+   </h3>
+  </div>
+
   
-  
-  
+ </div>
+  </div>
 
-  <div class="s-clip" id="sClip">
-   <div class="s-view">
-    <div class="s-track" id="sTrack">
-
-     <div class="s-slide"><div class="s-card">
-      <div class="s-icon"><i class="ti ti-user"></i></div>
-      <small>Studio Owner</small>
-      <h3 th:text="${owner != null and owner.name != null ? owner.name : (contact != null and contact.ownerName != null ? contact.ownerName : 'Saara Photography')}">Owner Name</h3>
-     </div></div>
-
-     <div class="s-slide"><div class="s-card">
-      <div class="s-icon"><i class="ti ti-camera"></i></div>
-      <small>Our Studio</small>
-      <h3 th:text="${owner != null && owner.studioName != null ? owner.studioName : 'Saara Photography'}">Saara Photography</h3>
-     </div></div>
-
-     <div class="s-slide"><div class="s-card">
-      <div class="s-icon"><i class="ti ti-phone"></i></div>
-      <small>Contact Number</small>
-      <h3>
-       <a th:if="${phone != null and !#strings.isEmpty(phone)}" th:href="'tel:' + ${phone}" th:text="${phone}">Phone</a>
-       <span th:if="${phone == null or #strings.isEmpty(phone)}">Contact number not updated</span>
-      </h3>
-     </div></div>
-
-     <div class="s-slide"><div class="s-card">
-      <div class="s-icon"><i class="ti ti-mail"></i></div>
-      <small>Email Address</small>
-      <h3>
-       <a th:if="${email != null and !#strings.isEmpty(email)}" th:href="'mailto:' + ${email}" th:text="${email}">Email</a>
-       <span th:if="${email == null or #strings.isEmpty(email)}">Email not updated</span>
-      </h3>
-     </div></div>
-
-    </div>
-    <button type="button" class="s-nav s-prev" id="sPrev" aria-label="Previous"><i class="ti ti-chevron-left"></i></button>
-    <button type="button" class="s-nav s-next" id="sNext" aria-label="Next"><i class="ti ti-chevron-right"></i></button>
+  <div class="studio-right">
+   <!-- photos JS-la inge varum (arch shape + small photo) -->
+   <div class="studio-photos" id="studioPhotos">
+    <div class="sp-main"><div class="ph" id="phMain"></div></div>
+    <div class="sp-small"><div class="ph" id="phSmall"></div></div>
    </div>
-   <div class="s-dots" id="sDots"></div>
   </div>
  </div>
 </section>
@@ -1531,7 +1654,7 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
   <p>Tell us a little about your upcoming celebration.</p>
  </div>
 
- <div class="hang idle" id="hang"><div class="hang-rail"></div><div class="hang-swing"><div id="clip"><div class="booking-card">
+ <div class="booking-wrap"><div class="booking-card">
 
   <div class="booking-info reveal-left">
    <h2>Every Story Is Worth Capturing.</h2>
@@ -1551,15 +1674,9 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
     <span>Personalized Event Bookings</span>
    </div>
 
-   <div class="info-line">
-    <i class="ti ti-heart"></i>
-    <span>Memories That Last Forever</span>
-   </div>
+  
 
-   <div class="info-line">
-    <i class="ti ti-sparkles"></i>
-    <span>Made With Love & Creativity</span>
-   </div>
+ 
   </div>
 
   <div class="booking-form reveal-right">
@@ -1608,8 +1725,6 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
    </form>
   </div>
 
- </div></div>
- <div class="hang-bar"><div class="hang-cord"><button type="button" id="knob" aria-label="Pull to open booking form"><i class="ti ti-chevrons-down"></i></button><span class="hang-hint">PULL TO BOOK</span></div></div>
  </div></div>
 </section>
 
@@ -1847,70 +1962,11 @@ function setT(t){root.dataset.theme=t;tt.textContent=t==='light'?'☾':'☀';tt.
 setT(root.dataset.theme==='light'?'light':'dark');
 tt.addEventListener('click',function(){setT(root.dataset.theme==='light'?'dark':'light')});
 
-/* ---- hanging booking blind with pull cord ---- */
-var hang=$('hang'),clip=$('clip'),knob=$('knob'),card=clip.firstElementChild,open=false,drag=false,y0=0,h0=0,mv=0;
-var full=function(){return card.offsetHeight};
-function swing(){hang.classList.remove('pull');void hang.offsetWidth;hang.classList.add('pull');setTimeout(function(){hang.classList.remove('pull')},2400)}
-function openIt(){open=true;clip.style.transition='height 1.2s cubic-bezier(.22,1.1,.36,1)';clip.style.height=full()+'px';swing();hang.classList.add('open','used')}
-function closeIt(){open=false;clip.style.transition='none';clip.style.height=clip.offsetHeight+'px';void clip.offsetHeight;clip.style.transition='height .8s cubic-bezier(.5,0,.2,1)';clip.style.height='0px';swing();hang.classList.remove('open')}
-clip.addEventListener('transitionend',function(e){if(e.target===clip&&open)clip.style.height='auto'});
-knob.addEventListener('pointerdown',function(e){drag=true;mv=0;y0=e.clientY;h0=clip.offsetHeight;clip.style.transition='none';clip.style.height=h0+'px';knob.setPointerCapture(e.pointerId);hang.classList.add('used')});
-knob.addEventListener('pointermove',function(e){if(!drag)return;var dy=e.clientY-y0;mv=Math.max(mv,Math.abs(dy));clip.style.height=Math.max(0,Math.min(full()+50,h0+dy))+'px'});
-function end(){if(!drag)return;drag=false;if(mv<6){open?closeIt():openIt();return}var h=clip.offsetHeight;if(h>(open?full()-110:Math.min(full()*.25,130)))openIt();else closeIt()}
-knob.addEventListener('pointerup',end);knob.addEventListener('pointercancel',end);
-knob.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open?closeIt():openIt()}});
-
-/* success / error message vandhaa form thaanaave thirakkum */
-if(document.querySelector('.booking-form .message')){$('booking').scrollIntoView();setTimeout(openIt,500)}
+/* success / error message vandhaa form kitta scroll aagum */
+if(document.querySelector('.booking-form .message')){$('booking').scrollIntoView()}
 })();
 </script>
 
-<script id="rope-slider-js">
-(function(){
-var track=document.getElementById('sTrack'),dots=document.getElementById('sDots'),
-    slides=[].slice.call(track.children),view=track.parentElement,n=slides.length,i=0,timer,
-    prog=document.createElement('div');
-prog.className='s-progress';dots.parentNode.appendChild(prog);
-
-for(var k=0;k<n;k++){(function(k){var d=document.createElement('span');d.onclick=function(){go(k,k>i?1:-1);auto()};dots.appendChild(d)})(k)}
-function mark(){[].forEach.call(dots.children,function(d,j){d.classList.toggle('on',j===i)})}
-function restartProg(){prog.innerHTML='<i></i>'}
-function card(j){return slides[j].firstElementChild}
-function go(x,dir){
- x=(x+n)%n;if(x===i)return;dir=dir||1;
- var old=slides[i],nw=slides[x];
- card(i).style.setProperty('--rx','0deg');card(i).style.setProperty('--ry','0deg');
- old.className='s-slide '+(dir>0?'out':'in');   /* old flies back (or forward) in 3D */
- nw.style.transition='none';nw.className='s-slide '+(dir>0?'in':'out');
- void nw.offsetWidth;nw.style.transition='';
- nw.className='s-slide active';                  /* new flies in to centre */
- i=x;mark();
-}
-function auto(){clearInterval(timer);restartProg();timer=setInterval(function(){go(i+1,1);restartProg()},3500)}
-slides[0].className='s-slide active';
-for(var q=1;q<n;q++)slides[q].className='s-slide in';
-mark();auto();
-
-document.getElementById('sPrev').onclick=function(){go(i-1,-1);auto()};
-document.getElementById('sNext').onclick=function(){go(i+1,1);auto()};
-
-/* swipe */
-var sx=null;
-view.addEventListener('pointerdown',function(e){if(e.target.closest('.s-nav'))return;sx=e.clientX});
-view.addEventListener('pointerup',function(e){if(sx===null)return;var dx=e.clientX-sx;sx=null;
- if(Math.abs(dx)>40){go(i+(dx<0?1:-1),dx<0?1:-1);auto()}});
-
-/* 3D mouse tilt on active card */
-if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
- view.addEventListener('pointermove',function(e){
-  var r=view.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height,c=card(i);
-  c.style.setProperty('--ry',((px-.5)*24)+'deg');
-  c.style.setProperty('--rx',((.5-py)*18)+'deg');
- });
- view.addEventListener('pointerleave',function(){var c=card(i);c.style.setProperty('--rx','0deg');c.style.setProperty('--ry','0deg')});
-}
-})();
-</script>
 
 <script id="top-nav-js">
 (function(){
@@ -1979,6 +2035,38 @@ if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
  sel.addEventListener('change',refresh);
  var f=sel.form; if(f) f.addEventListener('reset',function(){ setTimeout(refresh,0); });
  build();
+})();
+</script>
+
+<!-- PHOTOS: arch shape, thaanaa maarikitte irukkum -->
+<script id="studio-photos-js">
+(function(){
+ var wrap=document.getElementById('studioPhotos'),pm=document.getElementById('phMain'),ps=document.getElementById('phSmall');
+ if(!wrap||!pm||!ps) return;
+ var grid=wrap.closest('.studio-grid');
+ var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ var files=[];for(var i=1;i<=20;i++)files.push('/images/saara-'+(i<10?'0':'')+i+'.jpg');
+
+ Promise.all(files.map(function(f){return new Promise(function(r){var im=new Image();im.onload=function(){r(f)};im.onerror=function(){r(null)};im.src=f})})).then(function(l){
+  var ok=l.filter(Boolean).slice(0,10);
+  if(!ok.length){grid.classList.add('no-photos');return}
+  var n=ok.length;
+  function build(box,off){
+   return ok.map(function(src,k){
+    var im=document.createElement('img');im.src=ok[(k+off)%n];im.alt='Saara Photography';im.draggable=false;
+    box.appendChild(im);return im;
+   });
+  }
+  var big=build(pm,0),small=build(ps,Math.min(3,n-1)),cur=0;
+  big[0].classList.add('on');small[0].classList.add('on');
+  if(n<2||reduce) return;
+  setInterval(function(){
+   if(document.hidden) return;
+   big[cur].classList.remove('on');small[cur].classList.remove('on');
+   cur=(cur+1)%n;
+   big[cur].classList.add('on');small[cur].classList.add('on');
+  },3400);
+ });
 })();
 </script>
 <script src="/js/saara-nav.js"></script>
