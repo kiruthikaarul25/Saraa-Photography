@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -29,9 +30,21 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
+    // ====== CHANGE THESE TWO if your URLs are different ======
+    /** Where an ADMIN lands after login. */
+    private static final String ADMIN_HOME = "/clients";
+    /** Where a CLIENT lands after login (the client's own photo page). */
+    private static final String CLIENT_HOME = "/gallery/view";
+    // =========================================================
+
     /** The select page sends this header with every fetch() call. */
     private static boolean isAjax(HttpServletRequest request) {
         return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+    }
+
+    private static boolean isAdmin(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_OWNER"));
     }
 
     private static void writeJson(HttpServletResponse response, int status, String json)
@@ -63,13 +76,12 @@ public class SecurityConfig {
                     "/work",
                     "/contact",
                     "/select",
-                    "/select/**",           // new-login / reset buttons of the Select page
+                    "/select/**",
                     "/packages-page",
                     "/login",
                     "/register",
-                    "/forgot",              // admin "new password" request (needs owner approval by mail)
+                    "/forgot",
                     "/client/login",
-                    "/gallery/**",
                     "/css/**",
                     "/js/**",
                     "/images/**",
@@ -78,17 +90,25 @@ public class SecurityConfig {
                     "/webjars/**"
                 ).permitAll()
 
-                // Owner approval links from Gmail (protected by a secret one-time token)
+                // Owner approval links from Gmail (secret one-time token)
                 .requestMatchers("/owner/approval/**").permitAll()
 
-                // Owner profile - Login required
-                .requestMatchers("/owner/profile/**").authenticated()
+                // Client pages (gallery.html) - client session is checked in the controller
+                .requestMatchers("/gallery/**", "/client/**", "/api/client/**").permitAll()
 
-                // All remaining pages require login
+                // OWNER (admin) panel pages (sidebar: Clients, Work Photos, Packages,
+                // Contact Enquiries, Profile, Add Client)
+                .requestMatchers(
+                    "/clients/**",
+                    "/owner/**",
+                    "/admin/**"
+                ).hasRole("OWNER")
+
+                // Anything else needs login
                 .anyRequest().authenticated()
             )
 
-            // Not logged in -> go to the Select page, Admin side
+            // Not logged in -> Select page. Logged in but wrong role -> Select page too.
             .exceptionHandling(ex -> ex
                 .authenticationEntryPoint((request, response, authException) -> {
                     if (isAjax(request)) {
@@ -98,20 +118,31 @@ public class SecurityConfig {
                         response.sendRedirect("/select#admin");
                     }
                 })
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    if (isAjax(request)) {
+                        writeJson(response, 403,
+                            "{\"success\":false,\"message\":\"Access denied.\"}");
+                    } else {
+                        // client tried to open an admin page -> send back to own page
+                        response.sendRedirect(CLIENT_HOME);
+                    }
+                })
             )
 
-            // Login Configuration (form is on /select, answered with JSON for fetch())
+            // Login (form is on /select, answered with JSON for fetch())
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .successHandler((request, response, authentication) -> {
+                    String target = isAdmin(authentication) ? ADMIN_HOME : CLIENT_HOME;
+
                     if (isAjax(request)) {
                         writeJson(response, 200,
-                            "{\"success\":true,\"redirect\":\"/clients\"}");
+                            "{\"success\":true,\"redirect\":\"" + target + "\"}");
                     } else {
-                        response.sendRedirect("/clients");
+                        response.sendRedirect(target);
                     }
                 })
                 .failureHandler((request, response, exception) -> {
@@ -125,7 +156,7 @@ public class SecurityConfig {
                 .permitAll()
             )
 
-            // Logout Configuration
+            // Logout
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/select#admin")
@@ -134,7 +165,7 @@ public class SecurityConfig {
                 .permitAll()
             )
 
-            // Preserving your existing CSRF setting
+            // Existing CSRF setting
             .csrf(csrf -> csrf.disable());
 
         return http.build();

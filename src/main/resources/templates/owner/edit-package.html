@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Package — Saara Photography</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <script>
     (function () {
@@ -49,7 +49,7 @@
 :root { --r: 20px; }
 html { background: var(--bg); transition: background .3s; }
 body {
-    font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif; color: var(--text); min-height: 100vh; padding-top: 84px;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: var(--text); min-height: 100vh; padding-top: 84px;
     background: radial-gradient(600px 420px at 90% -5%, var(--glow-a), transparent 70%), radial-gradient(560px 420px at 5% 105%, var(--glow-b), transparent 70%), var(--bg);
     background-attachment: fixed; transition: background .3s, color .3s;
 }
@@ -209,6 +209,34 @@ html[data-theme="light"] body .ss-nav::before{background:rgba(255,255,255,.34);b
   html body .sidebar { padding-top: 64px; }
 }
 </style>
+<style id="lux-theme">
+/* ===== LUXURY EDITORIAL LOOK (fonts + nav type only, original pink colours kept) ===== */
+:root{--serif:'Cormorant Garamond','Playfair Display',Georgia,'Times New Roman',serif;--sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--r:6px}
+body{font-family:var(--sans)!important;font-weight:300;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font-family:var(--sans)}
+
+/* serif headings */
+.page-top h4,.modal-title,.sb-name{font-family:var(--serif)!important}
+.page-top h4{font-weight:500;font-size:1.9rem;letter-spacing:.03em}
+.page-top h4 span{font-style:italic}
+.sb-name{font-weight:600;font-size:1.25rem;letter-spacing:.22em}
+
+/* small tracked labels */
+.sb-sub,.sb-label,.badge,.card-title,.field label,.sep-label,.back-btn{font-family:var(--sans);font-weight:500;letter-spacing:.22em}
+.btn-submit{font-family:var(--sans);font-weight:500;letter-spacing:.2em}
+.field input,.field select,.field textarea{font-weight:300}
+.toggle-label{font-weight:300}
+
+/* top nav: slim, tracked, serif brand */
+html body .ss-nav{font-family:var(--sans)}
+html body .ss-nav .ss-bt{font-family:var(--serif);font-weight:500;font-size:1.25rem;letter-spacing:.22em}
+html body .ss-nav .ss-links a{font-family:var(--sans);font-weight:400;font-size:.68rem;letter-spacing:.28em}
+@media(max-width:480px){html body .ss-nav .ss-bt{font-size:1rem;letter-spacing:.16em}}
+
+/* top nav: hide on scroll down, show on scroll up */
+html body .ss-nav{transition:transform .35s ease}
+html body .ss-nav.ss-hide{transform:translate(-50%,-130%)}
+</style>
 </head>
 <body>
 
@@ -312,8 +340,6 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
                 </div>
             </div>
 
- 
-
             <div class="section-sep">
                 <div class="sep-line"></div>
                 <div class="sep-label"><i class="ti ti-settings"></i>Settings</div>
@@ -413,6 +439,24 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
   window.addEventListener('touchmove',function(e){if(settled()&&!inside(e.target))closeAll();},{passive:true});
   document.addEventListener('click',function(e){if(settled()&&!inside(e.target))closeAll();});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAll();});
+})();
+</script>
+<script>
+/* top nav: hide on scroll down, show on scroll up */
+(function () {
+  var nav = document.querySelector('.ss-nav'), links = document.getElementById('ssLinks');
+  var last = window.pageYOffset || 0, ticking = false;
+  if (!nav) return;
+  function update() {
+    var y = window.pageYOffset || 0;
+    if (links && links.classList.contains('open')) { last = y; ticking = false; return; }
+    if (y > last + 6 && y > 80) nav.classList.add('ss-hide');
+    else if (y < last - 6 || y <= 10) nav.classList.remove('ss-hide');
+    last = y; ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
 })();
 </script>
 </body>

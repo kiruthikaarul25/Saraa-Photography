@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clients — Saara Photography</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <script>
         (function () {
@@ -56,7 +56,7 @@
 
         html { background: var(--bg); transition: background .3s; }
         body {
-            font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             color: var(--text); min-height: 100vh; padding-top: 84px;
             background:
                 radial-gradient(600px 420px at 90% -5%, var(--glow-a), transparent 70%),
@@ -117,7 +117,7 @@
         .sb-name { display: block; font-weight: 800; font-size: 14px; letter-spacing: .14em; color: var(--side-text); }
         [data-theme="dark"] .sb-name { color: var(--text); }
         .sb-sub { display: block; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; font-weight: 500; margin-top: 2px; color: var(--side-muted); }
-                                                        .sb-label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; margin: 4px 8px 10px; color: var(--side-muted); }
+        .sb-label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; margin: 4px 8px 10px; color: var(--side-muted); }
         .nav-item {
             display: flex; align-items: center; gap: 12px; padding: 12px 14px; margin-bottom: 8px; border-radius: var(--r);
             text-decoration: none; font-size: 13px; font-weight: 500; color: var(--side-text); transition: all .2s; white-space: nowrap;
@@ -313,6 +313,35 @@ html[data-theme="light"] body .ss-nav::before{background:rgba(255,255,255,.34);b
 @media (max-width: 768px) {
   html body .sidebar { padding-top: 64px; }
 }
+</style>
+<style id="lux-theme">
+/* ===== LUXURY EDITORIAL LOOK (fonts + nav type only, original pink colours kept) ===== */
+:root{--serif:'Cormorant Garamond','Playfair Display',Georgia,'Times New Roman',serif;--sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--r:6px}
+body{font-family:var(--sans)!important;font-weight:300;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+button,input,textarea{font-family:var(--sans)}
+
+/* serif headings */
+.page-top h4,.modal-title,.sb-name{font-family:var(--serif)!important}
+.page-top h4{font-weight:500;font-size:1.9rem;letter-spacing:.03em}
+.page-top h4 span{font-style:italic}
+.sb-name{font-weight:600;font-size:1.25rem;letter-spacing:.22em}
+.couple-name,.mob-client-name{font-family:var(--serif);font-weight:600;font-size:1.15rem;letter-spacing:.01em}
+.mob-client-name{font-size:1.3rem}
+tbody td{font-weight:300}
+
+/* small tracked labels */
+.sb-sub,.sb-label,.badge,.card-title,thead th,.empty-text{font-family:var(--sans);font-weight:500;letter-spacing:.22em}
+.btn-add,.btn-view,.empty-link{font-family:var(--sans);font-weight:500;letter-spacing:.2em}
+
+/* top nav: slim, tracked, serif brand */
+html body .ss-nav{font-family:var(--sans)}
+html body .ss-nav .ss-bt{font-family:var(--serif);font-weight:500;font-size:1.25rem;letter-spacing:.22em}
+html body .ss-nav .ss-links a{font-family:var(--sans);font-weight:400;font-size:.68rem;letter-spacing:.28em}
+@media(max-width:480px){html body .ss-nav .ss-bt{font-size:1rem;letter-spacing:.16em}}
+
+/* top nav: hide on scroll down, show on scroll up */
+html body .ss-nav{transition:transform .35s ease}
+html body .ss-nav.ss-hide{transform:translate(-50%,-130%)}
 </style>
 </head>
 <body>
@@ -551,6 +580,24 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
   window.addEventListener('touchmove',function(e){if(settled()&&!inside(e.target))closeAll();},{passive:true});
   document.addEventListener('click',function(e){if(settled()&&!inside(e.target))closeAll();});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAll();});
+})();
+</script>
+<script>
+/* top nav: hide on scroll down, show on scroll up */
+(function () {
+  var nav = document.querySelector('.ss-nav'), links = document.getElementById('ssLinks');
+  var last = window.pageYOffset || 0, ticking = false;
+  if (!nav) return;
+  function update() {
+    var y = window.pageYOffset || 0;
+    if (links && links.classList.contains('open')) { last = y; ticking = false; return; }
+    if (y > last + 6 && y > 80) nav.classList.add('ss-hide');
+    else if (y < last - 6 || y <= 10) nav.classList.remove('ss-hide');
+    last = y; ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
 })();
 </script>
 </body>

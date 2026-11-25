@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" href="/images/logo.png">
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap">
 <style>
 /* ============ CLAYMORPHISM · dark / light (nav pink in light, center white) ============ */
 :root,html[data-theme="dark"]{
@@ -40,7 +40,7 @@ html[data-theme="light"]{
 
 /* ============ TOP NAV (same on every page) ============ */
 .ss-nav{position:fixed;top:12px;left:50%;transform:translateX(-50%);width:min(1180px,calc(100% - 24px));height:58px;z-index:2147483000;display:flex;align-items:center;gap:10px;padding:0 10px 0 12px;
- border-radius:var(--k-r);background:var(--k-bar);box-shadow:var(--k-barshadow);font-family:'Poppins','Segoe UI',sans-serif;box-sizing:border-box}
+ border-radius:var(--k-r);background:var(--k-bar);box-shadow:var(--k-barshadow);font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;box-sizing:border-box}
 .ss-nav *{box-sizing:border-box}
 html body .ss-nav a.ss-brand{display:flex;align-items:center;gap:10px;text-decoration:none;margin-right:auto;min-width:0;overflow:hidden;color:var(--k-text)!important}
 html[data-theme="light"] body .ss-nav a.ss-brand{color:#fff!important}
@@ -89,7 +89,7 @@ html body .ss-links a.pop{animation:ssPop .35s ease!important}
 
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{min-height:100%;width:100%;background:var(--k-bg);scroll-behavior:smooth}
-body{font-family:'Poppins','DM Sans',system-ui,sans-serif;color:var(--k-text);min-height:100vh;width:100%;overflow-x:hidden;padding:84px 0 70px;background:radial-gradient(600px 420px at 90% -5%,var(--k-glowa),transparent 70%),radial-gradient(560px 420px at 5% 105%,var(--k-glowb),transparent 70%),var(--k-bg);background-attachment:fixed;transition:background .3s,color .3s}
+body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--k-text);min-height:100vh;width:100%;overflow-x:hidden;padding:84px 0 70px;background:radial-gradient(600px 420px at 90% -5%,var(--k-glowa),transparent 70%),radial-gradient(560px 420px at 5% 105%,var(--k-glowb),transparent 70%),var(--k-bg);background-attachment:fixed;transition:background .3s,color .3s}
 body.lock{overflow:hidden}
 
 /* HERO */
@@ -213,6 +213,26 @@ html body .ss-nav::before{content:"";position:absolute;inset:0;z-index:-1;pointe
  -webkit-backdrop-filter:blur(8px) saturate(135%);backdrop-filter:blur(8px) saturate(135%);
  border-bottom:1px solid rgba(255,255,255,.07);transition:background .3s}
 html[data-theme="light"] body .ss-nav::before{background:rgba(255,255,255,.34);border-bottom:1px solid rgba(255,61,139,.12)}
+</style>
+<style id="lux-theme">
+/* ===== LUXURY EDITORIAL LOOK (fonts + nav type only, original pink colours kept) ===== */
+:root{--serif:'Cormorant Garamond','Playfair Display',Georgia,'Times New Roman',serif;--sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--k-r:6px}
+body{font-weight:300;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+
+/* serif headings */
+.panel-head h2,.tag b{font-family:var(--serif)!important}
+.panel-head h2{font-weight:500;font-size:clamp(1.8rem,4.6vw,2.6rem);letter-spacing:.02em}
+.tag b{font-weight:600;font-size:17px;letter-spacing:.02em}
+
+/* small tracked labels */
+.hero small,.tag em,.slide .scap,.slide .badge,.viewer p{font-family:var(--sans);font-weight:500;letter-spacing:.24em}
+.hero p{font-weight:300;letter-spacing:.08em}
+
+/* top nav: slim, tracked, serif brand */
+html body .ss-nav{font-family:var(--sans)}
+html body .ss-nav .ss-bt{font-family:var(--serif);font-weight:500;font-size:1.25rem;letter-spacing:.22em}
+html body .ss-nav .ss-links a{font-family:var(--sans);font-weight:400;font-size:.68rem;letter-spacing:.28em}
+@media(max-width:480px){html body .ss-nav .ss-bt{font-size:1rem;letter-spacing:.16em}}
 </style>
 
 </head>

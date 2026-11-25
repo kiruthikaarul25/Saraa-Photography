@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Owner Approval — Saara Photography</title>
 <link rel="icon" type="image/png" href="/images/logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
 <script>
     (function () {
         try {
@@ -48,7 +48,7 @@
 
     html { background: var(--bg); }
     body {
-        font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif; color: var(--text);
+        font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: var(--text);
         min-height: 100vh; padding: 96px 16px 40px; display: flex; align-items: center; justify-content: center;
         background:
             radial-gradient(600px 420px at 90% -5%, var(--glow-a), transparent 70%),
@@ -169,6 +169,29 @@ html body .ss-nav::before{content:"";position:absolute;inset:0;z-index:-1;pointe
  border-bottom:1px solid rgba(255,255,255,.07);transition:background .3s}
 html[data-theme="light"] body .ss-nav::before{background:rgba(255,255,255,.34);border-bottom:1px solid rgba(255,61,139,.12)}
 </style>
+<style id="lux-theme">
+/* ===== LUXURY EDITORIAL LOOK (fonts + nav type only, original pink colours kept) ===== */
+:root{--serif:'Cormorant Garamond','Playfair Display',Georgia,'Times New Roman',serif;--sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--r:6px}
+body{font-family:var(--sans)!important;font-weight:300;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+button{font-family:var(--sans)}
+
+/* serif heading */
+.card h2{font-family:var(--serif)!important;font-weight:600;font-size:1.9rem;letter-spacing:.04em}
+
+/* small tracked labels + buttons */
+.user-pill{font-family:var(--sans);font-weight:400;letter-spacing:.08em}
+button.ok,button.no{font-family:var(--sans);font-weight:500;letter-spacing:.2em}
+
+/* top nav: slim, tracked, serif brand */
+html body .ss-nav{font-family:var(--sans)}
+html body .ss-nav .ss-bt{font-family:var(--serif);font-weight:500;font-size:1.25rem;letter-spacing:.22em}
+html body .ss-nav .ss-links a{font-family:var(--sans);font-weight:400;font-size:.68rem;letter-spacing:.28em}
+@media(max-width:480px){html body .ss-nav .ss-bt{font-size:1rem;letter-spacing:.16em}}
+
+/* top nav: hide on scroll down, show on scroll up */
+html body .ss-nav{transition:transform .35s ease}
+html body .ss-nav.ss-hide{transform:translate(-50%,-130%)}
+</style>
 
 </head>
 <body>
@@ -279,4 +302,23 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAll();});
 })();
 </script>
+<script>
+/* top nav: hide on scroll down, show on scroll up */
+(function () {
+  var nav = document.querySelector('.ss-nav'), links = document.getElementById('ssLinks');
+  var last = window.pageYOffset || 0, ticking = false;
+  if (!nav) return;
+  function update() {
+    var y = window.pageYOffset || 0;
+    if (links && links.classList.contains('open')) { last = y; ticking = false; return; }
+    if (y > last + 6 && y > 80) nav.classList.add('ss-hide');
+    else if (y < last - 6 || y <= 10) nav.classList.remove('ss-hide');
+    last = y; ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
+  }, { passive: true });
+})();
+</script>
 </body>
+</html>
