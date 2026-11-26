@@ -794,14 +794,23 @@ document.addEventListener('keydown', e => {
 const csrfToken = '';
 const csrfHeader = 'X-CSRF-TOKEN';
 
+/* Count = photos that are really selected on this page (ignores stale records of deleted photos) */
+function recountSelected() {
+    const n = document.querySelectorAll('.photo-card.selected-card').length;
+    const a = document.getElementById('selectionCount');
+    const b = document.getElementById('submitCount');
+    if (a) a.textContent = n;
+    if (b) b.textContent = n;
+    return n;
+}
+recountSelected();
+
 function togglePhoto(photoId, select, btn) {
     const url = select ? `/gallery/select/${photoId}` : `/gallery/deselect/${photoId}`;
     btn.disabled = true;
     return fetch(url, { method: 'POST', headers: { [csrfHeader]: csrfToken } })
     .then(res => res.json())
     .then(data => {
-        document.getElementById('selectionCount').textContent = data.count;
-        document.getElementById('submitCount').textContent = data.count;
         const card = document.getElementById('card-' + photoId);
         if (select) {
             card.classList.add('selected-card');
@@ -815,6 +824,7 @@ function togglePhoto(photoId, select, btn) {
             btn.onclick = function() { togglePhoto(photoId, true, btn); };
         }
         btn.disabled = false;
+        recountSelected();
         syncHeart();
     })
     .catch(() => { btn.disabled = false; syncHeart(); });

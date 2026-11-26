@@ -225,6 +225,43 @@ button.chip-x:hover { color: #e5485f; }
 .add-topic { display: flex; gap: 12px; flex-wrap: wrap; }
 .add-topic input { flex: 1; min-width: 180px; }
 
+/* multi-select delete */
+.sel-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.mini {
+    display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border: 0; cursor: pointer;
+    border-radius: 14px; font: 500 .6rem 'Inter', sans-serif; letter-spacing: 1.2px; text-transform: uppercase;
+    color: var(--sub); background: var(--card); box-shadow: var(--out-sm); transition: color .2s;
+}
+.mini:hover { color: var(--pink); }
+.mini:active { box-shadow: var(--in); }
+.mini[hidden] { display: none; }
+.mini.danger { color: #e5485f; }
+.mini.danger:disabled { opacity: .4; cursor: not-allowed; }
+.mini.on { color: #fff; background: linear-gradient(145deg, var(--pink-2), var(--pink-deep)); box-shadow: var(--btn); }
+
+.strip .th .tick {
+    display: none; position: absolute; left: 5px; top: 5px; width: 26px; height: 26px; border-radius: 50%;
+    align-items: center; justify-content: center; font-size: 15px; color: transparent;
+    background: rgba(0,0,0,.35); border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.35); z-index: 2;
+    transition: all .15s;
+}
+.ph.selecting .strip { user-select: none; -webkit-user-select: none; }
+.ph.selecting .strip .th { cursor: pointer; }
+.ph.selecting .strip .th .tick { display: flex; }
+.ph.selecting .strip .th .x, .ph.selecting .strip .th .rep { display: none; }
+
+/* NOT selected: plain photo + empty ring (dimmed once something is selected) */
+.ph.has-pick .strip .th:not(.picked) img { opacity: .4; filter: grayscale(.85); }
+
+/* SELECTED: pink frame, pink tint, filled pink tick, "Selected" badge */
+.strip .th.picked { outline: 3px solid var(--pink); outline-offset: -3px; box-shadow: 0 0 0 3px rgba(255,77,148,.35), var(--out-sm); }
+.strip .th.picked img { opacity: 1; filter: none; }
+.strip .th.picked::after {
+    content: ""; position: absolute; inset: 0; border-radius: 12px; pointer-events: none;
+    background: rgba(255,77,148,.28);
+}
+.strip .th.picked .tick { color: #fff; background: var(--pink); border-color: #fff; transform: scale(1.1); }
+
 /* new-upload preview */
 .prev-strip { display: flex; flex-direction: row; flex-wrap: wrap; align-items: flex-start; gap: 10px; margin: 14px 0; min-height: 10px; }
 .prev-strip .pv { position: relative; width: 80px; height: 100px; cursor: grab; border-radius: 12px; box-shadow: var(--out-sm); }
@@ -412,7 +449,7 @@ button,input,textarea,select{font-family:var(--sans)}
 /* small tracked labels */
 .sb-sub,.sb-label,.card-label,.cat-label,.tag,.edit-form label.replace,.chip{font-family:var(--sans);font-weight:500;letter-spacing:.22em}
 .chip{letter-spacing:.06em}
-.btn,.saara-modal-actions button,.corner .slide-handle,.corner .edit-toggle,.file-pick{font-family:var(--sans);font-weight:500;letter-spacing:.2em}
+.btn,.saara-modal-actions button,.corner .slide-handle,.corner .edit-toggle,.file-pick,.mini{font-family:var(--sans);font-weight:500;letter-spacing:.2em}
 .drag-note,.msg,.empty,.saara-modal p{font-weight:300}
 .sel,.card input[type=text],.edit-form input[type=text]{font-weight:300}
 
@@ -561,9 +598,18 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
             <div class="cover"></div>
 
             <div class="edit-panel">
+
+                <!-- multi-select delete bar -->
+                <div class="sel-bar">
+                    <button type="button" class="mini sel-toggle"><i class="ti ti-checkbox"></i><span>Select</span></button>
+                    <button type="button" class="mini sel-all" hidden><i class="ti ti-checks"></i>Select all</button>
+                    <button type="button" class="mini danger sel-del" hidden disabled><i class="ti ti-trash"></i>Delete (<b>0</b>)</button>
+                </div>
+
                 <div class="strip sortable" th:attr="data-group=${g.key}">
                     <div class="th" th:each="p : ${g.photos}" th:attr="data-id=${p.id}">
                         <img th:src="${p.url}" th:alt="${p.title}" draggable="false">
+                        <span class="tick"><i class="ti ti-check"></i></span>
                         <button type="button" class="rep" title="Replace this photo"><i class="ti ti-pencil"></i></button>
                         <input type="file" class="rep-file" accept="image/*" hidden>
                         <button type="button" class="x" title="Remove this photo">×</button>
@@ -964,6 +1010,101 @@ Sortable.create(grid, {
             saaraToast('Slide order save aagala');
             location.reload();
         }
+    }
+});
+
+/* Multi-select delete */
+function selCount(card) { return card.querySelectorAll('.strip .th.picked').length; }
+
+function selUpdate(card) {
+    const n = selCount(card);
+    const del = card.querySelector('.sel-del');
+    del.querySelector('b').textContent = n;
+    del.disabled = n === 0;
+    card.classList.toggle('has-pick', n > 0);
+}
+
+function selMode(card, on) {
+    card.classList.toggle('selecting', on);
+    card.querySelector('.sel-toggle').classList.toggle('on', on);
+    card.querySelector('.sel-toggle span').textContent = on ? 'Cancel' : 'Select';
+    card.querySelector('.sel-all').hidden = !on;
+    card.querySelector('.sel-del').hidden = !on;
+    if (!on) card.querySelectorAll('.strip .th.picked').forEach(t => t.classList.remove('picked'));
+    card._anchor = null;
+
+    // select mode-la drag off panrom, so click-um drag-um mix aagaadhu
+    const sb = Sortable.get(card.querySelector('.strip'));
+    if (sb) sb.option('disabled', on);
+    selUpdate(card);
+}
+
+document.addEventListener('click', async e => {
+    const card = e.target.closest('.ph');
+    if (!card) return;
+
+    if (e.target.closest('.sel-toggle')) {
+        selMode(card, !card.classList.contains('selecting'));
+        return;
+    }
+
+    if (e.target.closest('.sel-all')) {
+        const ths = card.querySelectorAll('.strip .th');
+        const allPicked = selCount(card) === ths.length;
+        ths.forEach(t => t.classList.toggle('picked', !allPicked));
+        selUpdate(card);
+        return;
+    }
+
+    const th = e.target.closest('.strip .th');
+    if (th && card.classList.contains('selecting')) {
+        const all = Array.from(card.querySelectorAll('.strip .th'));
+        const idx = all.indexOf(th);
+
+        if (e.shiftKey && card._anchor != null && card._anchor < all.length) {
+            // Shift + click: anchor photo-la irundhu intha photo varaikum ella photos-um select
+            const a = Math.min(card._anchor, idx), b = Math.max(card._anchor, idx);
+            all.slice(a, b + 1).forEach(t => t.classList.add('picked'));
+            window.getSelection()?.removeAllRanges();
+        } else {
+            th.classList.toggle('picked');
+            card._anchor = idx;
+        }
+        selUpdate(card);
+        return;
+    }
+
+    if (e.target.closest('.sel-del')) {
+        const pickedEls = Array.from(card.querySelectorAll('.strip .th.picked'));
+        if (!pickedEls.length) return;
+
+        const ok = await saaraConfirm(
+            'Select panna ' + pickedEls.length + ' photo(s)-ah indha slide-la irundhu remove pannalaama?',
+            'Delete ' + pickedEls.length + ' photos?',
+            'Delete photos'
+        );
+        if (!ok) return;
+
+        let failed = 0;
+        const CHUNK = 6;   // oru dhadavai 6 requests mattum
+
+        saaraToast('Deleting ' + pickedEls.length + ' photos...');
+
+        for (let i = 0; i < pickedEls.length; i += CHUNK) {
+            const part = pickedEls.slice(i, i + CHUNK);
+            const results = await Promise.allSettled(part.map(t =>
+                fetch('/owner/home-photos/' + t.dataset.id + '/delete-ajax', {method: 'POST', headers: hdr()})
+                    .then(r => { if (!r.ok) throw new Error(); })
+            ));
+            results.forEach((r, j) => {
+                if (r.status === 'fulfilled') part[j].remove();
+                else failed++;
+            });
+        }
+
+        refreshCard(card);
+        selMode(card, false);
+        saaraToast(failed ? failed + ' photo delete aagala' : pickedEls.length + ' photos deleted');
     }
 });
 

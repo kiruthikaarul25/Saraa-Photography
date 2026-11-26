@@ -449,20 +449,25 @@ button, input, textarea { font-family: inherit; }
 
 
 /* ═════════ SUBMITTED ═════════ */
-.done-wrap { max-width: 500px; margin: 0 auto; padding: 24px 16px 40px; text-align: center; }
+.done-wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 40px; text-align: center; }
 .done-ring { width: 88px; height: 88px; margin: 0 auto 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.3rem; color: #fff; background: linear-gradient(145deg, var(--pink-2), var(--pink-deep)); box-shadow: var(--btn); animation: ringPulse 2.5s ease-in-out infinite; }
 @keyframes ringPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
 .done-eyebrow { margin-bottom: 8px; font-size: .68rem; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); }
 .done-title { margin-bottom: 14px; font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 700; letter-spacing: 2px; color: var(--text); }
 .done-title span { color: var(--pink); }
-.done-sub { margin-bottom: 30px; font-size: .88rem; line-height: 1.8; color: var(--sub); }
+.done-sub { margin: 0 auto 30px; max-width: 500px; font-size: .88rem; line-height: 1.8; color: var(--sub); }
 .done-sub strong { color: var(--pink); font-size: 1.05rem; }
 .done-card { margin-bottom: 26px; padding: 26px 22px; border-radius: var(--r); background: var(--card); box-shadow: var(--out); text-align: left; }
 .done-card .card-title { justify-content: center; }
-.photo-list { display: flex; flex-direction: column; gap: 10px; max-height: 260px; overflow-y: auto; padding: 4px; }
-.photo-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 14px; background: var(--field); box-shadow: var(--in); }
-.photo-row i { flex-shrink: 0; color: var(--pink); }
-.photo-row span { font-size: .8rem; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* selected photos shown as pictures */
+.thumb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 14px; max-height: 460px; overflow-y: auto; padding: 6px; }
+.thumb { position: relative; aspect-ratio: 1 / 1; border-radius: 16px; overflow: hidden; background: var(--field); box-shadow: var(--out-sm), 0 0 0 2px var(--ok); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
+.thumb .tick { position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; background: var(--ok); }
+@media (max-width: 480px) {
+    .thumb-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+}
 
     </style>
 <link rel="stylesheet" href="/css/saara-nav.css?v=1">
@@ -485,7 +490,6 @@ body{font-weight:300;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
 .done-title span{font-style:italic;font-weight:500}
 .sb-name{font-weight:600;font-size:1.25rem;letter-spacing:.22em}
 .done-sub{font-weight:300;line-height:1.9}
-.photo-row span{font-weight:400}
 
 /* small tracked labels */
 .sb-sub,.sb-label,.done-eyebrow,.badge,.card-title{font-family:var(--sans);font-weight:500;letter-spacing:.22em}
@@ -544,16 +548,19 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
     <p class="done-eyebrow">Saara Photography</p>
     <h1 class="done-title">Selection <span>Submitted!</span></h1>
     <p class="done-sub">
-        You selected <strong th:text="${count}">0</strong> beautiful photos.<br>
+        You selected <strong id="doneCount" th:text="${count}">0</strong> beautiful photos.<br>
         We will contact you soon!
     </p>
 
-    <div class="done-card" th:if="${!selections.isEmpty()}">
+    <div class="done-card" id="doneCard" th:if="${!selections.isEmpty()}">
         <p class="card-title"><i class="ti ti-photo-heart"></i> Your Selected Photos</p>
-        <div class="photo-list">
-            <div class="photo-row" th:each="sel : ${selections}">
-                <i class="ti ti-photo"></i>
-                <span th:text="${sel.photo.filename}">photo.jpg</span>
+        <div class="thumb-grid" id="thumbGrid">
+            <div class="thumb" th:each="sel : ${selections}" th:attr="data-id=${sel.photo.id}">
+                <img th:src="@{/gallery/photo/__${sel.photo.id}__}"
+                     th:alt="${sel.photo.filename}"
+                     loading="lazy" draggable="false"
+                     onerror="removeThumb(this)">
+                <span class="tick"><i class="ti ti-check"></i></span>
             </div>
         </div>
     </div>
@@ -632,6 +639,55 @@ function toggleSidebar() {
     if (window.history && window.history.replaceState) {
         window.history.replaceState(null, '', '/gallery/submitted');
     }
+
+    /* Count = photos really shown (deleted photos / stale records are ignored) */
+    function recountDone() {
+        var n = document.querySelectorAll('#thumbGrid .thumb').length;
+        var c = document.getElementById('doneCount');
+        if (c) c.textContent = n;
+        var card = document.getElementById('doneCard');
+        if (card && n === 0) card.style.display = 'none';
+        return n;
+    }
+    // a photo whose image can't load (deleted) is removed from the list
+    function removeThumb(img) {
+        var t = img.closest('.thumb');
+        if (t) t.remove();
+        recountDone();
+    }
+    recountDone();
+
+    /* Admin delete panna photos: gallery la irukura photos mattum vachuko, matha thumbs ah remove pannu */
+    (function () {
+        var grid = document.getElementById('thumbGrid');
+        if (!grid) return;
+        grid.style.visibility = 'hidden';           // flash aagama irukka
+        function reveal() { grid.style.visibility = ''; recountDone(); }
+
+        var ctrl = window.AbortController ? new AbortController() : null;
+        var timer = setTimeout(function () { if (ctrl) ctrl.abort(); reveal(); }, 5000);
+
+        fetch('/gallery/view', { credentials: 'same-origin', cache: 'no-store', signal: ctrl ? ctrl.signal : undefined })
+            .then(function (r) { return r.ok ? r.text() : ''; })
+            .then(function (html) {
+                clearTimeout(timer);
+                var ids = {}, found = 0, m;
+                var res = [/\/photo\/(\d+)/g, /data-(?:photo-)?id\s*=\s*["'](\d+)["']/g, /photoId\W{1,4}(\d+)/g];
+                res.forEach(function (re) {
+                    while ((m = re.exec(html)) !== null) { ids[m[1]] = true; found++; }
+                });
+                if (!found) return;                  // gallery page padikka mudiyala na filter panna vendaam
+                grid.querySelectorAll('.thumb').forEach(function (t) {
+                    if (!ids[t.getAttribute('data-id')]) t.remove();
+                });
+            })
+            .catch(function () {})
+            .then(reveal);
+    })();
+
+    // no right-click / drag on the pictures
+    document.addEventListener('contextmenu', function (e) { if (e.target.tagName === 'IMG') e.preventDefault(); });
+    document.addEventListener('dragstart', function (e) { if (e.target.tagName === 'IMG') e.preventDefault(); });
 </script>
 <script src="/js/saara-nav.js"></script>
 <script>

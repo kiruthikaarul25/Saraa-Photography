@@ -1,9 +1,15 @@
 package com.shop.service;
 
+import com.shop.model.Album;
 import com.shop.model.Client;
+import com.shop.repository.AlbumRepository;
 import com.shop.repository.ClientRepository;
+import com.shop.repository.PhotoRepository;
+import com.shop.repository.PhotoSelectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +18,14 @@ public class ClientService {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    // @Lazy = circular dependency error vara koodadhu nu
+    @Autowired @Lazy private AlbumService albumService;
+    @Autowired @Lazy private PhotoSelectionService photoSelectionService;
+
+    @Autowired private AlbumRepository albumRepository;
+    @Autowired private PhotoRepository photoRepository;
+    @Autowired private PhotoSelectionRepository photoSelectionRepository;
 
     // ─── Create Client ──────────────────────────────
     public Client createClient(Client client) {
@@ -57,8 +71,26 @@ public class ClientService {
         });
     }
 
-    // ─── Delete ─────────────────────────────────────
+    // ─── Delete (selections → photos → albums → client) ─────
+    @Transactional
     public void deleteById(int id) {
+        // 1. selections
+        photoSelectionRepository.deleteAll(photoSelectionService.getSelectionsByClient(id));
+        photoSelectionRepository.flush();
+
+        // 2. photos (soft-deleted-um serthu, direct SQL)
+        List<Album> albums = albumService.getAlbumsByClient(id);
+        List<Integer> albumIds = albums.stream().map(Album::getId).toList();
+
+        if (!albumIds.isEmpty()) {
+            photoRepository.deleteByAlbumIds(albumIds);
+
+            // 3. albums
+            albumRepository.deleteAllById(albumIds);
+            albumRepository.flush();
+        }
+
+        // 4. client
         clientRepository.deleteById(id);
     }
 

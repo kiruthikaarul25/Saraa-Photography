@@ -5,6 +5,8 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:if="${_csrf != null}" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:if="${_csrf != null}" th:content="${_csrf.headerName}">
     <title>View Client — Saara Photography</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
@@ -352,6 +354,14 @@ button, input, textarea { font-family: inherit; }
 .album-label > div { display: flex; align-items: center; gap: 8px; }
 .album-label i { color: var(--pink); }
 .album-count { font-size: .68rem; color: var(--muted); letter-spacing: 1px; }
+.sub-block { margin-bottom: 26px; }
+.sub-block:last-child { margin-bottom: 0; }
+.sub-label { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font-size: .7rem; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--sub); }
+.sub-label i { font-size: 1rem; }
+.sub-label.sel { color: var(--ok); }
+.sub-label.sel i { color: var(--ok); }
+.sub-label.unsel i { color: var(--pink); }
+.sub-label .sub-count { margin-left: 4px; font-size: .64rem; letter-spacing: 1px; color: var(--muted); }
 .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 14px; }
 .photo-item { position: relative; border-radius: 16px; overflow: hidden; background: var(--card); box-shadow: var(--out-sm); }
 .photo-item img { width: 100%; height: 120px; object-fit: cover; display: block; opacity: .85; transition: opacity .2s; }
@@ -367,6 +377,41 @@ button, input, textarea { font-family: inherit; }
     .photo-delete-btn { opacity: 1; background: rgba(0,0,0,.3); }
     .photo-item:hover .selected-tick { opacity: 1; }
 }
+
+/* ═════════ MULTI-SELECT DELETE ═════════ */
+.btn[hidden] { display: none; }
+.sel-bar {
+    position: sticky; top: 84px; z-index: 30; display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+    margin: 0 0 20px; padding: 10px 12px; border-radius: 16px; background: var(--field); box-shadow: var(--in);
+}
+.sel-tools { display: none; align-items: center; flex-wrap: wrap; gap: 8px; }
+.selecting .sel-tools { display: flex; }
+.sel-toggle.on { color: #fff; background: linear-gradient(145deg, var(--pink-2), var(--pink-deep)); box-shadow: var(--btn); }
+.sel-hint { font-size: .66rem; letter-spacing: .5px; color: var(--muted); }
+.sel-count { font-size: .72rem; font-weight: 600; letter-spacing: 1px; color: var(--pink); margin-left: auto; display: none; }
+.selecting .sel-count { display: inline; }
+.alb-sel { display: none; }
+.selecting .alb-sel { display: inline-flex; }
+
+.pick-tick {
+    display: none; position: absolute; left: 6px; top: 6px; width: 26px; height: 26px; border-radius: 50%;
+    align-items: center; justify-content: center; font-size: 15px; color: transparent; z-index: 3;
+    background: rgba(0,0,0,.35); border: 2px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.35); transition: all .15s;
+}
+.selecting .photo-item { cursor: pointer; user-select: none; -webkit-user-select: none; }
+.selecting .pick-tick { display: flex; }
+.selecting .photo-delete-btn { display: none; }
+.selecting .photo-item:hover img { opacity: .85; }
+.selecting .photo-item.selected-photo:hover .selected-tick { opacity: 1; }
+
+/* NOT selected: plain photo + empty ring (dimmed + grey once something is selected) */
+.selecting.has-pick .photo-item:not(.picked) img { opacity: .4; filter: grayscale(.85); }
+
+/* SELECTED: pink frame, pink tint, filled pink tick */
+.photo-item.picked { box-shadow: 0 0 0 3px var(--pink), var(--out-sm); }
+.photo-item.picked img { opacity: 1 !important; filter: none !important; }
+.photo-item.picked::after { content: ""; position: absolute; inset: 0; border-radius: 16px; background: rgba(255,77,148,.28); pointer-events: none; }
+.photo-item.picked .pick-tick { color: #fff; background: var(--pink); border-color: #fff; transform: scale(1.1); }
 
 /* ═════════ MODALS ═════════ */
 .modal-overlay { display: none; position: fixed; inset: 0; z-index: 2000; align-items: center; justify-content: center; padding: 16px; background: rgba(0,0,0,.55); backdrop-filter: blur(3px); }
@@ -585,27 +630,39 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
                     <p class="card-title"><i class="ti ti-download"></i> Download Photos</p>
                     <a th:href="@{/owner/clients/{id}/download/selected(id=${client.id})}" href="#" class="dl-btn ok">
                         <span><i class="ti ti-circle-check"></i> Selected Photos</span>
-                        <span class="dl-badge" th:text="${selectionCount}">0</span>
+                        <span class="dl-badge" id="dlSelBadge" th:text="${selectionCount}">0</span>
                     </a>
                     <a th:href="@{/owner/clients/{id}/download/unselected(id=${client.id})}" href="#" class="dl-btn">
                         <span><i class="ti ti-folder"></i> Unselected Photos</span>
-                        <span class="dl-badge" th:text="${photos.size() - selectionCount}">0</span>
+                        <span class="dl-badge" id="dlUnselBadge" th:text="${photos.size() - selectionCount}">0</span>
                     </a>
-                    <div class="dl-summary">Total <span th:text="${photos.size()}">0</span> photos</div>
+                    <div class="dl-summary">Total <span id="dlTotal" th:text="${photos.size()}">0</span> photos</div>
                 </div>
             </div>
         </div>
 
         <!-- RIGHT COLUMN — PHOTOS -->
-        <div class="card">
+        <div class="card" id="photoCard">
             <div class="card-body">
                 <p class="card-title">
                     <i class="ti ti-photo"></i> Photos
-                    <span style="color:var(--muted);letter-spacing:1px">(<span th:text="${photos.size()}"></span> total)</span>
-                    <span th:if="${selectionCount > 0}" class="badge badge-active" style="margin-left:6px">
-                        <i class="ti ti-check"></i> <span th:text="${selectionCount}"></span> selected
+                    <span style="color:var(--muted);letter-spacing:1px">(<span id="totalCount" th:text="${photos.size()}"></span> total)</span>
+                    <span th:if="${selectionCount > 0}" id="selBadge" class="badge badge-active" style="margin-left:6px">
+                        <i class="ti ti-check"></i> <span id="selBadgeNum" th:text="${selectionCount}"></span> selected
                     </span>
                 </p>
+
+                <!-- select / delete bar -->
+                <div class="sel-bar" th:if="${!photos.isEmpty()}">
+                    <button type="button" class="btn btn-soft btn-sm sel-toggle" id="selToggle"><i class="ti ti-checkbox"></i><span>Select</span></button>
+                    <button type="button" class="btn btn-danger btn-sm" id="delAllBtn"><i class="ti ti-trash-x"></i> Delete all</button>
+                    <div class="sel-tools">
+                        <button type="button" class="btn btn-soft btn-sm" id="selAll"><i class="ti ti-checks"></i> Select all</button>
+                        <button type="button" class="btn btn-soft btn-sm" id="selClear"><i class="ti ti-x"></i> Clear</button>
+                        <button type="button" class="btn btn-danger btn-sm" id="selDel" disabled><i class="ti ti-trash"></i> Delete (<b id="selCount">0</b>)</button>
+                        <span class="sel-hint">Click / Ctrl + click = pick · Shift + click = range · Ctrl + A = all · Del = delete</span>
+                    </div>
+                </div>
 
                 <div th:each="album : ${albums}">
                     <div class="album-section">
@@ -614,12 +671,22 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
                                 <i class="ti ti-folder"></i>
                                 <span th:text="${album.title != null and !#strings.isEmpty(album.title)} ? ${album.title} : 'Untitled Album'"></span>
                             </div>
-                            <span class="album-count"
-                                  th:text="${(selectedPhotos[album.id] != null ? selectedPhotos[album.id].size() : 0) + (unselectedPhotos[album.id] != null ? unselectedPhotos[album.id].size() : 0)} + ' photos'"></span>
+                            <div>
+                                <button type="button" class="btn btn-soft btn-sm alb-sel" onclick="toggleAlbumSelect(this)"><i class="ti ti-checks"></i> Select album</button>
+                                <span class="album-count"
+                                      th:text="${(selectedPhotos[album.id] != null ? selectedPhotos[album.id].size() : 0) + (unselectedPhotos[album.id] != null ? unselectedPhotos[album.id].size() : 0)} + ' photos'"></span>
+                            </div>
+                        </div>
+                        <!-- SELECTED photos -->
+                        <div class="sub-block" th:if="${selectedPhotos[album.id] != null and !selectedPhotos[album.id].isEmpty()}">
+                        <div class="sub-label sel">
+                            <i class="ti ti-circle-check"></i> Selected
+                            <span class="sub-count" th:text="'(' + ${selectedPhotos[album.id].size()} + ')'"></span>
                         </div>
                         <div class="photo-grid">
                             <div class="photo-item selected-photo" th:each="photo : ${selectedPhotos[album.id]}">
                                 <img th:src="${'/'+photo.filePath}" th:alt="${photo.filename}" loading="lazy">
+                                <span class="pick-tick"><i class="ti ti-check"></i></span>
                                 <span class="selected-tick"><i class="ti ti-check"></i></span>
                                 <div class="photo-delete-btn">
                                     <button type="button" th:data-photo-id="${photo.id}" th:data-photo-name="${photo.filename}" onclick="confirmDeletePhoto(this)">
@@ -627,14 +694,26 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                        </div>
+
+                        <!-- UNSELECTED photos -->
+                        <div class="sub-block" th:if="${unselectedPhotos[album.id] != null and !unselectedPhotos[album.id].isEmpty()}">
+                        <div class="sub-label unsel" th:if="${selectedPhotos[album.id] != null and !selectedPhotos[album.id].isEmpty()}">
+                            <i class="ti ti-folder"></i> Unselected
+                            <span class="sub-count" th:text="'(' + ${unselectedPhotos[album.id].size()} + ')'"></span>
+                        </div>
+                        <div class="photo-grid">
                             <div class="photo-item" th:each="photo : ${unselectedPhotos[album.id]}">
                                 <img th:src="${'/'+photo.filePath}" th:alt="${photo.filename}" loading="lazy">
+                                <span class="pick-tick"><i class="ti ti-check"></i></span>
                                 <div class="photo-delete-btn">
                                     <button type="button" th:data-photo-id="${photo.id}" th:data-photo-name="${photo.filename}" onclick="confirmDeletePhoto(this)">
                                         <i class="ti ti-trash"></i> Remove
                                     </button>
                                 </div>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -730,6 +809,23 @@ html body a.ss-ig{bottom:calc(86px + env(safe-area-inset-bottom,0px))!important}
     </div>
 </div>
 
+<!-- BULK PHOTO DELETE CONFIRM -->
+<div class="modal-overlay" id="bulkOverlay">
+    <div class="modal-box sm">
+        <div class="modal-ico"><i class="ti ti-photo-off"></i></div>
+        <div class="modal-title" id="bulkTitle" style="justify-content:center;margin-bottom:8px">Delete photos?</div>
+        <div class="modal-sub" id="bulkSub"></div>
+        <div class="progress-wrap" id="bulkProg" style="margin:0 0 20px">
+            <div class="progress-track"><div class="progress-bar" id="bulkBar"></div></div>
+            <div class="progress-text" id="bulkTxt"></div>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-soft" id="bulkCancel">Cancel</button>
+            <button type="button" class="btn btn-danger" id="bulkOk"><i class="ti ti-trash"></i> Delete</button>
+        </div>
+    </div>
+</div>
+
 <form id="deletePhotoForm" method="post" style="display:none">
     <input type="hidden" name="clientId" th:value="${client.id}"/>
 </form>
@@ -791,6 +887,36 @@ function toggleSidebar() {
 
 </script>
 <script src="/js/constants.js"></script>
+
+<!-- ═════ COUNT FIX: numbers come from the photos actually shown on the page ═════ -->
+<script>
+(function () {
+    function fixCounts() {
+        var sel   = document.querySelectorAll('#photoCard .photo-item.selected-photo').length;
+        var total = document.querySelectorAll('#photoCard .photo-item').length;
+
+        var totalCount = document.getElementById('totalCount');
+        if (totalCount) totalCount.textContent = total;
+
+        var dlSel = document.getElementById('dlSelBadge');
+        var dlUnsel = document.getElementById('dlUnselBadge');
+        var dlTotal = document.getElementById('dlTotal');
+        if (dlSel) dlSel.textContent = sel;
+        if (dlUnsel) dlUnsel.textContent = total - sel;
+        if (dlTotal) dlTotal.textContent = total;
+
+        var badge = document.getElementById('selBadge');
+        var badgeNum = document.getElementById('selBadgeNum');
+        if (badge) {
+            if (sel > 0) { if (badgeNum) badgeNum.textContent = sel; }
+            else { badge.style.display = 'none'; }
+        }
+    }
+    window.fixCounts = fixCounts;
+    fixCounts();
+})();
+</script>
+
 <script>
     function openUploadModal() {
         document.getElementById('uploadOverlay').classList.add('show');
@@ -848,6 +974,219 @@ function toggleSidebar() {
         if (e.target === this) closeDeleteModal();
     });
 
+    /* ═════════ MULTI-SELECT + BULK DELETE ═════════ */
+    const photoCard  = document.getElementById('photoCard');
+    const selToggle  = document.getElementById('selToggle');
+    const selAllBtn  = document.getElementById('selAll');
+    const selClearBtn= document.getElementById('selClear');
+    const selDelBtn  = document.getElementById('selDel');
+    const selCountEl = document.getElementById('selCount');
+
+    const bulkOverlay = document.getElementById('bulkOverlay');
+    const bulkTitle   = document.getElementById('bulkTitle');
+    const bulkSub     = document.getElementById('bulkSub');
+    const bulkProg    = document.getElementById('bulkProg');
+    const bulkBar     = document.getElementById('bulkBar');
+    const bulkTxt     = document.getElementById('bulkTxt');
+    const bulkCancel  = document.getElementById('bulkCancel');
+    const bulkOk      = document.getElementById('bulkOk');
+
+    let anchorIdx = null;
+    let bulkBusy = false;
+    let needReload = false;
+
+    const allItems = () => Array.from(photoCard.querySelectorAll('.photo-item'));
+    const pickedItems = () => Array.from(photoCard.querySelectorAll('.photo-item.picked'));
+
+    function updateSel() {
+        const n = photoCard.querySelectorAll('.photo-item.picked').length;
+        selCountEl.textContent = n;
+        selDelBtn.disabled = n === 0;
+        photoCard.classList.toggle('has-pick', n > 0);
+    }
+
+    function setSelectMode(on) {
+        if (!selToggle) return;
+        photoCard.classList.toggle('selecting', on);
+        selToggle.classList.toggle('on', on);
+        selToggle.querySelector('span').textContent = on ? 'Cancel' : 'Select';
+        if (!on) pickedItems().forEach(t => t.classList.remove('picked'));
+        anchorIdx = null;
+        updateSel();
+    }
+
+    if (selToggle) {
+        selToggle.addEventListener('click', () => setSelectMode(!photoCard.classList.contains('selecting')));
+
+        selAllBtn.addEventListener('click', () => {
+            const items = allItems();
+            const everyPicked = items.length > 0 && items.every(t => t.classList.contains('picked'));
+            items.forEach(t => t.classList.toggle('picked', !everyPicked));
+            anchorIdx = null;
+            updateSel();
+        });
+
+        selClearBtn.addEventListener('click', () => {
+            pickedItems().forEach(t => t.classList.remove('picked'));
+            anchorIdx = null;
+            updateSel();
+        });
+
+        // click = select / unselect · Shift + click = range from the last clicked photo
+        //   Click / Ctrl+click = pick or unpick one photo
+        //   Shift+click        = pick the whole range from the last clicked photo
+        //   Ctrl/Shift+click works even before pressing "Select" (select mode turns on automatically)
+        photoCard.addEventListener('click', e => {
+            const item = e.target.closest('.photo-item');
+            if (!item) return;
+
+            const multi = e.ctrlKey || e.metaKey || e.shiftKey;
+            if (!photoCard.classList.contains('selecting')) {
+                if (!multi) return;          // normal click outside select mode: do nothing special
+                setSelectMode(true);
+            }
+            e.preventDefault();
+            e.stopPropagation();             // don't trigger the hover "Remove" button
+
+            const items = allItems();
+            const idx = items.indexOf(item);
+
+            if (e.shiftKey && anchorIdx !== null && anchorIdx < items.length) {
+                const a = Math.min(anchorIdx, idx), b = Math.max(anchorIdx, idx);
+                for (let i = a; i <= b; i++) items[i].classList.add('picked');   // keeps earlier picks too
+                if (window.getSelection) window.getSelection().removeAllRanges();
+            } else {
+                item.classList.toggle('picked');
+                anchorIdx = idx;
+            }
+            updateSel();
+        }, true);
+
+        // keyboard: Ctrl+A = select all, Delete = open delete popup
+        document.addEventListener('keydown', e => {
+            if (!photoCard.classList.contains('selecting')) return;
+            if (document.querySelector('.modal-overlay.show')) return;
+            if (e.target.matches && e.target.matches('input, textarea')) return;
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a') { e.preventDefault(); selAllBtn.click(); }
+            else if (e.key === 'Delete' && !selDelBtn.disabled) { selDelBtn.click(); }
+        });
+    }
+
+    // "Select album" button: whole album select / unselect
+    function toggleAlbumSelect(btn) {
+        const items = Array.from(btn.closest('.album-section').querySelectorAll('.photo-item'));
+        const everyPicked = items.length > 0 && items.every(t => t.classList.contains('picked'));
+        items.forEach(t => t.classList.toggle('picked', !everyPicked));
+        anchorIdx = null;
+        updateSel();
+    }
+
+    // ── bulk delete ──
+    selDelBtn && selDelBtn.addEventListener('click', () => {
+        const n = pickedItems().length;
+        if (!n) return;
+        bulkTitle.textContent = 'Delete ' + n + ' photo' + (n > 1 ? 's' : '') + '?';
+        bulkSub.textContent = n + ' selected photo' + (n > 1 ? 's' : '') +
+            ' will be permanently deleted from this client and cannot be recovered.';
+        bulkSub.style.display = '';
+        bulkProg.style.display = 'none';
+        bulkBar.style.width = '0%';
+        bulkOk.disabled = false; bulkCancel.disabled = false;
+        bulkOk.innerHTML = '<i class="ti ti-trash"></i> Delete';
+        bulkOverlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    });
+
+    // "Delete all": select every photo, then open the confirm popup
+    const delAllBtn = document.getElementById('delAllBtn');
+    if (delAllBtn) delAllBtn.addEventListener('click', () => {
+        if (bulkBusy) return;
+        setSelectMode(true);
+        allItems().forEach(t => t.classList.add('picked'));
+        anchorIdx = null;
+        updateSel();
+        selDelBtn.click();
+    });
+
+    function closeBulk() {
+        if (bulkBusy) return;
+        bulkOverlay.classList.remove('show');
+        document.body.style.overflow = '';
+        if (needReload) location.reload();
+    }
+    bulkCancel.addEventListener('click', closeBulk);
+    bulkOverlay.addEventListener('click', e => { if (e.target === bulkOverlay) closeBulk(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && bulkOverlay.classList.contains('show')) closeBulk(); });
+
+    window.addEventListener('beforeunload', e => {
+        if (bulkBusy) { e.preventDefault(); e.returnValue = ''; }
+    });
+
+    bulkOk.addEventListener('click', async () => {
+        if (bulkBusy) return;
+        const items = pickedItems();
+        if (!items.length) return;
+
+        const csrf  = document.querySelector('meta[name="_csrf"]')?.content;
+        const csrfH = document.querySelector('meta[name="_csrf_header"]')?.content;
+        const clientId = document.querySelector('#deletePhotoForm [name=clientId]').value;
+
+        bulkBusy = true;
+        bulkOk.disabled = true; bulkCancel.disabled = true;
+        bulkSub.style.display = 'none';
+        bulkProg.style.display = 'block';
+        bulkBar.style.width = '0%';
+        bulkTxt.style.color = '';
+
+        const total = items.length;
+        const CHUNK = 6;                      // 6 requests at a time
+        let done = 0, failed = 0;
+
+        for (let i = 0; i < items.length; i += CHUNK) {
+            const part = items.slice(i, i + CHUNK);
+
+            const results = await Promise.allSettled(part.map(item => {
+                const id = item.querySelector('[data-photo-id]').dataset.photoId;
+                const headers = {};
+                if (csrf && csrfH) headers[csrfH] = csrf;
+                return fetch('/owner/photos/' + id + '/delete', {
+                    method: 'POST',
+                    headers,
+                    body: new URLSearchParams({ clientId }),
+                    credentials: 'same-origin',
+                    redirect: 'manual'
+                }).then(r => { if (!(r.type === 'opaqueredirect' || r.ok)) throw new Error(); });
+            }));
+
+            results.forEach((r, j) => {
+                if (r.status === 'fulfilled') { part[j].remove(); done++; }
+                else failed++;
+            });
+
+            if (done) needReload = true;
+            if (window.fixCounts) window.fixCounts();
+            bulkBar.style.width = Math.round(((done + failed) / total) * 100) + '%';
+            bulkTxt.textContent = 'Deleted ' + done + ' of ' + total + ' photos… please keep this page open' +
+                (failed ? ' (' + failed + ' failed)' : '');
+        }
+
+        bulkBusy = false;
+        updateSel();
+
+        if (!failed) {
+            bulkTitle.textContent = 'Done';
+            bulkTxt.textContent = done + ' photo' + (done > 1 ? 's' : '') + ' deleted ✓';
+            setTimeout(() => location.reload(), 600);
+        } else {
+            bulkTitle.textContent = 'Some photos not deleted';
+            bulkTxt.style.color = 'var(--danger)';
+            bulkTxt.textContent = done + ' deleted, ' + failed + ' failed. The failed photos are still selected. Click "Retry" to try again.';
+            bulkOk.disabled = false; bulkCancel.disabled = false;
+            bulkOk.innerHTML = '<i class="ti ti-refresh"></i> Retry';
+        }
+    });
+
+    /* ═════════ UPLOAD ═════════ */
     const fileInput    = document.getElementById('fileInput');
     const previewGrid  = document.getElementById('previewGrid');
     const previewBar   = document.getElementById('previewBar');

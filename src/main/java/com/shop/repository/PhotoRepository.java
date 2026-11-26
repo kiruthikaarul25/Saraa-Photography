@@ -2,7 +2,11 @@ package com.shop.repository;
 
 import com.shop.model.Photo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
@@ -24,4 +28,10 @@ public interface PhotoRepository
     // (makes upload retries safe - a retried batch will not create duplicates)
     boolean existsByAlbumIdAndFilenameEndingWithAndFileSizeAndIsDeletedFalse(
             int albumId, String filenameSuffix, Long fileSize);
+
+    // Client delete: albums-ku ulla ALL photos (soft-deleted-um serthu)
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Transactional
+    @Query(value = "DELETE FROM photos WHERE album_id IN (:ids)", nativeQuery = true)
+    void deleteByAlbumIds(@Param("ids") List<Integer> ids);
 }
