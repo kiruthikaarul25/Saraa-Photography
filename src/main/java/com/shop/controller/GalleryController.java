@@ -1,22 +1,29 @@
 package com.shop.controller;
 
+import com.shop.config.LoginAttemptService;
 import com.shop.model.*;
 import com.shop.service.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import jakarta.servlet.http.HttpSession;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.security.MessageDigest;
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,26 +37,50 @@ public class GalleryController {
     @Autowired private PhotoSelectionService selectionService;
     @Autowired private PackageService packageService;
     @Autowired private WatermarkService watermarkService;
+    @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired private LoginAttemptService loginAttempts;
 
-    // Old URL -> same Select page (client side)
     @GetMapping("/client/login")
     public String clientLoginPage() {
         return "redirect:/select#client";
     }
 
-    // Client login from the Select page (fetch) -> JSON
+    /** bcrypt hash, or (legacy) plain text that gets upgraded to bcrypt on first good login. */
+    private boolean passwordMatches(Client client, String raw) {
+        String stored = client.getAccessPassword();
+        if (stored == null || raw == null) return false;
+        if (stored.startsWith("$2")) {
+            return passwordEncoder.matches(raw, stored);
+        }
+        boolean ok = MessageDigest.isEqual(
+            stored.getBytes(StandardCharsets.UTF_8), raw.getBytes(StandardCharsets.UTF_8));
+        if (ok) {
+            client.setAccessPassword(passwordEncoder.encode(raw));
+            clientService.update(client);
+        }
+        return ok;
+    }
+
     @PostMapping("/client/login")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> clientLoginSubmit(
             @RequestParam("username") String username,
             @RequestParam("password") String password,
+            HttpServletRequest request,
             HttpSession session) {
 
         Map<String, Object> res = new LinkedHashMap<>();
         String loginName = username.trim();
+        String key = LoginAttemptService.key(request.getRemoteAddr(), loginName);
 
-        // admin usernames (niki / admin) must never open a client gallery
+        if (loginAttempts.isBlocked(key)) {
+            res.put("success", false);
+            res.put("message", "Too many attempts. Try again in 15 minutes.");
+            return ResponseEntity.status(429).body(res);
+        }
+
         if (loginName.equalsIgnoreCase("niki") || loginName.equalsIgnoreCase("admin")) {
+            loginAttempts.recordFailure(key);
             res.put("success", false);
             res.put("message", "Invalid username or password!");
             return ResponseEntity.status(401).body(res);
@@ -57,10 +88,11 @@ public class GalleryController {
 
         Optional<Client> found = clientService.findByToken(loginName);
 
-        if (found.isPresent()
-                && found.get().getAccessPassword() != null
-                && found.get().getAccessPassword().equals(password)) {
+        if (found.isPresent() && passwordMatches(found.get(), password)) {
             Client client = found.get();
+            loginAttempts.recordSuccess(key);
+            request.changeSessionId(); // prevent session fixation
+            session = request.getSession();
             session.setAttribute("clientId", client.getId());
             clientService.updateStatus(client.getId(), "active");
             res.put("success", true);
@@ -68,17 +100,17 @@ public class GalleryController {
             return ResponseEntity.ok(res);
         }
 
+        loginAttempts.recordFailure(key);
         res.put("success", false);
         res.put("message", "Invalid username or password!");
         return ResponseEntity.status(401).body(res);
     }
 
-    // Personal link sent to the client (WhatsApp) -> Select page with username filled in
     @GetMapping("/gallery/{token}")
     public String clientTokenLogin(@PathVariable("token") String token) {
         return clientService.findByToken(token)
             .map(client -> "redirect:/select?u="
-                + java.net.URLEncoder.encode(token, java.nio.charset.StandardCharsets.UTF_8)
+                + java.net.URLEncoder.encode(token, StandardCharsets.UTF_8)
                 + "#client")
             .orElse("error/invalid-link");
     }
@@ -88,7 +120,8 @@ public class GalleryController {
         Integer clientId = (Integer) session.getAttribute("clientId");
         if (clientId == null) return "redirect:/select#client";
 
-        Client client = clientService.getById(clientId).orElseThrow();
+        Client client = clientService.getById(clientId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         List<Album> albums = albumService.getAlbumsByClient(clientId);
 
         Set<Integer> selectedIds = selectionService
@@ -118,7 +151,16 @@ public class GalleryController {
         return "client/gallery";
     }
 
-    // ✅ AJAX — no page reload
+    /** True only if the photo sits in one of THIS client's albums (and is returned by the live-photo query). */
+    private Optional<Photo> findOwnedPhoto(int clientId, int photoId) {
+        for (Album album : albumService.getAlbumsByClient(clientId)) {
+            for (Photo p : photoService.getPhotosByAlbum(album.getId())) {
+                if (p.getId() == photoId) return Optional.of(p);
+            }
+        }
+        return Optional.empty();
+    }
+
     @PostMapping("/gallery/select/{photoId}")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> selectPhoto(
@@ -128,12 +170,16 @@ public class GalleryController {
         if (clientId == null)
             return ResponseEntity.status(401).build();
 
+        Optional<Photo> photo = findOwnedPhoto(clientId, photoId);
+        if (photo.isEmpty())
+            return ResponseEntity.status(404).build();
+
         if (!selectionService.isSelected(clientId, photoId)) {
-            Client client = clientService.getById(clientId).orElseThrow();
-            Photo photo = photoService.getById(photoId).orElseThrow();
+            Client client = clientService.getById(clientId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
             PhotoSelection ps = new PhotoSelection();
             ps.setClient(client);
-            ps.setPhoto(photo);
+            ps.setPhoto(photo.get());
             selectionService.selectPhoto(ps);
         }
 
@@ -144,7 +190,6 @@ public class GalleryController {
         return ResponseEntity.ok(res);
     }
 
-    // ─── Serve Watermarked Photo to Client ────────
     @GetMapping("/gallery/photo/{photoId}")
     public ResponseEntity<Resource> serveWatermarkedPhoto(
             @PathVariable("photoId") int photoId,
@@ -155,22 +200,27 @@ public class GalleryController {
         if (clientId == null)
             return ResponseEntity.status(401).build();
 
-        Photo photo = photoService.getById(photoId).orElseThrow();
+        Optional<Photo> found = findOwnedPhoto(clientId, photoId);
+        if (found.isEmpty())
+            return ResponseEntity.status(404).build();
+        Photo photo = found.get();
 
         String fullPath = System.getProperty("user.dir") + File.separator + photo.getFilePath();
 
         boolean thumb = "thumb".equals(size);
         Path preview = watermarkService.getPreviewPath(fullPath, thumb);
 
+        String safeName = photo.getFilename() == null ? "photo.jpg"
+            : photo.getFilename().replaceAll("[\"\\\\\\r\\n]", "_");
+
         return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + photo.getFilename() + "\"")
+            .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + safeName + "\"")
             .header("X-Content-Type-Options", "nosniff")
             .cacheControl(CacheControl.maxAge(Duration.ofDays(30)).cachePrivate())
             .contentType(MediaType.IMAGE_JPEG)
             .body(new FileSystemResource(preview));
     }
 
-    // ✅ AJAX — no page reload
     @PostMapping("/gallery/deselect/{photoId}")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> deselectPhoto(
@@ -180,6 +230,7 @@ public class GalleryController {
         if (clientId == null)
             return ResponseEntity.status(401).build();
 
+        // deselectPhoto(clientId, photoId) is already scoped to this client's own selection row
         selectionService.deselectPhoto(clientId, photoId);
 
         int count = selectionService.getSelectionsByClient(clientId).size();
@@ -195,7 +246,6 @@ public class GalleryController {
         if (clientId == null) return "redirect:/select#client";
 
         clientService.updateStatus(clientId, "selecting");
-        // PRG Pattern: redirect after POST so Back button works cleanly
         return "redirect:/gallery/submitted";
     }
 
@@ -208,7 +258,8 @@ public class GalleryController {
         model.addAttribute("selections", selections);
         model.addAttribute("count", selections.size());
         model.addAttribute("client",
-            clientService.getById(clientId).orElseThrow());
+            clientService.getById(clientId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
         return "client/submitted";
     }
 }

@@ -21,7 +21,7 @@ repositories {
     mavenCentral()
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.compilerArgs << '-parameters'
     options.encoding = 'UTF-8'
 }
@@ -40,7 +40,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // ⚠️ devtools Railway-ல் வேண்டாம் — production-ல் remove பண்ணுவோம்
+    // devtools is left out of the bootJar automatically (developmentOnly)
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -52,9 +52,4 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-
-compileJava {
-    options.compilerArgs << '-parameters'
 }
